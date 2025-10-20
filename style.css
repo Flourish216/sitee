@@ -71,28 +71,59 @@ body {
   width: 100%;
 }
 
-/* ===== Hero ===== */
+/* ===== Hero Section (Landing Animation) ===== */
 .hero {
   text-align: center;
-  margin: 6rem 0 5rem;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeInContainer 1.5s ease forwards;
+  animation-delay: 0.3s;
 }
 
-h1 {
+@keyframes fadeInContainer {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-title {
   font-family: var(--font-display);
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
+  opacity: 0;
+  animation: fadeIn 2s ease forwards;
+}
+
+.fade-in-quote {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  margin-bottom: 2.8rem;
+  max-width: 500px;
+  opacity: 0;
+  animation: fadeIn 2s ease forwards;
+  animation-delay: 1.3s;
+}
+
+.fade-in-btn {
+  opacity: 0;
+  animation: fadeIn 2s ease forwards;
+  animation-delay: 2.5s;
+}
+
+/* Smooth fade-up effect */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .accent {
   font-style: italic;
   color: var(--accent);
-}
-
-.lead {
-  font-size: 1.1rem;
-  color: var(--muted);
-  max-width: 600px;
-  margin: 1rem auto 2.5rem;
 }
 
 .cta-row {
@@ -208,10 +239,23 @@ h1 {
   .masonry {
     column-count: 2;
   }
+
+  .fade-in-title {
+    font-size: 2.3rem;
+  }
 }
 
 @media (max-width: 600px) {
   .masonry {
     column-count: 1;
+  }
+
+  .fade-in-title {
+    font-size: 1.9rem;
+  }
+
+  .fade-in-quote {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
   }
 }
