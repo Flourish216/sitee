@@ -6,11 +6,30 @@
 <title>Jesse Zhang | Creative Lab</title>
 
 <!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <!-- p5.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
 
+<link rel="stylesheet" href="style.css">
+<!-- Added font overrides for a cleaner aesthetic -->
+<style>
+  :root{
+    --ui-font: "Manrope", Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    --display-font: "Space Grotesk", "Orbitron", Inter, system-ui, -apple-system;
+  }
+  body{
+    font-family: var(--ui-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, .brand {
+    font-family: var(--display-font);
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  .muted { opacity: 0.85; font-weight: 400; }
+  .accent { font-weight: 700; }
+</style>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
