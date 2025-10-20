@@ -4,7 +4,7 @@ let cb = 20;
 let speed = 15; 
 
 function setup() {
-  createCanvas(400,400);
+  createCanvas(canvasHeight,canvasWidth);
 
   for (let i = 0; i < 21; i++) {
     grid[i] = [];
