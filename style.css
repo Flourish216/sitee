@@ -83,7 +83,8 @@ html, body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* 修改这里：从顶部开始 */
+  padding-top: 20vh; /* 添加顶部内边距控制上移距离 */
   align-items: center;
   position: relative;
   z-index: 2;
@@ -102,6 +103,7 @@ html, body {
   font-weight: 700;
   opacity: 0;
   animation: fadeIn 1.5s ease forwards;
+  margin-bottom: 1rem; /* 增加下边距使标题和引语之间距离更大 */
 }
 
 .fade-in-quote {
@@ -149,12 +151,12 @@ canvas {
   position: fixed;
   inset: 0; 
   width: 100vw;
-  height: 100vh; /* 修正了 100vht 的笔误 */
+  height: 100vh;
   z-index: 0;
   display: block;
   pointer-events: none;
   object-fit: cover;
-  filter: brightness(1.02); /* 移除了模糊，只保留轻微亮度调整 */
+  filter: brightness(1.02);
 }
 
 .site-footer {
@@ -173,7 +175,6 @@ canvas {
 .page-overlay {
   position: fixed;
   inset: 0;
-  /* 合并后的遮罩效果：渐变背景 + 模糊 */
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.5) 0%,
@@ -184,5 +185,3 @@ canvas {
   z-index: 1; 
   pointer-events: none;
 }
-
-/* 移除了原来的 ::after 伪元素，现在只有一层遮罩 */
