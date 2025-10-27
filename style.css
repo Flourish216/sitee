@@ -15,7 +15,7 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden; /* ✅ 确保画布铺满全屏 */
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
@@ -76,7 +76,6 @@ html, body {
 .nav a:hover::after {
   width: 100%;
 }
-
 
 .hero {
   text-align: center;
@@ -149,15 +148,14 @@ html, body {
 canvas {
   position: fixed;
   inset: 0; 
-  width: 100vw ;
-  height: 100vht;
+  width: 100vw;
+  height: 100vh; /* 修正了 100vht 的笔误 */
   z-index: 0;
   display: block;
   pointer-events: none;
   object-fit: cover;
-  filter: blur(0.5px) brightness(1.05);
+  filter: brightness(1.02); /* 移除了模糊，只保留轻微亮度调整 */
 }
-
 
 .site-footer {
   border-top: 1px solid var(--border);
@@ -171,24 +169,20 @@ canvas {
   background: rgba(255, 255, 255, 0.7);
 }
 
+/* ===== 修改后的单层全屏遮罩 ===== */
 .page-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(6px);
+  /* 合并后的遮罩效果：渐变背景 + 模糊 */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.65) 40%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  backdrop-filter: blur(8px);
   z-index: 1; 
   pointer-events: none;
 }
 
-.page-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.55) 40%,
-    rgba(255, 255, 255, 0.7) 100%
-  );
-  pointer-events: none;
-}
+/* 移除了原来的 ::after 伪元素，现在只有一层遮罩 */
