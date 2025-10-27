@@ -1,13 +1,13 @@
 let grid = [];
 let nextGrid = [];
 let cols, rows;
-let cellSize = 20;
+let cellSize = 18;
 let speed = 12;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   initGrid();
-  noStroke(); // ✅ 没有边线！
+  noStroke(); // ✅ 无边线
 }
 
 function initGrid() {
@@ -20,11 +20,11 @@ function initGrid() {
 }
 
 function draw() {
-  background(255, 80); // ✅ 柔和淡白背景
+  background(255, 70); // ✅ 柔白背景，淡化尾迹
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 100); // ✅ 半透明黑块
+        fill(0, 90); // ✅ 半透明黑块
         rect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }
@@ -53,14 +53,10 @@ function step() {
 
 function countNeighbors(x, y) {
   let sum = 0;
-  for (let i = -1; i <= 1; i++) {
-    for (let j = -1; j <= 1; j++) {
-      if (i === 0 && j === 0) continue;
-      let col = (x + i + cols) % cols;
-      let row = (y + j + rows) % rows;
-      sum += grid[col][row];
-    }
-  }
+  for (let i = -1; i <= 1; i++)
+    for (let j = -1; j <= 1; j++)
+      if (i || j)
+        sum += grid[(x + i + cols) % cols][(y + j + rows) % rows];
   return sum;
 }
 
