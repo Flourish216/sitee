@@ -42,13 +42,31 @@ html, body {
   100% { opacity: 1; filter: brightness(1.1) blur(0); }
 }
 
+/* ===== Light Mist Overlay (slightly stronger) ===== */
+.home-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6); /* ✅ 稍强于之前的0.5 */
+  backdrop-filter: blur(6px);
+  z-index: 1; /* ✅ 在canvas上方，文字下方 */
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeOverlay 1.2s ease 0.4s forwards;
+}
+
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ===== Header ===== */
 .site-header {
   position: relative;
   z-index: 3;
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.7); /* ✅ 稍比背景更亮更清晰 */
   backdrop-filter: blur(5px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
@@ -107,7 +125,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-top: 22vh; /* ✅ 再上移一点 */
+  padding-top: 22vh;
   position: relative;
   z-index: 3;
   opacity: 0;
@@ -152,7 +170,6 @@ html, body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Accent Text */
 .accent {
   font-style: italic;
   color: var(--accent);
@@ -184,7 +201,7 @@ html, body {
 }
 .home-page .site-footer {
   opacity: 0;
-  animation: fadeFooter 1.2s ease 1.8s forwards;
+  animation: fadeFooter 1.2s ease 1.6s forwards;
 }
 
 @keyframes fadeFooter {
