@@ -4,7 +4,8 @@ let cb = 20;
 let speed = 15; 
 
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(windowWidth, windowHeight);
+  noStroke();
 
   for (let i = 0; i < 21; i++) {
     grid[i] = [];
@@ -27,17 +28,21 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  // ✅ 半透明浅灰背景，带轻微透明叠影效果
+  background(255, 255, 255, 100);
+
+  let offsetX = (width - 21 * cb) / 2;
+  let offsetY = (height - 21 * cb) / 2;
 
   for (let i = 0; i < 21; i++) {
     for (let j = 0; j < 21; j++) {
-      let x = i * cb;
-      let y = j * cb;
-      stroke(200);
+      let x = i * cb + offsetX;
+      let y = j * cb + offsetY;
+
       if (grid[i][j] === 1) {
-        fill(0); 
+        fill(50, 50, 50, 180); // ✅ 深灰透明方块
       } else {
-        fill(255);
+        fill(240, 240, 240, 80); // ✅ 浅灰背景格
       }
       rect(x, y, cb);
     }
@@ -82,4 +87,9 @@ function countNeighbors(x, y) {
     }
   }
   return sum;
+}
+
+// ✅ 自动调整画布大小
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
