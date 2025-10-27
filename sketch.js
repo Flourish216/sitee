@@ -1,4 +1,3 @@
-// 修改后的代码
 let grid = [];
 let nextGrid = [];
 let cols, rows;
