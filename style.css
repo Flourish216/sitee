@@ -1,4 +1,4 @@
-/* ===== Classical Black & White Aesthetic ===== */
+/* ===== Core Colors and Fonts ===== */
 :root {
   --bg: #fff;
   --text: #111;
@@ -15,14 +15,15 @@ body {
   color: var(--text);
   font-family: var(--font-ui);
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ===== Header ===== */
 .site-header {
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
+  position: relative;
+  z-index: 10; 
 }
 
 .container {
@@ -40,12 +41,10 @@ body {
   font-size: 1.25rem;
   text-decoration: none;
   color: var(--text);
-  letter-spacing: -0.01em;
 }
 
 .muted {
   color: var(--muted);
-  font-weight: 400;
 }
 
 .nav a {
@@ -71,51 +70,39 @@ body {
   width: 100%;
 }
 
-/* ===== Hero Section (Landing Animation) ===== */
+/* ===== Hero Section ===== */
 .hero {
   text-align: center;
-  height: 80vh;
+  height: 100vh; /* ✅ 全屏显示 */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  animation: fadeInContainer 1.5s ease forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes fadeInContainer {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  position: relative;
+  z-index: 2; /* ✅ 在画布上层 */
 }
 
 .fade-in-title {
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
-  opacity: 0;
-  animation: fadeIn 2s ease forwards;
+  animation: fadeIn 1.5s ease forwards;
 }
 
 .fade-in-quote {
-  font-family: var(--font-ui);
   font-size: 1rem;
   color: var(--muted);
   margin-top: 1rem;
   margin-bottom: 2.8rem;
-  max-width: 500px;
-  opacity: 0;
   animation: fadeIn 2s ease forwards;
-  animation-delay: 1.3s;
+  animation-delay: 1s;
 }
 
 .fade-in-btn {
-  opacity: 0;
   animation: fadeIn 2s ease forwards;
-  animation-delay: 2.5s;
+  animation-delay: 2s;
 }
 
-/* Smooth fade-up effect */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -124,12 +111,6 @@ body {
 .accent {
   font-style: italic;
   color: var(--accent);
-}
-
-.cta-row {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
 }
 
 .btn {
@@ -146,15 +127,16 @@ body {
   background: var(--accent);
 }
 
-.btn.ghost {
-  background: none;
-  color: var(--text);
-  border: 1px solid var(--text);
-}
-
-.btn.ghost:hover {
-  background: var(--text);
-  color: var(--bg);
+/* ===== p5.js Canvas (Full Screen Background) ===== */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0;         /* ✅ 放在背景 */
+  display: block;
+  pointer-events: none; /* ✅ 防止遮挡点击 */
 }
 
 /* ===== Footer ===== */
@@ -162,101 +144,6 @@ body {
   border-top: 1px solid var(--border);
   text-align: center;
   padding: 1.5rem 0;
-  font-size: 0.9rem;
   color: var(--muted);
-}
-
-/* ===== Shop Page (瀑布流 Masonry Grid) ===== */
-.shop h2 {
-  font-family: var(--font-display);
-  text-align: center;
-  margin-top: 3rem;
-}
-
-.shop .muted {
-  text-align: center;
-  margin-bottom: 3rem;
-  display: block;
-}
-
-/* Masonry-style layout */
-.masonry {
-  column-count: 3;
-  column-gap: 1rem;
-}
-
-.item {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  break-inside: avoid;
-  cursor: pointer;
-}
-
-.item img {
-  width: 100%;
-  display: block;
-  transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
-}
-
-.item:hover img {
-  transform: scale(1.05);
-  filter: grayscale(100%);
-  opacity: 0.85;
-}
-
-/* Overlay with smooth upward fade */
-.overlay {
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
-  padding: 0.8rem 0;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s ease;
-}
-
-.item:hover .overlay {
-  opacity: 1;
-  transform: translateY(0);
-  bottom: 0;
-}
-
-.overlay h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-}
-
-/* ===== Responsive Adjustments ===== */
-@media (max-width: 900px) {
-  .masonry {
-    column-count: 2;
-  }
-
-  .fade-in-title {
-    font-size: 2.3rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .masonry {
-    column-count: 1;
-  }
-
-  .fade-in-title {
-    font-size: 1.9rem;
-  }
-
-  .fade-in-quote {
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
-  }
-
+  font-size: 0.9rem;
 }
