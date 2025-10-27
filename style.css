@@ -9,14 +9,17 @@
   --font-ui: "Manrope", sans-serif;
 }
 
-/* ===== Global Styles ===== */
-body {
+/* ===== Global Reset & Fullscreen Setup ===== */
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* ✅ 确保画布铺满全屏 */
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
   line-height: 1.6;
-  overflow-x: hidden;
   position: relative;
 }
 
@@ -25,9 +28,9 @@ body {
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
   position: relative;
-  z-index: 10; /* ✅ 导航在所有内容上层 */
-  backdrop-filter: blur(6px); /* ✅ 轻微磨砂效果 */
-  background: rgba(255, 255, 255, 0.6); /* ✅ 半透明背景 */
+  z-index: 10;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .container {
@@ -77,36 +80,37 @@ body {
 /* ===== Hero Section ===== */
 .hero {
   text-align: center;
-  height: 100vh; /* ✅ 全屏显示 */
+  height: 100vh; /* ✅ 始终全屏 */
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 2; /* ✅ 文字内容在画布之上 */
+  z-index: 2;
 }
 
-/* ✅ 添加轻微遮罩，使文字更清晰 */
+/* ✅ 文字背景遮罩 */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.55);
   z-index: 1;
   pointer-events: none;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
 }
 
 .fade-in-title,
 .fade-in-quote,
 .fade-in-btn {
   position: relative;
-  z-index: 2; /* ✅ 避免被遮罩盖住 */
+  z-index: 2;
 }
 
 .fade-in-title {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3.2rem);
   font-weight: 700;
   opacity: 0;
   animation: fadeIn 1.5s ease forwards;
@@ -155,14 +159,14 @@ body {
 /* ===== Fullscreen p5.js Canvas Background ===== */
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0; /* ✅ 同时锁定 top/right/bottom/left */
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 0; /* ✅ 在内容下方 */
+  z-index: 0;
   display: block;
-  pointer-events: none; /* ✅ 不干扰点击 */
-  filter: blur(0.5px) brightness(1.05); /* ✅ 柔化背景，不刺眼 */
+  pointer-events: none;
+  object-fit: cover;
+  filter: blur(0.5px) brightness(1.05);
 }
 
 /* ===== Footer ===== */
