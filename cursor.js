@@ -19,7 +19,7 @@ function setup() {
 }
 
 function draw() {
-  // 使用半透明背景创建拖尾效果
+
   background(0, 0, 0, 10);
   
   // 更新拖尾位置

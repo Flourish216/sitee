@@ -30,11 +30,9 @@ function initGrid() {
 }
 
 function draw() {
-  // 使用更透明的背景创建淡出效果
   background(255, 255, 255, 15); 
   noStroke();
 
-  // 居中绘制整个网格
   let offsetX = (width - cols * cb) / 2;
   let offsetY = (height - rows * cb) / 2;
 
