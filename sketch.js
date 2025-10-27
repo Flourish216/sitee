@@ -1,13 +1,13 @@
 let grid = [];
 let nextGrid = [];
 let cols, rows;
-let cb = 15; // 单个方格的大小
+let cb = 15; // 单格大小
 let speed = 10;
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent('game-of-life-container');
-  
+  noStroke();
   initGrid();
 }
 
@@ -29,8 +29,8 @@ function initGrid() {
 }
 
 function draw() {
-  background(255, 255, 255, 15); 
-  noStroke();
+  // 背景半透明，制造流动残影效果
+  background(255, 255, 255, 50);
 
   let offsetX = (width - cols * cb) / 2;
   let offsetY = (height - rows * cb) / 2;
@@ -38,15 +38,15 @@ function draw() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 0, 0, 40); 
+        fill(0, 0, 0, 80); // 活细胞黑色半透明
       } else {
-        fill(255, 255, 255, 0); // 完全透明
+        fill(255, 255, 255, 30); // 死细胞白色半透明
       }
       rect(offsetX + i * cb, offsetY + j * cb, cb, cb);
     }
   }
 
-  if (frameCount % speed == 0) {
+  if (frameCount % speed === 0) {
     step();
   }
 }
@@ -57,13 +57,13 @@ function step() {
       let state = grid[i][j];
       let neighbors = countNeighbors(i, j);
 
-      if (state == 0 && neighbors == 3) nextGrid[i][j] = 1;
-      else if (state == 1 && (neighbors < 2 || neighbors > 3)) nextGrid[i][j] = 0;
+      if (state === 0 && neighbors === 3) nextGrid[i][j] = 1;
+      else if (state === 1 && (neighbors < 2 || neighbors > 3)) nextGrid[i][j] = 0;
       else nextGrid[i][j] = state;
     }
   }
 
-  // 复制新状态
+  // 复制状态
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       grid[i][j] = nextGrid[i][j];
@@ -84,7 +84,6 @@ function countNeighbors(x, y) {
   return sum;
 }
 
-// ✅ 当窗口大小改变时自动调整网格
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   initGrid();
