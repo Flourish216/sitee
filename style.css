@@ -77,10 +77,10 @@ html, body {
   width: 100%;
 }
 
-/* ===== Hero Section ===== */
+
 .hero {
   text-align: center;
-  height: 100vh; /* ✅ 始终全屏 */
+  height: 100vh; 
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -88,17 +88,6 @@ html, body {
   align-items: center;
   position: relative;
   z-index: 2;
-}
-
-/* ✅ 文字背景遮罩 */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.55);
-  z-index: 1;
-  pointer-events: none;
-  backdrop-filter: blur(6px);
 }
 
 .fade-in-title,
@@ -159,9 +148,9 @@ html, body {
 /* ===== Fullscreen p5.js Canvas Background ===== */
 canvas {
   position: fixed;
-  inset: 0; /* ✅ 同时锁定 top/right/bottom/left */
-  width: 100vw !important;
-  height: 100vh !important;
+  inset: 0; 
+  width: 100vw ;
+  height: 100vht;
   z-index: 0;
   display: block;
   pointer-events: none;
@@ -169,7 +158,7 @@ canvas {
   filter: blur(0.5px) brightness(1.05);
 }
 
-/* ===== Footer ===== */
+
 .site-footer {
   border-top: 1px solid var(--border);
   text-align: center;
@@ -181,17 +170,16 @@ canvas {
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.7);
 }
-/* ===== 全屏柔光遮罩层 ===== */
+
 .page-overlay {
   position: fixed;
   inset: 0;
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(6px);
-  z-index: 1; /* ✅ 在 canvas 上方，文字下方 */
+  z-index: 1; 
   pointer-events: none;
 }
 
-/* ✅ 可选：柔光渐变（上浅下深）更有层次感 */
 .page-overlay::after {
   content: "";
   position: absolute;
