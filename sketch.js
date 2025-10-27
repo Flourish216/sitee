@@ -1,7 +1,7 @@
 let grid = [];
 let nextGrid = [];
 let cols, rows;
-let cb = 15; // 单格大小
+let cb = 15;
 let speed = 10;
 
 function setup() {
@@ -29,7 +29,7 @@ function initGrid() {
 }
 
 function draw() {
-  // 背景半透明，制造流动残影效果
+  // 半透明背景制造残影流动感
   background(255, 255, 255, 50);
 
   let offsetX = (width - cols * cb) / 2;
@@ -38,17 +38,15 @@ function draw() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 0, 0, 80); // 活细胞黑色半透明
+        fill(0, 0, 0, 100); // 活细胞半透明黑色
       } else {
-        fill(255, 255, 255, 30); // 死细胞白色半透明
+        fill(255, 255, 255, 30); // 死细胞半透明白色
       }
       rect(offsetX + i * cb, offsetY + j * cb, cb, cb);
     }
   }
 
-  if (frameCount % speed === 0) {
-    step();
-  }
+  if (frameCount % speed === 0) step();
 }
 
 function step() {
@@ -63,7 +61,6 @@ function step() {
     }
   }
 
-  // 复制状态
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       grid[i][j] = nextGrid[i][j];
