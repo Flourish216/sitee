@@ -9,6 +9,7 @@
   --font-ui: "Manrope", sans-serif;
 }
 
+/* ===== Global Styles ===== */
 body {
   margin: 0;
   background: var(--bg);
@@ -23,7 +24,7 @@ body {
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
   position: relative;
-  z-index: 10; 
+  z-index: 10; /* ✅ 让导航在画布之上 */
 }
 
 .container {
@@ -79,13 +80,14 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 2; /* ✅ 在画布上层 */
+  z-index: 2; /* ✅ 内容在画布上层 */
 }
 
 .fade-in-title {
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
+  opacity: 0;
   animation: fadeIn 1.5s ease forwards;
 }
 
@@ -94,11 +96,13 @@ body {
   color: var(--muted);
   margin-top: 1rem;
   margin-bottom: 2.8rem;
+  opacity: 0;
   animation: fadeIn 2s ease forwards;
   animation-delay: 1s;
 }
 
 .fade-in-btn {
+  opacity: 0;
   animation: fadeIn 2s ease forwards;
   animation-delay: 2s;
 }
@@ -127,16 +131,16 @@ body {
   background: var(--accent);
 }
 
-/* ===== p5.js Canvas (Full Screen Background) ===== */
+/* ===== Fullscreen p5.js Canvas Background ===== */
 canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 0;         /* ✅ 放在背景 */
+  z-index: -1; /* ✅ 在所有内容下方 */
   display: block;
-  pointer-events: none; /* ✅ 防止遮挡点击 */
+  pointer-events: none; /* ✅ 不影响点击交互 */
 }
 
 /* ===== Footer ===== */
@@ -146,4 +150,6 @@ canvas {
   padding: 1.5rem 0;
   color: var(--muted);
   font-size: 0.9rem;
+  position: relative;
+  z-index: 2; /* ✅ 确保也在画布之上 */
 }
