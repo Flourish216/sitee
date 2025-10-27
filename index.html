@@ -11,9 +11,17 @@
 
   <!-- p5.js -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
-  <div class="page-overlay"></div>
 </head>
 <body>
+  <!-- 生命游戏背景容器 -->
+  <div id="game-of-life-container"></div>
+  
+  <!-- 鼠标拖尾容器 -->
+  <div id="cursor-container"></div>
+  
+  <!-- 页面遮罩层 -->
+  <div class="page-overlay"></div>
+  
   <header class="site-header">
     <div class="container">
       <a class="brand" href="index.html">Jesse Zhang <span class="muted"></span></a>
@@ -35,7 +43,7 @@
     </div>
   </main>
 
-  <!-- p5 sketch -->
+  <!-- 加载sketch文件 -->
   <script src="sketch.js"></script>
   <script src="cursor.js"></script>
 </body>
