@@ -83,8 +83,8 @@ html, body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 修改这里：从顶部开始 */
-  padding-top: 20vh; /* 添加顶部内边距控制上移距离 */
+  justify-content: flex-start;
+  padding-top: 20vh;
   align-items: center;
   position: relative;
   z-index: 2;
@@ -103,7 +103,7 @@ html, body {
   font-weight: 700;
   opacity: 0;
   animation: fadeIn 1.5s ease forwards;
-  margin-bottom: 1rem; /* 增加下边距使标题和引语之间距离更大 */
+  margin-bottom: 1rem;
 }
 
 .fade-in-quote {
@@ -146,17 +146,24 @@ html, body {
   background: var(--accent);
 }
 
-/* ===== Fullscreen p5.js Canvas Background ===== */
-canvas {
+/* ===== 关键修复：生命游戏背景容器 ===== */
+#game-of-life-container {
   position: fixed;
   inset: 0; 
   width: 100vw;
   height: 100vh;
-  z-index: 0;
-  display: block;
+  z-index: -1; /* 确保在底层 */
   pointer-events: none;
-  object-fit: cover;
-  filter: brightness(1.02);
+}
+
+/* ===== 鼠标拖尾容器 ===== */
+#cursor-container {
+  position: fixed;
+  inset: 0; 
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* 在生命游戏之上 */
+  pointer-events: none;
 }
 
 .site-footer {
@@ -177,11 +184,22 @@ canvas {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.65) 40%,
-    rgba(255, 255, 255, 0.8) 100%
+    rgba(255, 255, 255, 0.3) 0%, /* 降低透明度 */
+    rgba(255, 255, 255, 0.45) 40%,
+    rgba(255, 255, 255, 0.6) 100%
   );
   backdrop-filter: blur(8px);
   z-index: 1; 
   pointer-events: none;
+}
+
+/* 移除通用canvas样式，避免冲突 */
+canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: block !important;
+  pointer-events: none !important;
+  object-fit: cover !important;
 }
