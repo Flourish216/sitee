@@ -31,32 +31,15 @@ html, body {
   z-index: 0;
   display: block;
   pointer-events: none;
-  filter: brightness(0.7);
+  filter: brightness(0.8);
   opacity: 0;
-  animation: revealBackground 2s ease-out forwards;
+  animation: revealBackground 1.8s ease-out forwards;
 }
 
 @keyframes revealBackground {
-  0%   { opacity: 0; filter: brightness(0.7) blur(2px); }
-  60%  { opacity: 0.8; filter: brightness(0.9) blur(1px); }
+  0%   { opacity: 0; filter: brightness(0.6) blur(2px); }
+  70%  { opacity: 0.8; filter: brightness(0.9) blur(1px); }
   100% { opacity: 1; filter: brightness(1.1) blur(0); }
-}
-
-/* ===== Overlay (home only) ===== */
-.home-page .page-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(7px);
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  animation: fadeOverlay 1.2s ease 0.4s forwards;
-}
-
-@keyframes fadeOverlay {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* ===== Header ===== */
@@ -65,51 +48,87 @@ html, body {
   z-index: 3;
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
-  backdrop-filter: blur(8px);
   background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .home-page .site-header {
   opacity: 0;
-  animation: fadeHeader 1s ease 0.8s forwards;
+  animation: fadeHeader 0.8s ease 0.6s forwards;
 }
 
 @keyframes fadeHeader {
-  from { opacity: 0; transform: translateY(-15px); }
+  from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav a {
+  text-decoration: none;
+  margin-left: 1.5rem;
+  color: var(--text);
+  font-weight: 500;
+  position: relative;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 1px;
+  left: 0;
+  bottom: -2px;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+.nav a:hover::after { width: 100%; }
 
 /* ===== Hero Section ===== */
 .hero {
   text-align: center;
   height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-top: 22vh; /* ✅ 再上移一点 */
   position: relative;
   z-index: 3;
-  opacity: 1;
-  transform: none;
-}
-
-.home-page .hero {
   opacity: 0;
-  transform: translateY(30px);
-  animation: fadeHero 2s ease 1s forwards;
-  padding-top: 8vh;
+  transform: translateY(40px);
+  animation: fadeHero 1.8s ease 0.9s forwards;
 }
 
 @keyframes fadeHero {
-  0%   { opacity: 0; transform: translateY(30px) scale(0.98); }
-  100% { opacity: 1; transform: translateY(-5px) scale(1); }
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to { opacity: 1; transform: translateY(-10px) scale(1); }
 }
 
+/* ===== Sequential Fade-in for Title, Quote, and Button ===== */
 .fade-in-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.2rem);
   font-weight: 700;
   margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeUp 1.5s ease 1.2s forwards;
 }
 
 .fade-in-quote {
@@ -117,13 +136,29 @@ html, body {
   color: var(--muted);
   margin-top: 0.5rem;
   margin-bottom: 2.8rem;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeUp 1.5s ease 1.8s forwards;
 }
 
+.fade-in-btn {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeUp 1.5s ease 2.4s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Accent Text */
 .accent {
   font-style: italic;
   color: var(--accent);
 }
 
+/* ===== Button ===== */
 .btn {
   text-decoration: none;
   color: var(--bg);
@@ -144,14 +179,12 @@ html, body {
   font-size: 0.9rem;
   position: relative;
   z-index: 3;
-  backdrop-filter: blur(8px);
   background: rgba(255, 255, 255, 0.7);
-  opacity: 1;
-  transform: none;
+  backdrop-filter: blur(5px);
 }
 .home-page .site-footer {
   opacity: 0;
-  animation: fadeFooter 1.2s ease 1.5s forwards;
+  animation: fadeFooter 1.2s ease 1.8s forwards;
 }
 
 @keyframes fadeFooter {
