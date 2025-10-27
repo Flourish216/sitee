@@ -1,4 +1,3 @@
-/* ===== Core Colors and Fonts ===== */
 :root {
   --bg: #ffffff;
   --text: #111;
@@ -9,7 +8,7 @@
   --font-ui: "Manrope", sans-serif;
 }
 
-/* ===== Global Reset & Fullscreen Setup ===== */
+
 html, body {
   margin: 0;
   padding: 0;
@@ -23,7 +22,6 @@ html, body {
   position: relative;
 }
 
-/* ===== Header ===== */
 .site-header {
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
@@ -146,25 +144,24 @@ html, body {
   background: var(--accent);
 }
 
-/* ===== 生命游戏背景容器 ===== */
 #game-of-life-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1; /* 确保在底层 */
+  z-index: -1; 
   pointer-events: none;
 }
 
-/* ===== 鼠标拖尾容器 ===== */
+
 #cursor-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0; /* 在生命游戏之上 */
+  z-index: 0; 
   pointer-events: none;
 }
 
@@ -198,7 +195,7 @@ html, body {
   pointer-events: none;
 }
 
-/* 确保所有画布正确显示 */
+
 #game-of-life-container canvas,
 #cursor-container canvas {
   position: absolute !important;
