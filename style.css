@@ -9,7 +9,7 @@
   --font-ui: "Manrope", sans-serif;
 }
 
-/* ===== Global Reset ===== */
+/* ===== Base Reset ===== */
 html, body {
   margin: 0;
   padding: 0;
@@ -20,15 +20,36 @@ html, body {
   color: var(--text);
   font-family: var(--font-ui);
   line-height: 1.6;
-  position: relative;
+}
+
+/* ===== p5 Canvas Background ===== */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0; /* ✅ 最底层 */
+  display: block;
+  pointer-events: none;
+}
+
+/* ===== Soft Overlay (middle layer) ===== */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.35); /* ✅ 透明柔光 */
+  backdrop-filter: blur(4px);
+  z-index: 1; /* ✅ 中间层 */
+  pointer-events: none;
 }
 
 /* ===== Header ===== */
 .site-header {
+  position: relative;
+  z-index: 3; /* ✅ 在 overlay 上层 */
   border-bottom: 1px solid var(--border);
   padding: 1rem 0;
-  position: relative;
-  z-index: 10;
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.6);
 }
@@ -50,12 +71,13 @@ html, body {
   color: var(--text);
 }
 
+/* ===== Navigation ===== */
 .nav a {
   text-decoration: none;
   margin-left: 1.5rem;
   color: var(--text);
-  position: relative;
   font-weight: 500;
+  position: relative;
 }
 
 .nav a::after {
@@ -68,10 +90,7 @@ html, body {
   background: var(--accent);
   transition: width 0.25s ease;
 }
-
-.nav a:hover::after {
-  width: 100%;
-}
+.nav a:hover::after { width: 100%; }
 
 /* ===== Hero Section ===== */
 .hero {
@@ -82,14 +101,13 @@ html, body {
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 2;
+  z-index: 3; /* ✅ 文字最高层 */
 }
 
 .fade-in-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.2rem);
   font-weight: 700;
-  opacity: 0;
   animation: fadeIn 1.5s ease forwards;
 }
 
@@ -98,13 +116,11 @@ html, body {
   color: var(--muted);
   margin-top: 1rem;
   margin-bottom: 2.8rem;
-  opacity: 0;
   animation: fadeIn 2s ease forwards;
   animation-delay: 1s;
 }
 
 .fade-in-btn {
-  opacity: 0;
   animation: fadeIn 2s ease forwards;
   animation-delay: 2s;
 }
@@ -128,32 +144,7 @@ html, body {
   font-weight: 600;
   transition: all 0.25s ease;
 }
-
-.btn:hover {
-  background: var(--accent);
-}
-
-/* ===== p5 Canvas Background ===== */
-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  display: block;
-  pointer-events: none;
-}
-
-/* ===== Soft Overlay ===== */
-.page-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.35); /* ✅ 调淡，让 Game of Life 透出来 */
-  backdrop-filter: blur(4px);
-  z-index: 1;
-  pointer-events: none;
-  transition: transform 0.4s ease-out;
-}
+.btn:hover { background: var(--accent); }
 
 /* ===== Footer ===== */
 .site-footer {
@@ -163,7 +154,7 @@ canvas {
   color: var(--muted);
   font-size: 0.9rem;
   position: relative;
-  z-index: 2;
+  z-index: 3;
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.7);
 }
