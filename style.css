@@ -181,3 +181,26 @@ canvas {
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.7);
 }
+/* ===== 全屏柔光遮罩层 ===== */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 1; /* ✅ 在 canvas 上方，文字下方 */
+  pointer-events: none;
+}
+
+/* ✅ 可选：柔光渐变（上浅下深）更有层次感 */
+.page-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.55) 40%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  pointer-events: none;
+}
