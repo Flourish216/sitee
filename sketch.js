@@ -1,3 +1,4 @@
+// 修改后的代码
 let grid = [];
 let nextGrid = [];
 let cols, rows;
@@ -5,7 +6,10 @@ let cb = 15; // 单个方格的大小
 let speed = 10;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  // 创建画布并放入背景容器
+  let canvas = createCanvas(windowWidth, windowHeight);
+  canvas.parent('game-of-life-container');
+  
   initGrid();
 }
 
@@ -20,14 +24,16 @@ function initGrid() {
     grid[i] = [];
     nextGrid[i] = [];
     for (let j = 0; j < rows; j++) {
-      grid[i][j] = random(1) < 0.15 ? 1 : 0;
+      // 降低初始活细胞密度，使背景更柔和
+      grid[i][j] = random(1) < 0.08 ? 1 : 0;
       nextGrid[i][j] = 0;
     }
   }
 }
 
 function draw() {
-  background(255, 80); // 半透明白背景，防止闪烁感
+  // 使用更透明的背景创建淡出效果
+  background(255, 255, 255, 15); 
   noStroke();
 
   // 居中绘制整个网格
@@ -37,9 +43,10 @@ function draw() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 80); // 柔和的黑色（不要太刺眼）
+        // 使用更柔和的颜色
+        fill(0, 0, 0, 40); // 黑色，低透明度
       } else {
-        fill(255, 0); // 透明
+        fill(255, 255, 255, 0); // 完全透明
       }
       rect(offsetX + i * cb, offsetY + j * cb, cb, cb);
     }
