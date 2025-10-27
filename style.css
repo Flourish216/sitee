@@ -9,13 +9,13 @@
   --font-ui: "Manrope", sans-serif;
 }
 
-/* ===== Global Reset & Fullscreen Setup ===== */
+/* ===== Global Reset ===== */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden; /* ✅ 确保画布铺满全屏 */
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
@@ -50,10 +50,6 @@ html, body {
   color: var(--text);
 }
 
-.muted {
-  color: var(--muted);
-}
-
 .nav a {
   text-decoration: none;
   margin-left: 1.5rem;
@@ -80,19 +76,11 @@ html, body {
 /* ===== Hero Section ===== */
 .hero {
   text-align: center;
-  height: 100vh; 
-  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
-  z-index: 2;
-}
-
-.fade-in-title,
-.fade-in-quote,
-.fade-in-btn {
   position: relative;
   z-index: 2;
 }
@@ -145,7 +133,7 @@ html, body {
   background: var(--accent);
 }
 
-/* ===== Fullscreen p5.js Canvas Background ===== */
+/* ===== p5 Canvas Background ===== */
 canvas {
   position: fixed;
   inset: 0;
@@ -154,8 +142,17 @@ canvas {
   z-index: 0;
   display: block;
   pointer-events: none;
-  object-fit: cover;
-  filter: blur(0.5px) brightness(1.05);
+}
+
+/* ===== Soft Overlay ===== */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.35); /* ✅ 调淡，让 Game of Life 透出来 */
+  backdrop-filter: blur(4px);
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.4s ease-out;
 }
 
 /* ===== Footer ===== */
@@ -169,15 +166,4 @@ canvas {
   z-index: 2;
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.7);
-}
-
-/* ===== 全屏柔光遮罩（简洁版） ===== */
-.page-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.55); /* ✅ 单层柔光 */
-  backdrop-filter: blur(6px); /* ✅ 轻微模糊 */
-  z-index: 1; /* ✅ 在 canvas 上方、文字下方 */
-  pointer-events: none;
-  transition: transform 0.4s ease-out; /* ✅ 用于漂浮动画 */
 }

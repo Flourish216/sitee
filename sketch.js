@@ -1,14 +1,13 @@
 let grid = [];
 let nextGrid = [];
 let cols, rows;
-let cb = 15;
+let cb = 15; // cell size
 let speed = 10;
 
 function setup() {
-  let canvas = createCanvas(windowWidth, windowHeight);
-  canvas.parent('game-of-life-container');
-  noStroke();
+  createCanvas(windowWidth, windowHeight);
   initGrid();
+  noStroke();
 }
 
 function initGrid() {
@@ -22,31 +21,26 @@ function initGrid() {
     grid[i] = [];
     nextGrid[i] = [];
     for (let j = 0; j < rows; j++) {
-      grid[i][j] = random(1) < 0.08 ? 1 : 0;
+      grid[i][j] = random(1) < 0.2 ? 1 : 0;
       nextGrid[i][j] = 0;
     }
   }
 }
 
 function draw() {
-  // 半透明背景制造残影流动感
-  background(255, 255, 255, 50);
-
+  background(255, 60); // ✅ 半透明白背景，让残影柔和
   let offsetX = (width - cols * cb) / 2;
   let offsetY = (height - rows * cb) / 2;
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      if (grid[i][j] === 1) {
-        fill(0, 0, 0, 100); // 活细胞半透明黑色
-      } else {
-        fill(255, 255, 255, 30); // 死细胞半透明白色
-      }
+      if (grid[i][j] === 1) fill(0, 80);
+      else fill(255, 0);
       rect(offsetX + i * cb, offsetY + j * cb, cb, cb);
     }
   }
 
-  if (frameCount % speed === 0) step();
+  if (frameCount % speed == 0) step();
 }
 
 function step() {
@@ -55,12 +49,13 @@ function step() {
       let state = grid[i][j];
       let neighbors = countNeighbors(i, j);
 
-      if (state === 0 && neighbors === 3) nextGrid[i][j] = 1;
-      else if (state === 1 && (neighbors < 2 || neighbors > 3)) nextGrid[i][j] = 0;
+      if (state == 0 && neighbors == 3) nextGrid[i][j] = 1;
+      else if (state == 1 && (neighbors < 2 || neighbors > 3)) nextGrid[i][j] = 0;
       else nextGrid[i][j] = state;
     }
   }
 
+  // copy nextGrid
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       grid[i][j] = nextGrid[i][j];
