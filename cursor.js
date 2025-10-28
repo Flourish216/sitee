@@ -3,6 +3,13 @@ const cursorTrailSketch = (p) => {
   const trailLength = 22;
   const trail = [];
   let lastPointer = null;
+  const palette = [
+    [255, 196, 196],
+    [255, 220, 186],
+    [211, 238, 255],
+    [206, 223, 255],
+    [217, 206, 255],
+  ];
 
   p.setup = () => {
     const canvas = p.createCanvas(p.windowWidth, p.windowHeight);
@@ -19,12 +26,15 @@ const cursorTrailSketch = (p) => {
     p.frameRate(60);
     p.clear();
 
+    const maxSize = p.constrain(Math.max(p.windowWidth, p.windowHeight) * 0.018, 18, 34);
+    const minSize = maxSize * 0.35;
+
     for (let i = 0; i < trailLength; i++) {
       trail.push({
         x: p.windowWidth / 2,
         y: p.windowHeight / 2,
-        size: p.map(i, 0, trailLength - 1, 28, 8),
-        alpha: p.map(i, 0, trailLength - 1, 230, 40),
+        size: p.map(i, 0, trailLength - 1, maxSize, minSize),
+        alpha: p.map(i, 0, trailLength - 1, 170, 25),
       });
     }
   };
@@ -58,19 +68,22 @@ const cursorTrailSketch = (p) => {
     trail[trailLength - 1].y = p.lerp(trail[trailLength - 1].y, targetY, 0.35);
 
     for (let i = 0; i < trailLength - 1; i++) {
-      trail[i].x = p.lerp(trail[i].x, trail[i + 1].x, 0.45);
-      trail[i].y = p.lerp(trail[i].y, trail[i + 1].y, 0.45);
+      trail[i].x = p.lerp(trail[i].x, trail[i + 1].x, 0.4);
+      trail[i].y = p.lerp(trail[i].y, trail[i + 1].y, 0.4);
     }
 
     p.clear();
     p.noStroke();
     p.drawingContext.save();
-    p.drawingContext.shadowBlur = 24;
-    p.drawingContext.shadowColor = 'rgba(17, 17, 17, 0.22)';
+    p.drawingContext.shadowBlur = 22;
+    p.drawingContext.shadowColor = 'rgba(255, 210, 240, 0.35)';
 
     for (let i = 0; i < trailLength; i++) {
       const { x, y, size, alpha } = trail[i];
-      p.fill(17, 17, 17, alpha);
+      const t = i / (trailLength - 1);
+      const paletteIndex = Math.floor(t * (palette.length - 1));
+      const [r, g, b] = palette[paletteIndex];
+      p.fill(r, g, b, alpha);
       p.ellipse(x, y, size);
     }
 
