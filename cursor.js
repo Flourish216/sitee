@@ -4,11 +4,11 @@ const cursorTrailSketch = (p) => {
   const trail = [];
   let lastPointer = null;
   const palette = [
-    [255, 196, 196],
-    [255, 220, 186],
-    [211, 238, 255],
-    [206, 223, 255],
-    [217, 206, 255],
+    [255, 139, 139],
+    [255, 181, 129],
+    [136, 190, 255],
+    [104, 162, 255],
+    [162, 118, 255],
   ];
 
   p.setup = () => {
@@ -26,14 +26,15 @@ const cursorTrailSketch = (p) => {
     p.frameRate(60);
     p.clear();
 
-    const maxSize = p.constrain(Math.max(p.windowWidth, p.windowHeight) * 0.018, 18, 34);
-    const minSize = maxSize * 0.35;
+    const base = Math.max(p.windowWidth, p.windowHeight);
+    const maxSize = p.constrain(base * 0.028, 24, 48);
+    const minSize = maxSize * 0.45;
 
     for (let i = 0; i < trailLength; i++) {
       trail.push({
         x: p.windowWidth / 2,
         y: p.windowHeight / 2,
-        size: p.map(i, 0, trailLength - 1, maxSize, minSize),
+        size: p.map(i, 0, trailLength - 1, minSize, maxSize),
         alpha: p.map(i, 0, trailLength - 1, 170, 25),
       });
     }
@@ -64,12 +65,12 @@ const cursorTrailSketch = (p) => {
       targetY = p.height / 2;
     }
 
-    trail[trailLength - 1].x = p.lerp(trail[trailLength - 1].x, targetX, 0.35);
-    trail[trailLength - 1].y = p.lerp(trail[trailLength - 1].y, targetY, 0.35);
+    trail[trailLength - 1].x = p.lerp(trail[trailLength - 1].x, targetX, 0.5);
+    trail[trailLength - 1].y = p.lerp(trail[trailLength - 1].y, targetY, 0.5);
 
     for (let i = 0; i < trailLength - 1; i++) {
-      trail[i].x = p.lerp(trail[i].x, trail[i + 1].x, 0.4);
-      trail[i].y = p.lerp(trail[i].y, trail[i + 1].y, 0.4);
+      trail[i].x = p.lerp(trail[i].x, trail[i + 1].x, 0.5);
+      trail[i].y = p.lerp(trail[i].y, trail[i + 1].y, 0.5);
     }
 
     p.clear();
