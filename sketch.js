@@ -1,8 +1,8 @@
 let grid = [];
 let nextGrid = [];
 let cols, rows;
-let cellSize = 18;
-let speed = 12;
+let cellSize = 24;
+let speed = 24;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -14,7 +14,7 @@ function initGrid() {
   cols = floor(width / cellSize);
   rows = floor(height / cellSize);
   grid = Array.from({ length: cols }, () =>
-    Array.from({ length: rows }, () => (random(1) < 0.25 ? 1 : 0))
+    Array.from({ length: rows }, () => (random(1) < 0.18 ? 1 : 0))
   );
   nextGrid = Array.from({ length: cols }, () => Array(rows).fill(0));
 }
@@ -24,7 +24,7 @@ function draw() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 90); // ✅ 半透明黑块
+        fill(0, 70); // ✅ 更柔和的半透明块
         rect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }

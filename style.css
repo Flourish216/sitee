@@ -22,6 +22,13 @@ html, body {
   line-height: 1.6;
 }
 
+#cursor-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
 /* ===== Background canvas (homepage only) ===== */
 .home-page canvas {
   position: fixed;
