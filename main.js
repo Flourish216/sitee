@@ -57,38 +57,50 @@
     let flashCooldown = 0;
     const safeRadius = 52;
     const flashDuration = 220;
-    const initialHeroRect = hero.getBoundingClientRect();
-    const initialButtonRect = ctaButton.getBoundingClientRect();
-    const anchor = {
-      x: initialButtonRect.left - initialHeroRect.left,
-      y: initialButtonRect.top - initialHeroRect.top,
+    const heroRect = hero.getBoundingClientRect();
+    const buttonRect = ctaButton.getBoundingClientRect();
+    const buttonWidth = buttonRect.width;
+    const buttonHeight = buttonRect.height;
+    const heroWidth = hero.clientWidth;
+    const heroHeight = hero.clientHeight;
+    const baseCenter = {
+      x: buttonRect.left - heroRect.left + buttonWidth / 2,
+      y: buttonRect.top - heroRect.top + buttonHeight / 2,
     };
+    const baseOffsetX = baseCenter.x - heroWidth / 2;
+    const baseTop = baseCenter.y - buttonHeight / 2;
+    const paddingX = Math.min(120, Math.max(36, heroWidth * 0.08));
+    const paddingY = Math.min(120, Math.max(40, heroHeight * 0.12));
+    const minCenterX = paddingX + buttonWidth / 2;
+    const maxCenterX = heroWidth - paddingX - buttonWidth / 2;
+    const minCenterY = paddingY + buttonHeight / 2;
+    const maxCenterY = heroHeight - paddingY - buttonHeight / 2;
     let resetTimer = null;
 
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const applyPosition = (offsetX, offsetY) => {
+      ctaButton.style.transform = `translate(-50%, 0) translate(${baseOffsetX + offsetX}px, ${offsetY}px)`;
+    };
+
+    const scheduleReset = () => {
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        resetPosition();
+      }, 1800);
+    };
+
     const teleportButton = () => {
-      const heroWidth = hero.clientWidth;
-      const heroHeight = hero.clientHeight;
-      const buttonWidth = ctaButton.offsetWidth;
-      const buttonHeight = ctaButton.offsetHeight;
-      const paddingX = Math.min(120, Math.max(36, heroWidth * 0.08));
-      const paddingY = Math.min(120, Math.max(40, heroHeight * 0.12));
-      const minX = paddingX;
-      const maxX = Math.max(minX, heroWidth - paddingX - buttonWidth);
-      const minY = paddingY;
-      const maxY = Math.max(minY, heroHeight - paddingY - buttonHeight);
-      const maxRadius = Math.min(Math.min(heroWidth, heroHeight) * 0.22, 240);
-      const minRadius = maxRadius * 0.35;
-      const theta = Math.random() * Math.PI * 2;
-      const radius = minRadius + Math.random() * (maxRadius - minRadius);
-      let targetX = anchor.x + Math.cos(theta) * radius;
-      let targetY = anchor.y + Math.sin(theta) * radius;
-      targetX = Math.min(Math.max(targetX, minX), maxX);
-      targetY = Math.min(Math.max(targetY, minY), maxY);
-      const offsetX = maxX > minX ? targetX : (heroWidth - buttonWidth) / 2;
-      const offsetY = maxY > minY ? targetY : (heroHeight - buttonHeight) / 2;
-      ctaButton.style.left = `${offsetX}px`;
-      ctaButton.style.top = `${offsetY}px`;
-      ctaButton.style.transform = 'translate(0, 0)';
+      const radiusX = Math.min(hero.clientWidth * 0.28, 220);
+      const radiusY = Math.min(hero.clientHeight * 0.22, 180);
+      const theta = Math.random() * (Math.PI * 2);
+      let nextCenterX = baseCenter.x + Math.cos(theta) * radiusX;
+      let nextCenterY = baseCenter.y + Math.sin(theta) * radiusY;
+      nextCenterX = clamp(nextCenterX, minCenterX, maxCenterX);
+      nextCenterY = clamp(nextCenterY, minCenterY, maxCenterY);
+      const offsetX = nextCenterX - baseCenter.x;
+      const offsetY = nextCenterY - baseCenter.y;
+      applyPosition(offsetX, offsetY);
       ctaButton.classList.add('cta-flash');
       setTimeout(() => ctaButton.classList.remove('cta-flash'), flashDuration);
       flashCooldown = Date.now() + 260;
@@ -109,23 +121,16 @@
       }
     };
 
-    const scheduleReset = () => {
-      clearTimeout(resetTimer);
-      resetTimer = setTimeout(() => {
-        resetPosition();
-      }, 1600);
-    };
-
     const resetPosition = () => {
-      ctaButton.style.left = `${anchor.x}px`;
-      ctaButton.style.top = `${anchor.y}px`;
-      ctaButton.style.transform = 'translate(0, 0)';
+      applyPosition(0, 0);
       ctaButton.classList.remove('cta-flash');
     };
 
     hero.style.position = 'relative';
     ctaButton.style.position = 'absolute';
-    resetPosition();
+    ctaButton.style.left = '50%';
+    ctaButton.style.top = `${baseTop}px`;
+    applyPosition(0, 0);
 
     hero.addEventListener('pointermove', handleMove);
     hero.addEventListener('pointerleave', () => {
