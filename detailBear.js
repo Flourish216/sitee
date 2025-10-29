@@ -1,145 +1,156 @@
 (() => {
-  const mount = document.getElementById('bear-canvas');
-  if (!mount) return;
+  const host = document.getElementById('bear-canvas');
+  if (!host) return;
 
-  const sketch = (p) => {
-    const candies = [];
+  new p5((p) => {
+    const offerings = [];
     const shards = [];
-    let bearScale = 1;
-    let hunger = 0;
-    let burst = false;
+    const aura = [];
+    let saturation = 0;
+    let rupture = false;
     let resetTimer = 0;
 
-    const spawnCandy = (x, y) => {
-      candies.push({
+    const spawnOffering = (x, y) => {
+      offerings.push({
         x,
         y,
-        vy: 2,
-        wobble: p.random(10),
-        eaten: false,
-        color: p.random([p.color('#ffb3c1'), p.color('#ffd166'), p.color('#baffc9')]),
+        vx: p.random(-0.8, 0.8),
+        vy: -p.random(1, 2),
+        hue: p.random([320, 20, 120, 180, 260]),
+        mass: p.random(6, 11),
       });
     };
 
-    const resetBear = () => {
-      bearScale = 1;
-      hunger = 0;
-      burst = false;
-      candies.length = 0;
+    const resetBeast = () => {
+      offerings.length = 0;
       shards.length = 0;
+      saturation = 0;
+      rupture = false;
       resetTimer = 0;
     };
 
-    const launchShards = () => {
+    const explodeBeast = (cx, cy) => {
       shards.length = 0;
-      const cx = p.width / 2;
-      const cy = p.height * 0.55;
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 220; i++) {
         shards.push({
-          x: cx,
-          y: cy,
+          x: cx + p.random(-20, 20),
+          y: cy + p.random(-20, 20),
           vx: p.random(-3, 3),
-          vy: p.random(-3, 2),
-          alpha: 255,
-          size: p.random(4, 12),
-          hue: p.random([0, 30, 120, 200, 320]),
+          vy: p.random(-4, 2),
+          hue: (p.random(360) + i * 2) % 360,
+          life: 1,
         });
       }
+      rupture = true;
     };
 
     p.setup = () => {
-      const size = Math.min(window.innerWidth, window.innerHeight);
-      p.createCanvas(size, size).parent(mount);
+      p.createCanvas(window.innerWidth, window.innerHeight).parent(host);
       p.colorMode(p.HSB, 360, 100, 100, 1);
+      resetBeast();
     };
 
     p.windowResized = () => {
-      const size = Math.min(window.innerWidth, window.innerHeight);
-      p.resizeCanvas(size, size);
+      p.resizeCanvas(window.innerWidth, window.innerHeight);
     };
 
-    const drawBear = () => {
+    const drawBackground = () => {
+      const ctx = p.drawingContext;
+      ctx.save();
+      const g = ctx.createRadialGradient(
+        p.width * 0.5,
+        p.height * 0.55,
+        p.width * 0.12,
+        p.width * 0.5,
+        p.height * 0.6,
+        Math.max(p.width, p.height)
+      );
+      g.addColorStop(0, 'rgba(18, 6, 16, 0.95)');
+      g.addColorStop(0.5, 'rgba(8, 4, 12, 0.92)');
+      g.addColorStop(1, 'rgba(1, 0, 4, 1)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, p.width, p.height);
+      ctx.restore();
+
+      p.push();
+      p.stroke(315, 30, 60, 0.1);
+      p.noFill();
+      for (let i = 0; i < 20; i++) {
+        p.ellipse(p.width / 2, p.height * 0.65, p.width * (0.3 + i * 0.05), p.width * (0.08 + i * 0.02));
+      }
+      p.pop();
+    };
+
+    const drawBeast = () => {
       const cx = p.width / 2;
       const cy = p.height * 0.55;
-      const s = p.width * 0.18 * bearScale;
-      const breathe = Math.sin(p.frameCount * 0.03) * s * 0.06;
+      const base = p.width * 0.16 + saturation * 6;
 
       p.push();
-      p.translate(cx, cy + breathe);
+      p.translate(cx, cy);
       p.noStroke();
-      p.fill(330, 35, 95, 0.35);
-      p.ellipse(0, s * 0.3, s * 2, s * 1.1);
-      p.fill(330, 35, 90, 0.5);
-      p.ellipse(0, 0, s * 1.6, s * 1.8);
-      p.ellipse(-s * 0.8, -s * 1.1, s * 1.1, s * 1.4);
-      p.ellipse(s * 0.8, -s * 1.1, s * 1.1, s * 1.4);
-
-      // ears
-      p.fill(330, 55, 95, 0.8);
-      p.ellipse(-s, -s * 1.8, s * 0.8, s * 0.9);
-      p.ellipse(s, -s * 1.8, s * 0.8, s * 0.9);
+      for (let layer = 5; layer >= 1; layer--) {
+        const r = base * (0.5 + layer * 0.18);
+        const hue = (320 + layer * 6 + saturation * 3) % 360;
+        p.fill(hue, 60, 100, 0.18 + layer * 0.08);
+        p.beginShape();
+        for (let a = 0; a < p.TWO_PI; a += p.TWO_PI / 140) {
+          const radial = r + Math.sin(a * 3 + p.frameCount * 0.02 + layer) * 18 + Math.sin(a * 8 + layer) * 6;
+          const x = Math.cos(a) * radial;
+          const y = Math.sin(a) * radial * 0.72;
+          p.vertex(x, y);
+        }
+        p.endShape(p.CLOSE);
+      }
 
       // eyes
-      p.fill(0, 0, 10);
-      p.circle(-s * 0.4, -s * 0.8, s * 0.35);
-      p.circle(s * 0.4, -s * 0.8, s * 0.35);
+      p.fill(0, 0, 10, 0.8);
+      const eyeOffset = base * 0.6;
+      const eyeSize = base * 0.32 + Math.sin(p.frameCount * 0.1) * base * 0.05;
+      p.circle(-eyeOffset, -base * 0.4, eyeSize);
+      p.circle(eyeOffset, -base * 0.4, eyeSize);
       p.fill(0, 0, 100);
-      p.circle(-s * 0.35 + Math.sin(p.frameCount * 0.1) * s * 0.05, -s * 0.8, s * 0.12);
-      p.circle(s * 0.35 + Math.sin(p.frameCount * 0.1 + 1) * s * 0.05, -s * 0.8, s * 0.12);
+      p.circle(-eyeOffset + Math.sin(p.frameCount * 0.12) * base * 0.07, -base * 0.38, eyeSize * 0.35);
+      p.circle(eyeOffset + Math.sin(p.frameCount * 0.1 + 1.1) * base * 0.07, -base * 0.38, eyeSize * 0.35);
 
-      // snout
-      p.fill(330, 40, 95, 0.9);
-      p.ellipse(0, -s * 0.5, s * 0.9, s * 0.7);
-      p.fill(0, 0, 20);
-      p.ellipse(0, -s * 0.48, s * 0.3, s * 0.2);
-
-      // arms
-      const armSwing = Math.sin(p.frameCount * 0.08) * s * 0.3;
-      p.fill(330, 35, 90, 0.6);
-      p.push();
-      p.translate(-s * 1.1, -s * 0.15);
-      p.rotate(-0.8 + armSwing * 0.001);
-      p.ellipse(0, 0, s * 0.8, s * 1.4);
-      p.pop();
-
-      p.push();
-      p.translate(s * 1.1, -s * 0.15);
-      p.rotate(0.8 - armSwing * 0.001);
-      p.ellipse(0, 0, s * 0.8, s * 1.4);
-      p.pop();
-
-      // belly gloss
-      p.fill(330, 35, 100, 0.3);
-      p.ellipse(-s * 0.2, s * 0.2, s * 1.1, s * 1.2);
+      // mouth slit
+      p.fill(330, 80, 100, 0.6);
+      const mouth = base * (0.4 + saturation * 0.008);
+      p.beginShape();
+      p.vertex(-mouth, base * 0.1);
+      p.vertex(-mouth * 0.4, base * 0.28);
+      p.vertex(mouth * 0.4, base * 0.28);
+      p.vertex(mouth, base * 0.1);
+      p.vertex(0, -base * 0.05);
+      p.endShape(p.CLOSE);
 
       p.pop();
     };
 
-    const updateCandies = () => {
-      for (let i = candies.length - 1; i >= 0; i--) {
-        const c = candies[i];
-        if (c.eaten) {
-          candies.splice(i, 1);
-          continue;
-        }
-        c.y += c.vy;
-        c.vy += 0.04;
-        const wobble = Math.sin(p.frameCount * 0.2 + c.wobble) * 3;
-        p.fill(c.color);
+    const updateOfferings = () => {
+      const cx = p.width / 2;
+      const cy = p.height * 0.55;
+
+      for (let i = offerings.length - 1; i >= 0; i--) {
+        const o = offerings[i];
+        o.vy += 0.01;
+        o.x += o.vx;
+        o.y += o.vy;
+        const target = p.createVector(cx, cy - p.width * 0.05);
+        const pos = p.createVector(o.x, o.y);
+        const toCenter = target.sub(pos).setMag(0.8);
+        o.vx += toCenter.x * 0.04;
+        o.vy += toCenter.y * 0.04;
+
         p.noStroke();
-        p.circle(c.x + wobble, c.y, p.width * 0.025);
-        if (c.y > p.height * 0.53) {
-          const dx = c.x - p.width / 2;
-          const dy = c.y - p.height * 0.5;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < p.width * 0.14 * bearScale) {
-            c.eaten = true;
-            hunger += 1;
-            bearScale = 1 + hunger * 0.12;
-            if (hunger >= 5 && !burst) {
-              burst = true;
-              launchShards();
-            }
+        p.fill(o.hue, 80, 100, 0.8);
+        p.circle(o.x, o.y, o.mass);
+
+        if (p.dist(o.x, o.y, cx, cy) < p.width * 0.12) {
+          offerings.splice(i, 1);
+          saturation += 1;
+          if (saturation >= 18 && !rupture) {
+            explodeBeast(cx, cy - p.width * 0.02);
           }
         }
       }
@@ -150,76 +161,69 @@
         const s = shards[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.vy += 0.05;
-        s.alpha -= 2.2;
-        p.noStroke();
-        p.fill(s.hue, 80, 100, Math.max(0, s.alpha / 255));
-        p.circle(s.x, s.y, s.size);
-        if (s.alpha <= 0) {
+        s.vx *= 0.99;
+        s.vy += 0.02;
+        s.life *= 0.985;
+        if (s.life <= 0.02) {
           shards.splice(i, 1);
+          continue;
         }
+        p.noStroke();
+        p.fill(s.hue, 70, 100, s.life * 0.6);
+        p.circle(s.x, s.y, 4 + s.life * 12);
       }
-      if (burst && shards.length === 0) {
+
+      if (rupture && shards.length === 0) {
         resetTimer += 1;
-        if (resetTimer > 90) {
-          resetBear();
-        }
+        if (resetTimer > 90) resetBeast();
       }
     };
 
     p.draw = () => {
-      p.background(315, 40, 8);
-      p.fill(0, 0, 100, 0.08);
-      p.rect(0, p.height * 0.62, p.width, p.height * 0.4);
+      drawBackground();
 
-      if (!burst) drawBear();
-      updateCandies();
-      if (burst) {
-        updateShards();
-        p.fill(0, 0, 90, 0.8);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.textFont('Playfair Display');
-        p.textSize(p.width * 0.035);
-        p.text('The bear became stardust. Collect the sweets.', p.width / 2, p.height * 0.18);
-      } else {
-        p.fill(0, 0, 70, 0.75);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.textFont('Playfair Display');
-        p.textSize(p.width * 0.032);
-        p.text('Click to feed gummy comets', p.width / 2, p.height * 0.18);
+      const auraCount = 80;
+      while (aura.length < auraCount) {
+        aura.push({ angle: Math.random() * p.TWO_PI, radius: p.random(0.4, 0.9), speed: p.random(-0.002, 0.002) });
       }
+      const cx = p.width / 2;
+      const cy = p.height * 0.55;
+      p.push();
+      p.translate(cx, cy);
+      p.blendMode(p.ADD);
+      aura.forEach((node, idx) => {
+        node.angle += node.speed;
+        const r = Math.sin(idx * 0.1 + p.frameCount * 0.01) * 40 + node.radius * p.width * 0.22;
+        const x = Math.cos(node.angle) * r;
+        const y = Math.sin(node.angle) * r * 0.6;
+        p.noStroke();
+        p.fill((320 + idx * 4 + saturation * 4) % 360, 80, 90, 0.18);
+        p.circle(x, y, 6);
+      });
+      p.pop();
+      p.blendMode(p.BLEND);
+
+      if (!rupture) drawBeast();
+      updateOfferings();
+      updateShards();
     };
 
     p.mousePressed = () => {
-      if (burst) {
+      if (rupture) {
         for (let i = shards.length - 1; i >= 0; i--) {
-          const s = shards[i];
-          if (p.dist(p.mouseX, p.mouseY, s.x, s.y) < s.size * 0.8) {
+          if (p.dist(p.mouseX, p.mouseY, shards[i].x, shards[i].y) < 12) {
             shards.splice(i, 1);
           }
         }
         return false;
       }
-      spawnCandy(p.mouseX, Math.min(p.mouseY, p.height * 0.2));
+      spawnOffering(p.mouseX, Math.min(p.mouseY, p.height * 0.3));
       return false;
     };
 
     p.touchStarted = () => {
-      const x = p.mouseX;
-      const y = Math.min(p.mouseY, p.height * 0.2);
-      if (burst) {
-        for (let i = shards.length - 1; i >= 0; i--) {
-          const s = shards[i];
-          if (p.dist(x, y, s.x, s.y) < s.size * 0.8) {
-            shards.splice(i, 1);
-          }
-        }
-      } else {
-        spawnCandy(x, y);
-      }
+      p.mousePressed();
       return false;
     };
-  };
-
-  new p5(sketch, mount);
+  }, host);
 })();

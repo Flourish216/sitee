@@ -9,7 +9,14 @@
   </head>
   <body class="project-detail project-bear">
     <main class="detail-canvas" id="bear-canvas"></main>
-    <a class="detail-back" href="../projects.html">⬤ Back to Constellation</a>
+    <button class="cosmos-return detail-back" onclick="location.href='../projects.html'" aria-label="Return to constellation">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M32 6c-9.2 0-16 12.1-16 25.5 0 3.8.5 7.5 1.4 11.1L10.4 49l12.6-3.8c3.1 5.4 6.9 9.5 11 12 4.1-2.5 7.9-6.6 11-12L53.6 49l-7-10.4C47.5 39 48 35.3 48 31.5 48 18.1 41.2 6 32 6z"/>
+        <circle cx="32" cy="25" r="6.5" fill="currentColor" opacity="0.38"/>
+        <path fill="currentColor" opacity="0.55" d="M32 46l-8.5 4.5L32 62l8.5-11.5z"/>
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4" d="M20 38c3.4 2.2 7.7 3.4 12 3.4s8.6-1.2 12-3.4"/>
+      </svg>
+    </button>
     <script src="../detailBear.js"></script>
   </body>
 </html>
