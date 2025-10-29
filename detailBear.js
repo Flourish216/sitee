@@ -263,19 +263,29 @@
         });
       }
 
-      const splitOffset = baseRadius * 0.45;
-      const doomed = Math.random() < 0.5 ? 0 : 1;
+      const splitOffset = baseRadius * 0.55;
+      const survivorIndex = Math.random() < 0.5 ? 0 : 1;
+      const home = p.createVector(cx, cy);
       for (let i = 0; i < 2; i++) {
+        const angle = i === 0 ? -0.7 : 0.7;
+        const initialPos = p.createVector(
+          cx + Math.cos(angle) * splitOffset,
+          cy + Math.sin(angle) * baseRadius * 0.35
+        );
+        const velocity = p.createVector(Math.cos(angle), Math.sin(angle) * 0.6 - 0.8).mult(baseRadius * 0.035);
         offspring.push({
-          x: cx + (i === 0 ? -splitOffset : splitOffset),
-          y: cy + baseRadius * 0.18,
-          scale: baseRadius * 0.55,
-          pulse: 0,
-          dead: i === doomed,
-          drift: p.random(-0.6, 0.6),
-          life: 1,
-          collapse: 0,
-          shapeSeed: Math.random() * 1000,
+          pos: initialPos,
+          vel: velocity,
+          base: baseRadius,
+          scale: baseRadius * (0.62 + i * 0.08),
+          timer: 0,
+          state: 'split',
+          alpha: 1,
+          survivor: i === survivorIndex,
+          vanish: i !== survivorIndex,
+          seed: Math.random() * 1000,
+          home: home.copy(),
+          dragVec: velocity.copy(),
         });
       }
 
@@ -328,30 +338,42 @@
       p.pop();
     };
 
-    const drawBeast = () => {
-      const center = beast.pos || p.createVector(p.width / 2, p.height * 0.55);
-      const base = currentRadius();
-      const ripple = Math.sin(p.frameCount * 0.03) * base * 0.04;
-      const home = p.createVector(p.width / 2, p.height * 0.55);
-      const offset = center.copy().sub(home);
-      const dragAngle = Math.atan2(offset.y, offset.x);
-      const dragStrength = p.constrain(offset.mag() / (p.width * 0.35), 0, 1);
+    const renderSlime = (center, baseRadius, opts = {}) => {
+      const dragVec = opts.drag ? opts.drag.copy() : p.createVector(0, 0);
+      const seed = opts.seed || 0;
+      const alpha = opts.alpha ?? 1;
+      const sat = opts.saturation ?? saturation;
+      const smilePulse = opts.mouth ?? gulpPulse;
+      const hueShift = opts.hueShift || 0;
+      const drawEyes = opts.eyes !== false;
+      const dragSpan = opts.dragSpan || 2.4;
+      const dragMax = opts.dragMax ?? 0.95;
+      const ripplePhase = opts.ripplePhase || 0;
+
+      const dragStrength = p.constrain(dragVec.mag() / (baseRadius * dragSpan), 0, dragMax);
+      const dragAngle = dragVec.heading();
+      const ripple = Math.sin(p.frameCount * 0.03 + seed + ripplePhase) * baseRadius * 0.04;
 
       p.push();
       p.translate(center.x, center.y + ripple);
       p.noStroke();
+
       for (let layer = 5; layer >= 1; layer--) {
-        const r = base * (0.52 + layer * 0.2);
-        const hue = (320 + layer * 6 + saturation * 3) % 360;
-        p.fill(hue, 55, 100, 0.16 + layer * 0.09);
+        const r = baseRadius * (0.52 + layer * 0.2);
+        const hue = (320 + hueShift + layer * 6 + sat * 3) % 360;
+        const layerAlpha = (0.16 + layer * 0.09) * alpha;
+        p.fill(hue, 55, 100, layerAlpha);
         p.beginShape();
-        for (let a = 0; a < p.TWO_PI; a += p.TWO_PI / 150) {
+        const STEP = 150;
+        for (let i = 0; i <= STEP; i++) {
+          const a = (p.TWO_PI / STEP) * i;
           const directional = Math.cos(a - dragAngle) * dragStrength;
-          const radial = r +
-            Math.sin(a * 3 + p.frameCount * 0.02 + layer) * 18 +
-            Math.sin(a * 8 + layer) * 6 +
-            directional * base * 0.55;
-          const yWarp = Math.sin(a - dragAngle) * dragStrength * base * 0.18;
+          const radial =
+            r +
+            Math.sin(a * 3 + p.frameCount * 0.02 + layer + seed) * 18 +
+            Math.sin(a * 8 + layer + seed * 0.5) * 6 +
+            directional * baseRadius * 0.55;
+          const yWarp = Math.sin(a - dragAngle) * dragStrength * baseRadius * 0.18;
           const x = Math.cos(a) * (radial + yWarp * 0.25);
           const y = Math.sin(a) * radial * (0.72 + directional * 0.08) + yWarp;
           p.vertex(x, y);
@@ -359,27 +381,36 @@
         p.endShape(p.CLOSE);
       }
 
-      const eyeOffset = base * (0.55 + dragStrength * 0.08);
-      const eyeSize = base * 0.32 + Math.sin(p.frameCount * 0.1) * base * 0.05;
-      p.fill(0, 0, 10, 0.85);
-      p.circle(-eyeOffset, -base * 0.4, eyeSize);
-      p.circle(eyeOffset, -base * 0.4, eyeSize);
-      p.fill(0, 0, 100);
-      p.circle(-eyeOffset + Math.sin(p.frameCount * 0.12) * base * 0.07, -base * 0.38, eyeSize * 0.35);
-      p.circle(eyeOffset + Math.sin(p.frameCount * 0.1 + 1.1) * base * 0.07, -base * 0.38, eyeSize * 0.35);
+      if (drawEyes) {
+        const eyeOffset = baseRadius * (0.55 + dragStrength * 0.08);
+        const eyeSize = baseRadius * 0.32 + Math.sin(p.frameCount * 0.1 + seed) * baseRadius * 0.05;
+        p.fill(0, 0, 10, 0.85 * alpha);
+        p.circle(-eyeOffset, -baseRadius * 0.4, eyeSize);
+        p.circle(eyeOffset, -baseRadius * 0.4, eyeSize);
+        p.fill(0, 0, 100, alpha);
+        p.circle(-eyeOffset + Math.sin(p.frameCount * 0.12 + seed) * baseRadius * 0.07, -baseRadius * 0.38, eyeSize * 0.35);
+        p.circle(eyeOffset + Math.sin(p.frameCount * 0.1 + 1.1 + seed) * baseRadius * 0.07, -baseRadius * 0.38, eyeSize * 0.35);
 
-      p.fill(330, 80, 100, 0.58 + gulpPulse * 0.2);
-      const mouth = base * (0.4 + saturation * 0.008);
-      p.beginShape();
-      p.vertex(-mouth, base * 0.1);
-      p.vertex(-mouth * 0.4, base * 0.28 + gulpPulse * 6);
-      p.vertex(mouth * 0.4, base * 0.28 + gulpPulse * 6);
-      p.vertex(mouth, base * 0.1);
-      p.vertex(0, -base * 0.05 - gulpPulse * 4);
-      p.endShape(p.CLOSE);
+        const mouthWidth = baseRadius * (0.4 + sat * 0.008);
+        p.fill(330, 80, 100, (0.58 + smilePulse * 0.2) * alpha);
+        p.beginShape();
+        p.vertex(-mouthWidth, baseRadius * 0.1);
+        p.vertex(-mouthWidth * 0.4, baseRadius * 0.28 + smilePulse * 6);
+        p.vertex(mouthWidth * 0.4, baseRadius * 0.28 + smilePulse * 6);
+        p.vertex(mouthWidth, baseRadius * 0.1);
+        p.vertex(0, -baseRadius * 0.05 - smilePulse * 4);
+        p.endShape(p.CLOSE);
+      }
 
       p.pop();
+    };
 
+    const drawBeast = () => {
+      const center = beast.pos || p.createVector(p.width / 2, p.height * 0.55);
+      const base = currentRadius();
+      const home = p.createVector(p.width / 2, p.height * 0.55);
+      const offset = center.copy().sub(home);
+      renderSlime(center, base, { drag: offset });
       beast.radius = base;
     };
 
@@ -417,103 +448,78 @@
       }
     };
 
+    const reassembleFromCub = (cub) => {
+      beast.pos = cub.home.copy();
+      beast.drag = false;
+      beast.dragOffset = p.createVector(0, 0);
+      beast.radius = cub.base;
+      saturation = 0;
+      offerings.length = 0;
+      shards.length = 0;
+      fragments.length = 0;
+      offspring.length = 0;
+      rupture = false;
+      resetTimer = 0;
+      pointer.down = false;
+      pointer.dragging = false;
+      pointer.dragCandidate = false;
+      pointer.pendingSpawn = false;
+      bassLevel = 0;
+      hissLevel = 0;
+      if (bass) bass.amp(0, 0.08);
+      if (hiss) hiss.amp(0, 0.08);
+    };
+
+    const updateOffspring = () => {
+      for (let i = offspring.length - 1; i >= 0; i--) {
+        const cub = offspring[i];
+        cub.timer += 1;
+
+        if (cub.state === 'split') {
+          cub.vel.mult(0.96);
+          cub.vel.y += 0.08;
+          cub.pos.add(cub.vel);
+          cub.dragVec = cub.vel.copy().mult(16);
+          if (cub.timer > 70) {
+            cub.state = cub.survivor ? 'return' : 'vanish';
+            cub.timer = 0;
+          }
+        } else if (cub.state === 'vanish') {
+          cub.vel.mult(0.9);
+          cub.pos.add(cub.vel);
+          cub.alpha = p.lerp(cub.alpha, 0, 0.08);
+          cub.scale = p.lerp(cub.scale, cub.base * 0.25, 0.06);
+          cub.dragVec.mult(0.8);
+          if (cub.alpha < 0.02) {
+            offspring.splice(i, 1);
+            continue;
+          }
+        } else if (cub.state === 'return') {
+          const target = cub.home;
+          cub.pos.lerp(target, 0.12);
+          cub.scale = p.lerp(cub.scale, cub.base, 0.08);
+          cub.alpha = p.lerp(cub.alpha, 1, 0.1);
+          cub.dragVec = cub.pos.copy().sub(target).mult(0.6);
+          if (
+            p5.Vector.dist(cub.pos, target) < 1.5 &&
+            Math.abs(cub.scale - cub.base) < 1.2
+          ) {
+            reassembleFromCub(cub);
+            break;
+          }
+        }
+      }
+    };
+
     const drawOffspring = () => {
       offspring.forEach((cub) => {
-        cub.pulse += 0.018 + (cub.dead ? -0.0025 : 0.004);
-        if (cub.dead) {
-          cub.collapse = Math.min(1, cub.collapse + 0.012);
-          cub.life = Math.max(0, cub.life - 0.009);
-          cub.y += 0.35 + cub.collapse * 0.3;
-        } else {
-          cub.y += Math.sin(p.frameCount * 0.01 + cub.drift) * 0.35;
-          cub.x += Math.sin(p.frameCount * 0.012 + cub.drift * 2) * 0.45;
-          cub.life = Math.min(1, cub.life + 0.01);
-        }
-
-        const breathing = Math.sin(p.frameCount * 0.04 + cub.pulse) * 0.04;
-        const s = cub.scale * (cub.dead ? 0.65 : 0.85 + breathing * 0.6);
-        const seed = cub.shapeSeed || 0;
-        p.push();
-        p.translate(cub.x, cub.y);
-        p.noStroke();
-
-        if (cub.dead) {
-          const flatten = Math.max(0.25, 1 - cub.collapse * 0.6);
-          p.scale(1 + cub.collapse * 0.4, flatten);
-          for (let layer = 0; layer < 3; layer++) {
-            const alpha = (0.22 - layer * 0.05) * cub.life;
-            p.fill(330, 20 + layer * 10, 80, alpha);
-            p.beginShape();
-            const total = 80;
-            for (let i = 0; i <= total; i++) {
-              const a = (p.TWO_PI / total) * i;
-              const n = p.noise(seed + layer * 4 + Math.cos(a) * 0.8, Math.sin(a) * 0.8, p.frameCount * 0.008);
-              const radial = s * (1.4 + layer * 0.3 + n * 0.4);
-              const x = Math.cos(a) * radial;
-              const y = Math.sin(a) * radial * 0.8 + layer * 6;
-              p.vertex(x, y);
-            }
-            p.endShape(p.CLOSE);
-          }
-          p.fill(330, 40, 100, 0.25 * cub.life);
-          for (let drip = 0; drip < 5; drip++) {
-            const angle = p.map(drip, 0, 4, -0.9, 0.9) + Math.sin(seed + drip) * 0.1;
-            const lenNoise = p.noise(seed + drip * 1.7, p.frameCount * 0.012);
-            const len = s * (0.45 + lenNoise * 0.35);
-            const x = Math.sin(angle) * s * 1.1;
-            p.beginShape();
-            p.vertex(x, 0);
-            p.bezierVertex(x + 6, len * 0.2, x + 2, len * 0.6, x + Math.sin(drip) * 4, len);
-            p.bezierVertex(x - 4, len * 0.7, x - 3, len * 0.3, x, 0);
-            p.endShape(p.CLOSE);
-          }
-        } else {
-          p.scale(1 + breathing * 0.65, 1 - breathing * 0.35);
-          for (let layer = 3; layer >= 0; layer--) {
-            const alpha = 0.22 + layer * 0.12;
-            p.fill(330, 60 + layer * 8, 100, alpha * cub.life);
-            p.beginShape();
-            const segments = 90;
-            for (let i = 0; i <= segments; i++) {
-              const a = (p.TWO_PI / segments) * i;
-              const n = p.noise(seed + layer * 12 + Math.cos(a) * 0.9, Math.sin(a) * 0.9, p.frameCount * 0.012 + layer);
-              const radial = s * (1.1 + layer * 0.22 + n * 0.32);
-              const x = Math.cos(a) * radial;
-              const y = Math.sin(a) * radial * (0.78 + n * 0.12);
-              p.vertex(x, y);
-            }
-            p.endShape(p.CLOSE);
-          }
-
-          p.fill(0, 0, 12, 0.75);
-          const eyeSpread = s * 0.55;
-          const eyeSize = s * 0.28;
-          const flicker = Math.sin(p.frameCount * 0.2 + seed) * 0.25;
-          p.ellipse(-eyeSpread, -s * 0.2, eyeSize * (0.9 + flicker), eyeSize * (1.1 - flicker));
-          p.ellipse(eyeSpread, -s * 0.2, eyeSize * (1.1 - flicker), eyeSize * (0.9 + flicker));
-          p.fill(330, 80, 100, 0.6);
-          p.beginShape();
-          p.vertex(-eyeSpread * 0.6, s * 0.15);
-          p.bezierVertex(-eyeSpread * 0.2, s * 0.45 + gulpPulse * 4, eyeSpread * 0.2, s * 0.45 + gulpPulse * 4, eyeSpread * 0.6, s * 0.15);
-          p.bezierVertex(0, s * 0.02 - gulpPulse * 6, 0, s * 0.02 - gulpPulse * 6, -eyeSpread * 0.6, s * 0.15);
-          p.endShape(p.CLOSE);
-
-          p.stroke(330, 40, 100, 0.4);
-          p.noFill();
-          p.strokeWeight(2);
-          for (let d = 0; d < 4; d++) {
-            const angle = p.map(d, 0, 3, -0.9, 0.9) + Math.sin(seed + d * 2) * 0.1;
-            const len = s * (0.9 + Math.sin(p.frameCount * 0.04 + d) * 0.2);
-            const x = Math.sin(angle) * s * 0.9;
-            p.beginShape();
-            p.vertex(x, s * 0.6);
-            p.bezierVertex(x + 4, s * 0.8, x + 2, s * 1.1, x - 2, s * 1.25 + len * 0.2);
-            p.bezierVertex(x - 6, s * 1.05 + len * 0.6, x - 3, s * 0.8, x, s * 0.6);
-            p.endShape();
-          }
-        }
-
-        p.pop();
+        renderSlime(cub.pos, cub.scale, {
+          drag: cub.dragVec,
+          mouth: Math.max(0, gulpPulse * 0.6),
+          saturation: Math.max(6, saturation * 0.4),
+          alpha: cub.alpha,
+          seed: cub.seed,
+        });
       });
     };
 
@@ -610,6 +616,8 @@
       if (hiss) hiss.amp(hissLevel, 0.06);
 
       drawOffscreenAura();
+
+      if (rupture) updateOffspring();
 
       if (!rupture) drawBeast();
       else {
