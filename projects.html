@@ -8,44 +8,56 @@
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
 </head>
-<body>
-<div id="cursor-container"></div>
-<header class="site-header">
-<div class="container">
-<a class="brand" href="index.html">Jesse Zhang</a>
-<nav class="nav">
-<a href="projects.html">Projects</a>
-<a href="shop.html">Shop</a>
-<a href="links.html">Links</a>
-</nav>
-</div>
-</header>
+<body class="projects-page">
+  <div id="cursor-container"></div>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Jesse Zhang</a>
+      <nav class="nav">
+        <a href="projects.html" class="active">Projects</a>
+        <a href="shop.html">Shop</a>
+        <a href="links.html">Links</a>
+      </nav>
+    </div>
+  </header>
 
-<main class="container page">
-<h2>Projects</h2>
-<p class="muted">A selection of interactive projects, p5.js sketches and game prototypes.</p>
+  <main class="container page">
+    <section class="page-lede">
+      <h1>Lab Notes</h1>
+      <p class="muted">
+        A revolving collection of sketches where code, play, and calm overlap. Some are prototypes in
+        progress, others are finished micro experiences. Click in and stay a while.
+      </p>
+    </section>
 
+    <section class="project-grid">
+      <article class="project-card matrix-card">
+        <header class="card-header">
+          <div>
+            <h3>Matrix Self-Portrait</h3>
+            <p class="muted">
+              Capture a snapshot, then paint yourself back into existence one tile at a time.
+            </p>
+          </div>
+          <div class="card-controls">
+            <button class="btn small" id="matrix-start">Enable Camera</button>
+            <button class="btn small ghost" id="matrix-capture" disabled>Freeze Frame</button>
+            <button class="btn small ghost" id="matrix-reset" disabled>Reset</button>
+          </div>
+        </header>
+        <p class="matrix-status muted" data-matrix-status>Enable the camera to begin.</p>
+        <div class="matrix-canvas" id="matrix-project"></div>
+      </article>
+    </section>
+  </main>
 
-<article class="card">
-<h3>Mind Cosmos</h3>
-<p>Light therapeutic game for teen anxiety</p>
-<div class="card-actions">
-<a class="btn small" href="#">Play</a>
-<a class="btn small ghost" href="#">Repo</a>
-</div>
-</article>
-
-<!-- Add more project cards here -->
-
-</div>
-</main>
-
-<footer class="site-footer">
-<div class="container">
-<small><a href="index.html">Back home</a></small>
-</div>
-</footer>
-<script src="cursor.js"></script>
-<script src="main.js"></script>
+  <footer class="site-footer">
+    <div class="container">
+      <small><a href="index.html">Back home</a></small>
+    </div>
+  </footer>
+  <script src="cursor.js"></script>
+  <script src="main.js"></script>
+  <script src="matrixPortrait.js"></script>
 </body>
 </html>
