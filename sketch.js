@@ -2,7 +2,14 @@ let grid = [];
 let nextGrid = [];
 let cols, rows;
 let cellSize = 24;
-let speed = 24;
+const baseInterval = 24;
+const konamiPalette = [
+  [255, 99, 164],
+  [255, 173, 64],
+  [132, 224, 108],
+  [111, 197, 255],
+  [171, 133, 255],
+];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -20,20 +27,29 @@ function initGrid() {
 }
 
 function draw() {
-  background(255, 70); // ✅ 柔白背景，淡化尾迹
+  const konami = Boolean(window.konamiActive);
+  background(255, konami ? 60 : 70); // ✅ 柔白背景，淡化尾迹
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
-        fill(0, 70); // ✅ 更柔和的半透明块
+        if (konami) {
+          const colorIndex = Math.abs(floor(i + j + frameCount * 0.08)) % konamiPalette.length;
+          const color = konamiPalette[colorIndex];
+          const alpha = 140 + 60 * sin(frameCount * 0.12 + (i + j) * 0.3);
+          fill(color[0], color[1], color[2], constrain(alpha, 90, 220));
+        } else {
+          fill(0, 70); // ✅ 更柔和的半透明块
+        }
         rect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }
   }
 
-  if (frameCount % speed === 0) step();
+  const interval = konami ? 8 : baseInterval;
+  if (frameCount % interval === 0) step(konami);
 }
 
-function step() {
+function step(konami = false) {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       let state = grid[i][j];
@@ -46,9 +62,23 @@ function step() {
           : neighbors === 3
           ? 1
           : 0;
+      if (konami && random(1) < 0.0025) {
+        nextGrid[i][j] = 1;
+      }
     }
   }
   [grid, nextGrid] = [nextGrid, grid];
+  if (konami && frameCount % 320 === 0) {
+    sprinkleKonami();
+  }
+}
+
+function sprinkleKonami() {
+  for (let k = 0; k < cols * 0.4; k++) {
+    const i = floor(random(cols));
+    const j = floor(random(rows));
+    grid[i][j] = 1;
+  }
 }
 
 function countNeighbors(x, y) {
