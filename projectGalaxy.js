@@ -5,9 +5,9 @@
   const pointer = { x: 0, y: 0, active: false };
 
   const planets = [
-    { label: 'VOX', url: 'projects/robot.html', radius: 0.26, speed: 0.0065, wobble: Math.random() * 1000, hue: 210, size: 22 },
-    { label: 'CANDY', url: 'projects/bear.html', radius: 0.36, speed: -0.0052, wobble: Math.random() * 1000, hue: 320, size: 26 },
-    { label: 'CYCLE', url: 'projects/carpet.html', radius: 0.46, speed: 0.0042, wobble: Math.random() * 1000, hue: 140, size: 18 },
+    { type: 'robot', url: 'projects/robot.html', radius: 0.28, speed: 0.006, wobble: Math.random() * 1000, hue: 200, size: 28 },
+    { type: 'bear', url: 'projects/bear.html', radius: 0.39, speed: -0.0048, wobble: Math.random() * 1000, hue: 330, size: 34 },
+    { type: 'cycle', url: 'projects/carpet.html', radius: 0.5, speed: 0.0038, wobble: Math.random() * 1000, hue: 150, size: 26 },
   ].map((planet, idx) => ({
     ...planet,
     phase: Math.random() * Math.PI * 2 + idx * 0.8,
@@ -33,15 +33,16 @@
     let canvas;
 
     const resize = () => {
-      const { clientWidth, clientHeight } = host;
+      const w = host.clientWidth || window.innerWidth;
+      const h = host.clientHeight || window.innerHeight;
       if (!canvas) {
-        canvas = p.createCanvas(clientWidth, clientHeight);
+        canvas = p.createCanvas(w, h);
         canvas.parent(host);
         canvas.canvas.addEventListener('pointerleave', () => {
           pointer.active = false;
         });
       } else {
-        p.resizeCanvas(clientWidth, clientHeight);
+        p.resizeCanvas(w, h);
       }
     };
 
@@ -49,8 +50,8 @@
 
     const basePosition = (planet) => {
       const angle = planet.phase;
-      const rx = planet.radius * p.width;
-      const ry = planet.radius * p.height * 0.6;
+      const rx = planet.radius * Math.max(p.width, p.height);
+      const ry = rx * 0.6;
       const noiseWarp = (p.noise(planet.wobble + p.frameCount * 0.002) - 0.5) * rx * 0.12;
       return p.createVector(
         Math.cos(angle) * rx + noiseWarp,
@@ -88,8 +89,8 @@
         });
 
         const drift = p.createVector(
-          Math.sin(p.frameCount * 0.004 + idx * 1.7) * 14,
-          Math.cos(p.frameCount * 0.003 + idx) * 12
+          Math.sin(p.frameCount * 0.004 + idx * 1.7) * 18,
+          Math.cos(p.frameCount * 0.003 + idx) * 16
         );
         offset.add(drift);
 
@@ -147,40 +148,73 @@
       const c = center();
       const pos = planet.pos.copy().add(c);
 
-      // trail
       p.push();
+      p.translate(c.x, c.y);
+
       p.strokeWeight(3);
       planet.trail.forEach((node, idx) => {
         node.alpha *= 0.97;
         if (node.alpha <= 0.02) return;
-        const hue = (planet.hue + idx * 2 + p.frameCount * 0.4) % 360;
-        p.stroke(hue, 90, 100, node.alpha * 0.5);
-        const current = node.pos.copy().add(c);
+        const hue = (planet.hue + idx * 3 + p.frameCount * 0.5) % 360;
+        p.stroke(hue, 90, 100, node.alpha * 0.4);
+        const current = node.pos;
         p.line(current.x, current.y, current.x, current.y);
       });
-      p.pop();
 
-      // halo
       p.noStroke();
-      p.fill(planet.hue, 90, 100, 0.25);
-      p.circle(pos.x, pos.y, planet.size * 4.6);
-      p.fill(planet.hue, 85, 100, 0.7);
-      p.circle(pos.x, pos.y, planet.size * 2.6);
-      p.fill(planet.hue, 30, 100, 0.9);
-      p.circle(pos.x + planet.size * 0.2, pos.y - planet.size * 0.2, planet.size * 1.6);
+      p.fill(planet.hue, 80, 100, 0.25);
+      p.circle(planet.pos.x, planet.pos.y, planet.size * 4.2);
 
-      // label ring
-      p.noFill();
-      p.stroke(planet.hue, 30, 100, 0.45);
-      p.strokeWeight(1.6);
-      p.circle(pos.x, pos.y, planet.size * 5.4);
+      const drawIcon = {
+        robot: () => {
+          const s = planet.size;
+          p.push();
+          p.translate(planet.pos.x, planet.pos.y);
+          p.fill(planet.hue, 50, 90, 0.85);
+          p.rectMode(p.CENTER);
+          p.rect(0, 0, s * 1.5, s * 1.3, 6);
+          p.fill(planet.hue, 20, 100);
+          p.rect(0, -s * 0.7, s, s * 0.8, 4);
+          p.fill(0, 0, 10);
+          p.ellipse(-s * 0.25, -s * 0.75, s * 0.28, s * 0.32);
+          p.ellipse(s * 0.25, -s * 0.75, s * 0.28, s * 0.32);
+          p.fill(planet.hue, 60, 100);
+          p.rect(0, -s * 0.35, s * 0.55, s * 0.18, 3);
+          p.pop();
+        },
+        bear: () => {
+          const s = planet.size;
+          p.push();
+          p.translate(planet.pos.x, planet.pos.y);
+          p.fill(planet.hue, 70, 100, 0.9);
+          p.circle(0, 0, s * 1.9);
+          p.fill(planet.hue, 45, 100);
+          p.circle(-s * 0.55, -s * 0.6, s * 0.8);
+          p.circle(s * 0.55, -s * 0.6, s * 0.8);
+          p.fill(0, 0, 10);
+          p.circle(-s * 0.35, -s * 0.25, s * 0.35);
+          p.circle(s * 0.35, -s * 0.25, s * 0.35);
+          p.arc(0, s * 0.2, s * 0.8, s * 0.8, 0, p.PI);
+          p.pop();
+        },
+        cycle: () => {
+          const s = planet.size;
+          p.push();
+          p.translate(planet.pos.x, planet.pos.y);
+          p.stroke(planet.hue, 90, 100, 0.75);
+          p.strokeWeight(3);
+          p.noFill();
+          p.ellipse(-s * 0.9, s * 0.4, s, s * 0.9);
+          p.ellipse(s * 0.9, s * 0.4, s, s * 0.9);
+          p.line(-s * 0.6, -s * 0.5, s * 0.6, -s * 0.1);
+          p.line(-s * 0.6, -s * 0.5, -s * 0.9, s * 0.4);
+          p.line(s * 0.6, -s * 0.1, s * 0.9, s * 0.4);
+          p.pop();
+        },
+      };
 
-      // label
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textFont('Manrope');
-      p.textSize(planet.size * 0.85);
-      p.fill(planet.hue, 20, 100, 0.7);
-      p.text(planet.label, pos.x, pos.y - planet.size * 3.2);
+      drawIcon[planet.type]();
+      p.pop();
 
       planet.screenPos = pos;
     };
