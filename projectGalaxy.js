@@ -5,7 +5,7 @@
   const satellites = [
     {
       label: 'VOX',
-      target: '#project-vox',
+      target: 'projects/robot.html',
       radius: 120,
       speed: 0.012,
       size: 12,
@@ -14,7 +14,7 @@
     },
     {
       label: 'CANDY',
-      target: '#project-gummy',
+      target: 'projects/bear.html',
       radius: 170,
       speed: -0.0095,
       size: 14,
@@ -23,7 +23,7 @@
     },
     {
       label: 'CARPET',
-      target: '#project-carpet',
+      target: 'projects/carpet.html',
       radius: 210,
       speed: 0.007,
       size: 10,
@@ -31,6 +31,13 @@
       jitter: 0,
     },
   ];
+
+  const stars = Array.from({ length: 180 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    brightness: 40 + Math.random() * 60,
+    size: Math.random() * 1.4 + 0.6,
+  }));
 
   const sketch = (p) => {
     const pointer = { x: 0, y: 0, active: false };
@@ -48,9 +55,8 @@
       }
     };
 
-    const scrollToTarget = (hash) => {
-      const el = document.querySelector(hash);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const openTarget = (href) => {
+      window.location.href = href;
     };
 
     p.setup = () => {
@@ -72,14 +78,21 @@
       const center = p.createVector(p.width / 2, p.height / 2);
       for (const node of nodes) {
         if (p5.Vector.dist(center.copy().add(node.pos), p.createVector(p.mouseX, p.mouseY)) < node.size * 2.4) {
-          scrollToTarget(node.target);
+          openTarget(node.target);
           break;
         }
       }
     };
 
     p.draw = () => {
-      p.background(2, 2, 2);
+      p.background(2, 2, 6);
+      // starfield
+      p.noStroke();
+      stars.forEach((star, idx) => {
+        const twinkle = Math.sin(p.frameCount * 0.02 + idx) * 0.4 + 0.6;
+        p.fill(200, 200, 255, star.brightness * twinkle);
+        p.circle(star.x * p.width, star.y * p.height, star.size * twinkle * 1.2);
+      });
       const center = p.createVector(p.width / 2, p.height / 2);
 
       // draw faint orbit rings
@@ -91,7 +104,7 @@
       });
 
       // draw connecting lines
-      p.stroke(255, 255, 255, 14);
+        p.stroke(255, 255, 255, 18);
       p.strokeWeight(1);
       p.beginShape();
       nodes.forEach((node) => {
