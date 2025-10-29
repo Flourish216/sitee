@@ -9,55 +9,167 @@
 <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
 </head>
 <body class="projects-page">
-  <div id="cursor-container"></div>
-  <header class="site-header">
-    <div class="container">
-      <a class="brand" href="index.html">Jesse Zhang</a>
-      <nav class="nav">
-        <a href="projects.html" class="active">Projects</a>
-        <a href="shop.html">Shop</a>
-        <a href="links.html">Links</a>
-      </nav>
-    </div>
-  </header>
+<div id="cursor-container"></div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">Jesse Zhang</a>
+    <nav class="nav">
+      <a href="projects.html" class="active">Projects</a>
+      <a href="shop.html">Shop</a>
+      <a href="links.html">Links</a>
+    </nav>
+  </div>
+</header>
 
-  <main class="container page">
-    <section class="page-lede">
-      <h1>Lab Notes</h1>
-      <p class="muted">
-        A revolving collection of sketches where code, play, and calm overlap. Some are prototypes in
-        progress, others are finished micro experiences. Click in and stay a while.
-      </p>
-    </section>
+<main class="container page">
+  <section class="page-lede">
+    <h1>Lab Notes</h1>
+    <p class="muted">
+      Three tiny p5.js sketches I made in class. Click around, see what they do, and feel free to remix them.
+    </p>
+  </section>
 
-    <section class="project-grid">
-      <article class="project-card matrix-card">
-        <header class="card-header">
-          <div>
-            <h3>Matrix Self-Portrait</h3>
-            <p class="muted">
-              Capture a snapshot, then paint yourself back into existence one tile at a time.
-            </p>
-          </div>
-          <div class="card-controls">
-            <button class="btn small" id="matrix-start">Enable Camera</button>
-            <button class="btn small ghost" id="matrix-capture" disabled>Freeze Frame</button>
-            <button class="btn small ghost" id="matrix-reset" disabled>Reset</button>
-          </div>
-        </header>
-        <p class="matrix-status muted" data-matrix-status>Enable the camera to begin.</p>
-        <div class="matrix-canvas" id="matrix-project"></div>
-      </article>
-    </section>
-  </main>
+  <section class="project-grid">
+    <article class="project-card">
+      <h3>Soft Orbit</h3>
+      <p class="muted">Two moons orbit an invisible center. Drag to nudge their path.</p>
+      <div class="sketch-frame" id="sketch-orbit"></div>
+    </article>
 
-  <footer class="site-footer">
-    <div class="container">
-      <small><a href="index.html">Back home</a></small>
-    </div>
-  </footer>
-  <script src="cursor.js"></script>
-  <script src="main.js"></script>
-  <script src="matrixPortrait.js"></script>
+    <article class="project-card">
+      <h3>Noise Field</h3>
+      <p class="muted">Perlin noise pushes dots into slow currents. Move the mouse to stir the field.</p>
+      <div class="sketch-frame" id="sketch-noise"></div>
+    </article>
+
+    <article class="project-card">
+      <h3>Polka Echo</h3>
+      <p class="muted">Tap or click to drop ripples of circles that fade away.</p>
+      <div class="sketch-frame" id="sketch-polka"></div>
+    </article>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <small><a href="index.html">Back home</a></small>
+  </div>
+</footer>
+<script src="cursor.js"></script>
+<script src="main.js"></script>
+<script>
+  const sketches = {
+    orbit: (p) => {
+      let angle = 0;
+      let target = 0;
+      p.setup = () => {
+        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
+        p.createCanvas(size, size).parent('sketch-orbit');
+      };
+      p.draw = () => {
+        p.background(250);
+        const r1 = p.width * 0.18;
+        const r2 = p.width * 0.28;
+        angle = p.lerp(angle, target, 0.05);
+        const x1 = p.width / 2 + Math.cos(angle) * r1;
+        const y1 = p.height / 2 + Math.sin(angle) * r1;
+        const x2 = p.width / 2 + Math.cos(-angle * 1.4) * r2;
+        const y2 = p.height / 2 + Math.sin(-angle * 1.4) * r2;
+        p.noStroke();
+        p.fill(30, 30, 30, 30);
+        p.circle(p.width / 2, p.height / 2, p.width * 0.08);
+        p.fill(30, 30, 30, 200);
+        p.circle(x1, y1, p.width * 0.12);
+        p.fill(30, 30, 30, 120);
+        p.circle(x2, y2, p.width * 0.16);
+      };
+      p.mouseDragged = () => {
+        target += (p.movedX + p.movedY) * 0.01;
+      };
+      p.touchMoved = () => {
+        target += (p.movedX + p.movedY) * 0.01;
+        return false;
+      };
+      p.windowResized = () => {
+        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
+        p.resizeCanvas(size, size);
+      };
+    },
+    noise: (p) => {
+      const dots = [];
+      const dotCount = 180;
+      let zOff = 0;
+      p.setup = () => {
+        const w = Math.min(360, Math.floor(window.innerWidth * 0.65));
+        const h = w * 0.6;
+        p.createCanvas(w, h).parent('sketch-noise');
+        for (let i = 0; i < dotCount; i++) {
+          dots.push({ x: p.random(p.width), y: p.random(p.height) });
+        }
+      };
+      p.draw = () => {
+        p.background(250);
+        p.noStroke();
+        const mousePush = p.createVector(p.mouseX - p.width / 2, p.mouseY - p.height / 2).mult(0.0006);
+        dots.forEach((dot) => {
+          const angle = p.noise(dot.x * 0.003, dot.y * 0.003, zOff) * p.TWO_PI * 2;
+          dot.x += Math.cos(angle) * 0.7 + mousePush.x;
+          dot.y += Math.sin(angle) * 0.7 + mousePush.y;
+          if (dot.x < 0) dot.x += p.width;
+          if (dot.x > p.width) dot.x -= p.width;
+          if (dot.y < 0) dot.y += p.height;
+          if (dot.y > p.height) dot.y -= p.height;
+          p.fill(30, 30, 30, 70);
+          p.circle(dot.x, dot.y, 6);
+        });
+        zOff += 0.003;
+      };
+      p.windowResized = () => {
+        const w = Math.min(360, Math.floor(window.innerWidth * 0.65));
+        const h = w * 0.6;
+        p.resizeCanvas(w, h);
+      };
+    },
+    polka: (p) => {
+      const ripples = [];
+      p.setup = () => {
+        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
+        p.createCanvas(size, size).parent('sketch-polka');
+      };
+      p.draw = () => {
+        p.background(250);
+        for (let i = ripples.length - 1; i >= 0; i--) {
+          const r = ripples[i];
+          r.radius += 2;
+          r.alpha -= 4;
+          if (r.alpha <= 0) {
+            ripples.splice(i, 1);
+            continue;
+          }
+          p.noFill();
+          p.stroke(30, 30, 30, r.alpha);
+          p.strokeWeight(2);
+          p.circle(r.x, r.y, r.radius);
+        }
+      };
+      const spawn = (x, y) => {
+        ripples.push({ x, y, radius: 10, alpha: 180 });
+      };
+      p.mousePressed = () => spawn(p.mouseX, p.mouseY);
+      p.touchStarted = () => {
+        spawn(p.mouseX, p.mouseY);
+        return false;
+      };
+      p.windowResized = () => {
+        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
+        p.resizeCanvas(size, size);
+      };
+    },
+  };
+
+  new p5(sketches.orbit, 'sketch-orbit');
+  new p5(sketches.noise, 'sketch-noise');
+  new p5(sketches.polka, 'sketch-polka');
+</script>
 </body>
 </html>

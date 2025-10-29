@@ -131,6 +131,9 @@ body.projects-page {
   cursor: pointer;
   position: relative;
 }
+.nav a.active {
+  opacity: 0.5;
+}
 
 /* ===== Hero Section ===== */
 .hero {
@@ -197,10 +200,6 @@ body.projects-page {
   opacity: 0.25;
 }
 
-.btn {
-  white-space: nowrap;
-}
-
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(15px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -252,6 +251,7 @@ body.projects-page {
   font-weight: 600;
   transition: all 0.25s ease;
   display: inline-block;
+  white-space: nowrap;
 }
 .btn:hover { background: var(--accent); }
 .btn.small {
@@ -302,15 +302,12 @@ body.projects-page {
 
 .project-grid {
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 @media (min-width: 900px) {
   .project-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .matrix-card {
-    grid-column: 1 / -1;
   }
 }
 
@@ -318,60 +315,36 @@ body.projects-page {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 1.8rem;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  padding: 1.6rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1rem;
 }
 
-.card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-@media (min-width: 640px) {
-  .card-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-}
-
-.card-header h3 {
+.project-card h3 {
   font-family: var(--font-display);
-  font-size: 1.4rem;
-  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  margin: 0;
 }
 
-.card-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.project-card .card-body {
-  font-size: 0.95rem;
+.project-card p {
+  margin: 0;
   color: var(--muted);
+  font-size: 0.95rem;
   line-height: 1.7;
 }
 
-.matrix-status {
-  font-size: 0.85rem;
-  margin: 0 0 0.8rem;
-}
-
-.matrix-canvas {
+.sketch-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #f6f6f6;
+  background: #f7f7f7;
   border-radius: 14px;
   overflow: hidden;
+  min-height: 220px;
 }
 
-#matrix-project canvas {
+.sketch-frame canvas {
   width: 100% !important;
   height: 100% !important;
   display: block;
