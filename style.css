@@ -191,8 +191,7 @@ html, body {
 }
 
 .hero .btn.cta-flash {
-  opacity: 0.2;
-  transform: translateX(-50%) scale(0.88);
+  opacity: 0.25;
   pointer-events: none;
 }
 
@@ -208,6 +207,37 @@ html, body {
 .accent {
   font-style: italic;
   color: var(--accent);
+}
+.accent-link {
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 0.08em;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.25);
+  color: inherit;
+  display: inline-block;
+}
+.accent-link:hover {
+  color: var(--accent);
+  border-bottom-color: rgba(0, 0, 0, 0.45);
+}
+.accent-link:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.4);
+  outline-offset: 4px;
+  border-bottom-color: rgba(0, 0, 0, 0.6);
+}
+.accent-link.attention {
+  animation: accentGlow 0.7s ease-in-out 5 alternate;
+}
+
+@keyframes accentGlow {
+  from {
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+  }
+  to {
+    text-shadow: 0 4px 14px rgba(255, 79, 163, 0.4);
+    border-bottom-color: rgba(255, 79, 163, 0.6);
+  }
 }
 
 /* ===== Button ===== */
@@ -268,53 +298,8 @@ body.konami-mode .site-footer {
   background: rgba(255, 255, 255, 0.75);
   border-color: rgba(255, 79, 163, 0.25);
 }
-
-.secret-see-projects {
-  position: fixed;
-  bottom: 1.6rem;
-  left: 1.8rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(20, 20, 20, 0.42);
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.68);
-  padding: 0.35rem 0.68rem;
-  border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  opacity: 0;
-  animation: revealSecret 2.2s ease 1.2s forwards;
-  z-index: 6;
-}
-.secret-see-projects:hover {
-  color: rgba(20, 20, 20, 0.75);
-  background: rgba(255, 255, 255, 0.88);
-}
-
-.secret-see-projects.attention {
-  animation: revealSecret 0.45s ease forwards, secretPulse 2.4s ease 0.45s infinite alternate;
-}
-
-@keyframes revealSecret {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes secretPulse {
-  from {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    letter-spacing: 0.12em;
-  }
-  to {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
-    letter-spacing: 0.16em;
-  }
+body.konami-mode .accent-link {
+  border-bottom-color: rgba(255, 79, 163, 0.45);
 }
 
 .konami-toast {

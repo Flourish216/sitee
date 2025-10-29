@@ -55,17 +55,34 @@
   const ctaButton = hero ? hero.querySelector('.btn') : null;
   if (hero && ctaButton) {
     let flashCooldown = 0;
-    const safeRadius = 170;
+    const safeRadius = 180;
     const flashDuration = 220;
+    const initialHeroRect = hero.getBoundingClientRect();
+    const initialButtonRect = ctaButton.getBoundingClientRect();
+    const anchor = {
+      x: initialButtonRect.left - initialHeroRect.left,
+      y: initialButtonRect.top - initialHeroRect.top,
+    };
 
     const teleportButton = () => {
-      const heroRect = hero.getBoundingClientRect();
-      const buttonRect = ctaButton.getBoundingClientRect();
-      const padding = Math.min(80, Math.max(32, heroRect.width * 0.06));
-      const availableWidth = Math.max(0, heroRect.width - buttonRect.width - padding * 2);
-      const availableHeight = Math.max(0, heroRect.height - buttonRect.height - padding * 2);
-      const offsetX = availableWidth * Math.random() + padding;
-      const offsetY = availableHeight * Math.random() + padding;
+      const heroWidth = hero.clientWidth;
+      const heroHeight = hero.clientHeight;
+      const buttonWidth = ctaButton.offsetWidth;
+      const buttonHeight = ctaButton.offsetHeight;
+      const paddingX = Math.min(120, Math.max(36, heroWidth * 0.08));
+      const paddingY = Math.min(120, Math.max(40, heroHeight * 0.1));
+      const minX = paddingX;
+      const maxX = Math.max(minX, heroWidth - paddingX - buttonWidth);
+      const minY = paddingY;
+      const maxY = Math.max(minY, heroHeight - paddingY - buttonHeight);
+      const rangeX = Math.min(heroWidth * 0.45, 340);
+      const rangeY = Math.min(heroHeight * 0.35, 220);
+      let targetX = anchor.x + (Math.random() - 0.5) * rangeX * 2;
+      let targetY = anchor.y + (Math.random() - 0.5) * rangeY * 2;
+      targetX = Math.min(Math.max(targetX, minX), maxX);
+      targetY = Math.min(Math.max(targetY, minY), maxY);
+      const offsetX = maxX > minX ? targetX : (heroWidth - buttonWidth) / 2;
+      const offsetY = maxY > minY ? targetY : (heroHeight - buttonHeight) / 2;
       ctaButton.style.left = `${offsetX}px`;
       ctaButton.style.top = `${offsetY}px`;
       ctaButton.style.transform = 'translate(0, 0)';
@@ -88,9 +105,9 @@
     };
 
     const resetPosition = () => {
-      ctaButton.style.left = '50%';
-      ctaButton.style.top = '0';
-      ctaButton.style.transform = 'translate(-50%, 0)';
+      ctaButton.style.left = `${anchor.x}px`;
+      ctaButton.style.top = `${anchor.y}px`;
+      ctaButton.style.transform = 'translate(0, 0)';
     };
 
     hero.style.position = 'relative';
@@ -116,16 +133,16 @@
 
   const fakeNavLink = document.querySelector('.nav-link-fake');
   if (fakeNavLink) {
-    const secretLink = document.querySelector('.secret-see-projects');
+    const realLink = document.querySelector('.accent-link');
     fakeNavLink.setAttribute('role', 'button');
     fakeNavLink.setAttribute('tabindex', '0');
     fakeNavLink.setAttribute('aria-label', 'This link is a decoy');
 
     const nudgeSecret = () => {
-      showKonamiToast('Decoy! The real portal is hiding down left.');
-      if (secretLink) {
-        secretLink.classList.add('attention');
-        setTimeout(() => secretLink.classList.remove('attention'), 5200);
+      showKonamiToast('Decoy! Follow the glow in the title instead.');
+      if (realLink) {
+        realLink.classList.add('attention');
+        setTimeout(() => realLink.classList.remove('attention'), 3600);
       }
     };
 
