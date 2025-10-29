@@ -55,7 +55,7 @@
   const ctaButton = hero ? hero.querySelector('.btn') : null;
   if (hero && ctaButton) {
     let flashCooldown = 0;
-    const safeRadius = 180;
+    const safeRadius = 44;
     const flashDuration = 220;
     const initialHeroRect = hero.getBoundingClientRect();
     const initialButtonRect = ctaButton.getBoundingClientRect();
@@ -92,6 +92,7 @@
     };
 
     const handleMove = (event) => {
+      if (!event.isPrimary) return;
       const rect = ctaButton.getBoundingClientRect();
       const pointerX = event.clientX;
       const pointerY = event.clientY;
