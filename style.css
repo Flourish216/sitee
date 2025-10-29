@@ -123,12 +123,8 @@ html, body {
 .nav a:hover::after { width: 100%; }
 
 .nav-link-fake {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
-}
-.nav-link-fake::after {
-  display: none;
+  cursor: pointer;
+  position: relative;
 }
 
 /* ===== Hero Section ===== */
@@ -259,22 +255,26 @@ body.konami-mode .site-footer {
   position: fixed;
   bottom: 1.6rem;
   left: 1.8rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(20, 20, 20, 0.8);
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.75);
-  padding: 0.35rem 0.55rem;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.4rem 0.75rem;
   border-radius: 999px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   opacity: 0;
-  animation: revealSecret 4s ease 2.2s forwards;
-  z-index: 4;
+  animation: revealSecret 2.2s ease 1.2s forwards;
+  z-index: 6;
 }
 .secret-see-projects:hover {
-  color: rgba(0, 0, 0, 0.85);
-  background: rgba(255, 255, 255, 0.9);
+  color: rgba(20, 20, 20, 1);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.secret-see-projects.attention {
+  animation: revealSecret 0.45s ease forwards, secretPulse 1.8s ease 0.45s infinite alternate;
 }
 
 @keyframes revealSecret {
@@ -285,6 +285,17 @@ body.konami-mode .site-footer {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes secretPulse {
+  from {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    letter-spacing: 0.14em;
+  }
+  to {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26);
+    letter-spacing: 0.18em;
   }
 }
 
