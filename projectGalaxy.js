@@ -3,218 +3,211 @@
   if (!host) return;
 
   const pointer = { x: 0, y: 0, active: false };
-  const planets = [
-    {
-      label: 'VOX',
-      url: 'projects/robot.html',
-      radius: 140,
-      speed: 0.009,
-      hue: 200,
-      size: 18,
-      phase: Math.random() * Math.PI * 2,
-      wobble: Math.random() * 1000,
-      trail: [],
-    },
-    {
-      label: 'CANDY',
-      url: 'projects/bear.html',
-      radius: 200,
-      speed: -0.0075,
-      hue: 330,
-      size: 22,
-      phase: Math.random() * Math.PI * 2,
-      wobble: Math.random() * 1000,
-      trail: [],
-    },
-    {
-      label: 'CARPET',
-      url: 'projects/carpet.html',
-      radius: 260,
-      speed: 0.006,
-      hue: 120,
-      size: 16,
-      phase: Math.random() * Math.PI * 2,
-      wobble: Math.random() * 1000,
-      trail: [],
-    },
-  ];
 
-  const stars = Array.from({ length: 260 }, () => ({
+  const planets = [
+    { label: 'VOX', url: 'projects/robot.html', radius: 0.26, speed: 0.0065, wobble: Math.random() * 1000, hue: 210, size: 22 },
+    { label: 'CANDY', url: 'projects/bear.html', radius: 0.36, speed: -0.0052, wobble: Math.random() * 1000, hue: 320, size: 26 },
+    { label: 'CYCLE', url: 'projects/carpet.html', radius: 0.46, speed: 0.0042, wobble: Math.random() * 1000, hue: 140, size: 18 },
+  ].map((planet, idx) => ({
+    ...planet,
+    phase: Math.random() * Math.PI * 2 + idx * 0.8,
+    pos: null,
+    trail: [],
+  }));
+
+  const stars = Array.from({ length: 240 }, () => ({
     x: Math.random(),
     y: Math.random(),
-    depth: Math.random() * 0.8 + 0.2,
+    depth: Math.random() * 0.9 + 0.1,
     phase: Math.random() * Math.PI * 2,
   }));
 
-  const nebulaSeeds = Array.from({ length: 4 }, () => ({
-    angle: Math.random() * Math.PI * 2,
-    radius: 0.2 + Math.random() * 0.4,
-    speed: Math.random() * 0.0006 + 0.0002,
+  const nebulas = Array.from({ length: 4 }, () => ({
+    phase: Math.random() * Math.PI * 2,
+    radius: Math.random() * 0.35 + 0.25,
+    drift: Math.random() * 0.0007 + 0.00025,
     hue: Math.random() * 360,
   }));
 
   const sketch = (p) => {
     let canvas;
-    const center = () => p.createVector(p.width / 2, p.height / 2);
 
-    const resizeCanvas = () => {
-      canvas = canvas || p.createCanvas(host.clientWidth, host.clientHeight);
-      p.resizeCanvas(host.clientWidth, host.clientHeight);
+    const resize = () => {
+      const { clientWidth, clientHeight } = host;
+      if (!canvas) {
+        canvas = p.createCanvas(clientWidth, clientHeight);
+        canvas.parent(host);
+        canvas.canvas.addEventListener('pointerleave', () => {
+          pointer.active = false;
+        });
+      } else {
+        p.resizeCanvas(clientWidth, clientHeight);
+      }
     };
 
-    const drawGradient = () => {
+    const center = () => p.createVector(p.width / 2, p.height / 2);
+
+    const basePosition = (planet) => {
+      const angle = planet.phase;
+      const rx = planet.radius * p.width;
+      const ry = planet.radius * p.height * 0.6;
+      const noiseWarp = (p.noise(planet.wobble + p.frameCount * 0.002) - 0.5) * rx * 0.12;
+      return p.createVector(
+        Math.cos(angle) * rx + noiseWarp,
+        Math.sin(angle) * ry
+      );
+    };
+
+    const updatePlanets = () => {
+      const c = center();
+
+      const basePositions = planets.map((planet) => {
+        planet.phase += planet.speed;
+        return basePosition(planet);
+      });
+
+      const targets = basePositions.map((base, idx) => {
+        const offset = p.createVector(0, 0);
+
+        if (pointer.active) {
+          const pointerVec = p.createVector(pointer.x, pointer.y).sub(c);
+          const diff = pointerVec.copy().sub(base);
+          const dist = diff.mag() + 1;
+          diff.setMag(Math.min(150, 260 / dist));
+          offset.add(diff.mult(0.35));
+        }
+
+        basePositions.forEach((other, jdx) => {
+          if (idx === jdx) return;
+          const sep = base.copy().sub(other);
+          const dist = sep.mag() + 0.001;
+          if (dist < 160) {
+            sep.setMag((160 - dist) * 0.55);
+            offset.add(sep);
+          }
+        });
+
+        const drift = p.createVector(
+          Math.sin(p.frameCount * 0.004 + idx * 1.7) * 14,
+          Math.cos(p.frameCount * 0.003 + idx) * 12
+        );
+        offset.add(drift);
+
+        return base.copy().add(offset);
+      });
+
+      planets.forEach((planet, idx) => {
+        const target = targets[idx];
+        if (!planet.pos) {
+          planet.pos = target.copy();
+        } else {
+          planet.pos.lerp(target, 0.18);
+        }
+
+        planet.trail.unshift({ pos: planet.pos.copy(), alpha: 1 });
+        if (planet.trail.length > 120) planet.trail.pop();
+      });
+    };
+
+    const drawNebulae = () => {
       const ctx = p.drawingContext;
       ctx.save();
-      const g = ctx.createRadialGradient(
-        p.width / 2,
-        p.height / 2,
-        p.width * 0.1,
-        p.width / 2,
-        p.height / 2,
-        Math.max(p.width, p.height) * 0.7
-      );
-      g.addColorStop(0, 'rgba(8, 10, 18, 0.95)');
-      g.addColorStop(0.5, 'rgba(5, 7, 14, 0.9)');
-      g.addColorStop(1, 'rgba(0, 0, 2, 1)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, p.width, p.height);
+      const c = center();
+      ctx.translate(c.x, c.y);
+      ctx.globalCompositeOperation = 'lighter';
+      nebulas.forEach((cloud, idx) => {
+        cloud.phase += cloud.drift;
+        const r = cloud.radius * Math.max(p.width, p.height) * (0.6 + Math.sin(p.frameCount * 0.003 + idx) * 0.1);
+        const x = Math.cos(cloud.phase) * p.width * 0.3;
+        const y = Math.sin(cloud.phase * 0.7) * p.height * 0.2;
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+        const hue = (cloud.hue + p.frameCount * 0.2) % 360;
+        gradient.addColorStop(0, `hsla(${hue}, 80%, 65%, 0.18)`);
+        gradient.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
       ctx.restore();
     };
 
-    const drawNebula = () => {
-      const c = center();
-      p.push();
-      p.translate(c.x, c.y);
-      p.blendMode(p.ADD);
-      nebulaSeeds.forEach((seed, idx) => {
-        seed.angle += seed.speed;
-        const nx = Math.cos(seed.angle) * seed.radius * p.width * 0.45;
-        const ny = Math.sin(seed.angle * 0.9) * seed.radius * p.height * 0.45;
-        const radius = p.width * (0.12 + Math.sin(p.frameCount * 0.002 + idx) * 0.03);
-        const gradient = p.drawingContext.createRadialGradient(0, 0, radius * 0.1, 0, 0, radius);
-        const hue = (seed.hue + p.frameCount * 0.08) % 360;
-        gradient.addColorStop(0, `hsla(${hue}, 80%, 80%, 0.18)`);
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        p.drawingContext.save();
-        p.drawingContext.translate(nx, ny);
-        p.drawingContext.fillStyle = gradient;
-        p.drawingContext.beginPath();
-        p.drawingContext.arc(0, 0, radius, 0, Math.PI * 2);
-        p.drawingContext.fill();
-        p.drawingContext.restore();
-      });
-      p.pop();
-      p.blendMode(p.BLEND);
-    };
-
     const drawStars = () => {
-      p.blendMode(p.ADD);
+      p.noStroke();
       stars.forEach((star, idx) => {
-        const flicker = 0.4 + Math.sin(p.frameCount * 0.02 + star.phase) * 0.6;
-        const x = star.x * p.width + Math.sin(p.frameCount * 0.0006 + idx) * 8 * star.depth;
-        const y = star.y * p.height + Math.cos(p.frameCount * 0.0004 + idx) * 8 * star.depth;
-        p.noStroke();
-        p.fill(200, 200, 255, 60 * star.depth * flicker);
-        p.circle(x, y, (star.depth * 2 + 1.5) * flicker);
+        const flicker = Math.sin(p.frameCount * 0.02 + star.phase) * 0.5 + 0.8;
+        const x = star.x * p.width + Math.sin(p.frameCount * 0.0008 + idx) * 10 * star.depth;
+        const y = star.y * p.height + Math.cos(p.frameCount * 0.0006 + idx) * 14 * star.depth;
+        p.fill(220, 5, 95, 0.25 * star.depth * flicker);
+        p.circle(x, y, (0.8 + star.depth) * 2.5 * flicker);
       });
-      p.blendMode(p.BLEND);
     };
 
     const drawPlanet = (planet) => {
-      planet.phase += planet.speed;
       const c = center();
-      const orbitNoise = p.noise(planet.wobble + p.frameCount * 0.001) * 0.6 - 0.3;
-      const r = planet.radius + orbitNoise * 40;
-      const basePos = p.createVector(
-        Math.cos(planet.phase) * r,
-        Math.sin(planet.phase) * r * 0.72
-      );
-      let finalPos = basePos.copy();
+      const pos = planet.pos.copy().add(c);
 
-      if (pointer.active) {
-        const mouseVec = p.createVector(pointer.x, pointer.y).sub(c);
-        const diff = mouseVec.copy().sub(basePos);
-        const dist = Math.max(40, diff.mag());
-        diff.normalize().mult(Math.min(80, 160 / dist));
-        finalPos.add(diff);
-      }
-
-      planet.trail.unshift({ pos: finalPos.copy(), life: 1 });
-      if (planet.trail.length > 90) planet.trail.pop();
-
-      // orbit ring
-      p.stroke(255, 20);
-      p.noFill();
+      // trail
       p.push();
-      p.translate(c.x, c.y);
-      p.ellipse(0, 0, planet.radius * 2, planet.radius * 1.4);
+      p.strokeWeight(3);
+      planet.trail.forEach((node, idx) => {
+        node.alpha *= 0.97;
+        if (node.alpha <= 0.02) return;
+        const hue = (planet.hue + idx * 2 + p.frameCount * 0.4) % 360;
+        p.stroke(hue, 90, 100, node.alpha * 0.5);
+        const current = node.pos.copy().add(c);
+        p.line(current.x, current.y, current.x, current.y);
+      });
       p.pop();
 
-      // trail glow
-      p.push();
-      p.translate(c.x, c.y);
-      p.blendMode(p.ADD);
-      planet.trail.forEach((node, idx) => {
-        node.life *= 0.97;
-        const alpha = Math.max(0, node.life) * (0.9 - idx / planet.trail.length);
-        if (alpha <= 0.01) return;
-        p.fill((planet.hue + idx * 3) % 360, 80, 90, alpha * 0.4);
-        p.noStroke();
-        p.circle(node.pos.x, node.pos.y, planet.size * 1.2 * (1 - idx / planet.trail.length));
-      });
-      p.blendMode(p.BLEND);
-
-      // planet body
-      const highlight = pointer.active && finalPos.copy().add(c).dist(p.createVector(pointer.x, pointer.y)) < planet.size * 3;
-      const planetVec = finalPos.copy();
-      p.translate(c.x, c.y);
+      // halo
       p.noStroke();
-      p.fill(planet.hue, 70, highlight ? 100 : 80, 0.9);
-      p.circle(planetVec.x, planetVec.y, planet.size * 2.2);
-      p.fill(planet.hue, 40, 100, 0.65);
-      p.ellipse(
-        planetVec.x + planet.size * 0.2,
-        planetVec.y - planet.size * 0.2,
-        planet.size * 1.2,
-        planet.size * 1.2
-      );
+      p.fill(planet.hue, 90, 100, 0.25);
+      p.circle(pos.x, pos.y, planet.size * 4.6);
+      p.fill(planet.hue, 85, 100, 0.7);
+      p.circle(pos.x, pos.y, planet.size * 2.6);
+      p.fill(planet.hue, 30, 100, 0.9);
+      p.circle(pos.x + planet.size * 0.2, pos.y - planet.size * 0.2, planet.size * 1.6);
 
-      // glyph halo
+      // label ring
       p.noFill();
-      p.stroke(planet.hue, 40, 100, 0.3);
+      p.stroke(planet.hue, 30, 100, 0.45);
       p.strokeWeight(1.6);
-      const haloR = planet.size * 2.8;
-      p.ellipse(planetVec.x, planetVec.y, haloR, haloR * 0.9);
+      p.circle(pos.x, pos.y, planet.size * 5.4);
 
-      // luminescent sparks
-      p.blendMode(p.ADD);
-      for (let i = 0; i < 3; i++) {
-        const sparkAngle = planet.phase + i * (Math.PI * 2) / 3 + p.frameCount * 0.01;
-        const sx = planetVec.x + Math.cos(sparkAngle) * planet.size * 3;
-        const sy = planetVec.y + Math.sin(sparkAngle) * planet.size * 1.8;
-        p.fill(planet.hue, 80, 100, 0.5);
-        p.noStroke();
-        p.circle(sx, sy, 6);
-      }
-      p.blendMode(p.BLEND);
+      // label
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textFont('Manrope');
+      p.textSize(planet.size * 0.85);
+      p.fill(planet.hue, 20, 100, 0.7);
+      p.text(planet.label, pos.x, pos.y - planet.size * 3.2);
 
-      planet.screenPos = planetVec.add(c);
+      planet.screenPos = pos;
     };
 
     p.setup = () => {
-      resizeCanvas();
+      resize();
       p.colorMode(p.HSB, 360, 100, 100, 1);
-      canvas.canvas.addEventListener('pointerleave', () => {
-        pointer.active = false;
-      });
+      p.frameRate(60);
     };
 
-    p.windowResized = () => resizeCanvas();
+    p.windowResized = resize;
 
     p.mouseMoved = () => {
       pointer.x = p.mouseX;
       pointer.y = p.mouseY;
       pointer.active = pointer.x >= 0 && pointer.x <= p.width && pointer.y >= 0 && pointer.y <= p.height;
+    };
+
+    p.mousePressed = () => {
+      if (!pointer.active) return;
+      const pt = p.createVector(pointer.x, pointer.y);
+      for (const planet of planets) {
+        if (planet.screenPos && pt.dist(planet.screenPos) < planet.size * 2.2) {
+          window.location.href = planet.url;
+          break;
+        }
+      }
     };
 
     p.touchMoved = () => {
@@ -224,30 +217,20 @@
       return false;
     };
 
-    p.draw = () => {
-      drawGradient();
-      drawNebula();
-      drawStars();
-      planets.forEach(drawPlanet);
-    };
-
-    p.mousePressed = () => {
-      if (!pointer.active) return;
-      const pos = p.createVector(pointer.x, pointer.y);
-      for (const planet of planets) {
-        if (planet.screenPos && pos.dist(planet.screenPos) < planet.size * 1.8) {
-          window.location.href = planet.url;
-          break;
-        }
-      }
-    };
-
     p.touchStarted = () => {
       pointer.x = p.mouseX;
       pointer.y = p.mouseY;
       pointer.active = true;
       p.mousePressed();
       return false;
+    };
+
+    p.draw = () => {
+      p.background(0, 0, 0);
+      drawNebulae();
+      drawStars();
+      updatePlanets();
+      planets.forEach(drawPlanet);
     };
   };
 
