@@ -1,141 +1,288 @@
-(() => {
-  const host = document.getElementById('bear-canvas');
-  if (!host) return;
+(() => {(() => {
 
-  new p5((p) => {
-    const offerings = [];
-    const shards = [];
-    const fragments = [];
-    const aura = [];
-    const offspring = [];
-    const beast = {
-      pos: null,
-      wobble: 0,
-      drag: false,
-      dragOffset: null,
-      radius: 0,
-    };
-    const pointer = {
-      x: 0,
-      y: 0,
+  const host = document.getElementById('bear-canvas');  const host = document.getElementById('bear-canvas');
+
+  if (!host) return;  if (!host) return;
+
+
+
+  new p5((p) => {  new p5((p) => {
+
+    let cats = []; // 存储所有的猫    let cats = []; // 存储所有的猫
+
+    const colors = [ // 彩虹颜色    const colors = [ // 彩虹颜色
+
+        '#ff0000', // 红        '#ff0000', // 红
+
+        '#ff9900', // 橙        '#ff9900', // 橙
+
+        '#ffff00', // 黄        '#ffff00', // 黄
+
+        '#33ff00', // 绿        '#33ff00', // 绿
+
+        '#0099ff', // 蓝        '#0099ff', // 蓝
+
+        '#6633ff'  // 紫        '#6633ff'  // 紫
+
+    ];    ];
+
+
+
+    class NyanCat {    class NyanCat {
+
+        constructor(x, y) {        constructor(x, y) {
+
+            this.pos = p.createVector(x, y);            this.pos = p.createVector(x, y);
+
+            this.vel = p5.Vector.random2D().mult(p.random(3, 6));            this.vel = p5.Vector.random2D().mult(p.random(3, 6));
+
+            this.trail = []; // 彩虹轨迹            this.trail = []; // 彩虹轨迹
+
+            this.trailLength = 20; // 彩虹长度            this.trailLength = 20; // 彩虹长度
+
+            this.size = p.random(30, 50); // 猫的大小            this.size = p.random(30, 50); // 猫的大小
+
+            this.bobTime = 0; // 用于上下浮动动画            this.bobTime = 0; // 用于上下浮动动画
+
+            this.alive = true;            this.alive = true;
+
+        }        }
+
       down: false,
-      dragging: false,
-      dragCandidate: false,
-      pendingSpawn: false,
-      startX: 0,
-      startY: 0,
-    };
-    let saturation = 0;
-    let rupture = false;
-    let resetTimer = 0;
+
+        update() {      dragging: false,
+
+            // 更新位置      dragCandidate: false,
+
+            this.pos.add(this.vel);      pendingSpawn: false,
+
+                  startX: 0,
+
+            // 记录轨迹      startY: 0,
+
+            this.trail.unshift({x: this.pos.x, y: this.pos.y});    };
+
+            if (this.trail.length > this.trailLength) {    let saturation = 0;
+
+                this.trail.pop();    let rupture = false;
+
+            }    let resetTimer = 0;
+
     let gulpPulse = 0;
-    let bass, hiss, gulpOsc, burstOsc, gulpEnv, burstEnv;
-    let bassLevel = 0;
-    let hissLevel = 0;
-    let audioReady = false;
+
+            // 边界检查    let bass, hiss, gulpOsc, burstOsc, gulpEnv, burstEnv;
+
+            if (this.pos.x < -100 || this.pos.x > p.width + 100 ||    let bassLevel = 0;
+
+                this.pos.y < -100 || this.pos.y > p.height + 100) {    let hissLevel = 0;
+
+                this.alive = false;    let audioReady = false;
+
+            }
 
     const spawnOffering = (x, y, heavy = false) => {
-      const spawnX = p.constrain(x, p.width * 0.08, p.width * 0.92);
-      const spawnY = Math.min(y, p.height * 0.35);
-      const massRange = heavy ? [14, 24] : [6, 11];
+
+            // 更新浮动动画      const spawnX = p.constrain(x, p.width * 0.08, p.width * 0.92);
+
+            this.bobTime += 0.2;      const spawnY = Math.min(y, p.height * 0.35);
+
+        }      const massRange = heavy ? [14, 24] : [6, 11];
+
       offerings.push({
-        x: spawnX,
-        y: spawnY,
-        vx: p.random(-0.8, 0.8),
-        vy: -p.random(1, 2),
-        hue: p.random([320, 20, 120, 180, 260]),
-        mass: p.random(massRange[0], massRange[1]),
-      });
-    };
 
-    const ensureAudio = () => {
-      if (audioReady) return;
-      if (typeof p5 === 'undefined' || !p5.Oscillator) return;
-      if (p.userStartAudio) p.userStartAudio();
-      bass = new p5.Oscillator('sawtooth');
+        draw() {        x: spawnX,
+
+            p.push();        y: spawnY,
+
+                    vx: p.random(-0.8, 0.8),
+
+            // 绘制彩虹轨迹        vy: -p.random(1, 2),
+
+            p.noStroke();        hue: p.random([320, 20, 120, 180, 260]),
+
+            for (let i = this.trail.length - 1; i >= 0; i--) {        mass: p.random(massRange[0], massRange[1]),
+
+                const t = this.trail[i];      });
+
+                const alpha = p.map(i, 0, this.trail.length - 1, 255, 100);    };
+
+                for (let j = 0; j < colors.length; j++) {
+
+                    p.fill(p.color(colors[j] + p.hex(p.int(alpha), 2)));    const ensureAudio = () => {
+
+                    const yOffset = j * (this.size/8) - (this.size/3);      if (audioReady) return;
+
+                    p.rect(t.x - this.size, t.y + yOffset, this.size/1.2, this.size/8);      if (typeof p5 === 'undefined' || !p5.Oscillator) return;
+
+                }      if (p.userStartAudio) p.userStartAudio();
+
+            }      bass = new p5.Oscillator('sawtooth');
+
       bass.start();
-      bass.amp(0, 0.1);
-      hiss = new p5.Noise('pink');
-      hiss.start();
-      hiss.amp(0, 0.1);
-      gulpOsc = new p5.Oscillator('triangle');
-      gulpOsc.start();
-      gulpOsc.amp(0);
-      burstOsc = new p5.Oscillator('square');
-      burstOsc.start();
-      burstOsc.amp(0);
-      gulpEnv = new p5.Envelope();
-      gulpEnv.setADSR(0.005, 0.08, 0, 0.06);
-      gulpEnv.setRange(0.22, 0);
-      burstEnv = new p5.Envelope();
-      burstEnv.setADSR(0.01, 0.18, 0, 0.4);
-      burstEnv.setRange(0.3, 0);
-      audioReady = true;
-    };
 
-    const triggerGulp = () => {
-      ensureAudio();
-      if (!gulpEnv || !gulpOsc) return;
-      gulpOsc.freq(220 + Math.random() * 160);
-      gulpEnv.play(gulpOsc);
-      bassLevel = Math.min(0.4, bassLevel + 0.08);
-      hissLevel = Math.min(0.28, hissLevel + 0.04);
-    };
+            // 绘制猫咪      bass.amp(0, 0.1);
 
-    const triggerBurst = () => {
-      ensureAudio();
-      if (burstEnv && burstOsc) {
-        burstOsc.freq(50 + Math.random() * 22);
-        burstEnv.play(burstOsc);
-      }
-      bassLevel = Math.max(bassLevel, 0.38);
-      hissLevel = Math.max(hissLevel, 0.32);
-    };
+            p.translate(this.pos.x, this.pos.y + p.sin(this.bobTime) * 5);      hiss = new p5.Noise('pink');
 
-    const teardownAudio = () => {
-      [bass, hiss, gulpOsc, burstOsc].forEach((node) => {
-        if (!node) return;
-        try {
-          node.stop();
-        } catch (_) {
+                  hiss.start();
+
+            // 身体（粉色）      hiss.amp(0, 0.1);
+
+            p.fill('#ffb3da');      gulpOsc = new p5.Oscillator('triangle');
+
+            p.noStroke();      gulpOsc.start();
+
+            p.rect(-this.size/2, -this.size/2, this.size, this.size, this.size/5);      gulpOsc.amp(0);
+
+                  burstOsc = new p5.Oscillator('square');
+
+            // 头部      burstOsc.start();
+
+            p.rect(-this.size/3, -this.size/1.5, this.size/1.5, this.size/1.5, this.size/6);      burstOsc.amp(0);
+
+                  gulpEnv = new p5.Envelope();
+
+            // 耳朵      gulpEnv.setADSR(0.005, 0.08, 0, 0.06);
+
+            p.triangle(-this.size/3, -this.size/1.5, -this.size/6, -this.size/1.5, -this.size/4, -this.size);      gulpEnv.setRange(0.22, 0);
+
+            p.triangle(this.size/6, -this.size/1.5, 0, -this.size/1.5, 0, -this.size);      burstEnv = new p5.Envelope();
+
+                  burstEnv.setADSR(0.01, 0.18, 0, 0.4);
+
+            // 面部表情      burstEnv.setRange(0.3, 0);
+
+            // 眼睛      audioReady = true;
+
+            p.fill(0);    };
+
+            const blinkRate = p.sin(this.bobTime * 2) > 0.9;
+
+            if (blinkRate) {    const triggerGulp = () => {
+
+                p.strokeWeight(2);      ensureAudio();
+
+                p.stroke(0);      if (!gulpEnv || !gulpOsc) return;
+
+                p.line(-this.size/4, -this.size/1.8, -this.size/8, -this.size/1.8);      gulpOsc.freq(220 + Math.random() * 160);
+
+                p.line(0, -this.size/1.8, this.size/8, -this.size/1.8);      gulpEnv.play(gulpOsc);
+
+            } else {      bassLevel = Math.min(0.4, bassLevel + 0.08);
+
+                p.noStroke();      hissLevel = Math.min(0.28, hissLevel + 0.04);
+
+                p.ellipse(-this.size/6, -this.size/1.8, this.size/10);    };
+
+                p.ellipse(this.size/10, -this.size/1.8, this.size/10);
+
+            }    const triggerBurst = () => {
+
+                  ensureAudio();
+
+            // 嘴巴 (:3 形状)      if (burstEnv && burstOsc) {
+
+            p.fill('#ff9999');        burstOsc.freq(50 + Math.random() * 22);
+
+            p.arc(this.size/5, -this.size/2.2, this.size/4, this.size/6, 0, p.PI);        burstEnv.play(burstOsc);
+
+                  }
+
+            p.pop();      bassLevel = Math.max(bassLevel, 0.38);
+
+        }      hissLevel = Math.max(hissLevel, 0.32);
+
+    }    };
+
+
+
+    p.setup = () => {    const teardownAudio = () => {
+
+        const canvas = p.createCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);      [bass, hiss, gulpOsc, burstOsc].forEach((node) => {
+
+        canvas.parent(host);        if (!node) return;
+
+        p.colorMode(p.RGB);        try {
+
+        p.background(20);          node.stop();
+
+    };        } catch (_) {
+
           // ignore
-        }
-        if (node.dispose) node.dispose();
-      });
-      bass = hiss = gulpOsc = burstOsc = null;
-      gulpEnv = burstEnv = null;
-      audioReady = false;
-      bassLevel = 0;
-      hissLevel = 0;
-    };
 
-    const resetBeast = () => {
-      offerings.length = 0;
-      shards.length = 0;
-      fragments.length = 0;
-      offspring.length = 0;
-      saturation = 0;
-      rupture = false;
-      resetTimer = 0;
-      bassLevel = 0;
-      hissLevel = 0;
-      if (bass) bass.amp(0, 0.05);
-      if (hiss) hiss.amp(0, 0.05);
-      const base = p.createVector(p.width / 2, p.height * 0.55);
+    p.draw = () => {        }
+
+        // 渐变淡化背景，创造拖尾效果        if (node.dispose) node.dispose();
+
+        p.background(20, 20, 20, 10);      });
+
+              bass = hiss = gulpOsc = burstOsc = null;
+
+        // 更新和绘制所有的猫      gulpEnv = burstEnv = null;
+
+        for (let i = cats.length - 1; i >= 0; i--) {      audioReady = false;
+
+            cats[i].update();      bassLevel = 0;
+
+            cats[i].draw();      hissLevel = 0;
+
+                };
+
+            // 移除离开屏幕的猫
+
+            if (!cats[i].alive) {    const resetBeast = () => {
+
+                cats.splice(i, 1);      offerings.length = 0;
+
+            }      shards.length = 0;
+
+        }      fragments.length = 0;
+
+              offspring.length = 0;
+
+        // 显示提示文本      saturation = 0;
+
+        p.fill(255);      rupture = false;
+
+        p.noStroke();      resetTimer = 0;
+
+        p.textSize(16);      bassLevel = 0;
+
+        p.textAlign(p.LEFT, p.TOP);      hissLevel = 0;
+
+        p.text('Click anywhere to create a Nyan Cat!', 20, 20);      if (bass) bass.amp(0, 0.05);
+
+        p.text('Active Cats: ' + cats.length, 20, 45);      if (hiss) hiss.amp(0, 0.05);
+
+    };      const base = p.createVector(p.width / 2, p.height * 0.55);
+
       beast.pos = base.copy();
-      beast.drag = false;
-      beast.dragOffset = p.createVector(0, 0);
-      beast.radius = p.width * 0.16;
-      pointer.down = false;
-      pointer.dragging = false;
-      pointer.dragCandidate = false;
-      pointer.pendingSpawn = false;
-    };
 
-    const updatePointer = (x, y) => {
-      pointer.x = p.constrain(x, -p.width * 0.1, p.width * 1.1);
-      pointer.y = p.constrain(y, -p.height * 0.1, p.height * 1.1);
-    };
+    p.mousePressed = () => {      beast.drag = false;
+
+        // 创建新的彩虹猫      beast.dragOffset = p.createVector(0, 0);
+
+        if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {      beast.radius = p.width * 0.16;
+
+            cats.push(new NyanCat(p.mouseX, p.mouseY));      pointer.down = false;
+
+        }      pointer.dragging = false;
+
+    };      pointer.dragCandidate = false;
+
+      pointer.pendingSpawn = false;
+
+    p.windowResized = () => {    };
+
+        p.resizeCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);
+
+        p.background(20);    const updatePointer = (x, y) => {
+
+    };      pointer.x = p.constrain(x, -p.width * 0.1, p.width * 1.1);
+
+  });      pointer.y = p.constrain(y, -p.height * 0.1, p.height * 1.1);
+
+})();    };
 
     const handlePointerDown = (x, y) => {
       updatePointer(x, y);
