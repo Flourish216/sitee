@@ -43,15 +43,6 @@
       const size = Math.min(window.innerWidth, window.innerHeight);
       p.createCanvas(size, size).parent(host);
       resetVoice();
-      osc = new p5.Oscillator('triangle');
-      noise = new p5.Noise('pink');
-      reverb = new p5.Reverb();
-      osc.amp(0, 0.1);
-      osc.start();
-      noise.amp(0, 0.1);
-      noise.start();
-      reverb.process(osc, 2, 0.3);
-      reverb.process(noise, 2, 0.3);
     };
 
     p.windowResized = () => {
@@ -173,8 +164,17 @@
     const toggle = () => {
       talking = !talking;
       if (talking) {
-        if (osc) osc.amp(0.12, 0.2);
-        if (noise) noise.amp(0.04, 0.2);
+        if (!osc) {
+          osc = new p5.Oscillator('triangle');
+          noise = new p5.Noise('pink');
+          reverb = new p5.Reverb();
+          osc.start();
+          noise.start();
+          reverb.process(osc, 2, 0.3);
+          reverb.process(noise, 2, 0.3);
+        }
+        osc.amp(0.12, 0.2);
+        noise.amp(0.04, 0.2);
         glitch = 0;
       } else {
         if (osc) osc.amp(0, 0.3);

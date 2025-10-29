@@ -27,9 +27,9 @@ html, body {
 }
 
 body.projects-page {
-  overflow-y: auto;
+  overflow: hidden;
   min-height: 100vh;
-  background: #050505;
+  background: radial-gradient(circle at top, #161616, #040507 60%, #000);
   color: #f5f5f5;
   --muted: rgba(220, 220, 220, 0.65);
   --border: rgba(255, 255, 255, 0.12);
@@ -135,10 +135,6 @@ body.projects-page {
   backdrop-filter: blur(4px); /* gentle glass effect */
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-.projects-page .site-header {
-  background: rgba(10, 10, 10, 0.78);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-}
 .home-page .site-header {
   opacity: 0;
   animation: fadeHeader 0.8s ease 0.6s forwards;
@@ -165,9 +161,6 @@ body.projects-page {
   text-decoration: none;
   color: var(--text);
 }
-.projects-page .brand {
-  color: #f5f5f5;
-}
 
 .nav a {
   text-decoration: none;
@@ -175,9 +168,6 @@ body.projects-page {
   color: var(--text);
   font-weight: 500;
   position: relative;
-}
-.projects-page .nav a {
-  color: rgba(245, 245, 245, 0.88);
 }
 .nav a::after {
   content: "";
@@ -189,9 +179,6 @@ body.projects-page {
   background: var(--accent);
   transition: width 0.25s ease;
 }
-.projects-page .nav a::after {
-  background: rgba(255, 255, 255, 0.5);
-}
 .nav a:hover::after { width: 100%; }
 
 .nav-link-fake {
@@ -200,6 +187,14 @@ body.projects-page {
 }
 .nav a.active {
   opacity: 0.5;
+}
+
+.projects-page .site-header,
+.projects-page .site-footer,
+.projects-page .page-lede,
+.projects-page .container.page,
+.projects-page .galaxy-hints {
+  display: none;
 }
 
 /* ===== Hero Section ===== */
@@ -486,14 +481,6 @@ body.projects-page {
   background: rgba(255, 255, 255, 0.55); /* matches the header translucency */
   backdrop-filter: blur(4px);
 }
-.projects-page .site-footer {
-  background: rgba(10, 10, 10, 0.82);
-  border-top-color: rgba(255, 255, 255, 0.08);
-  color: rgba(230, 230, 230, 0.6);
-}
-.projects-page .site-footer a {
-  color: rgba(240, 240, 240, 0.85);
-}
 .home-page .site-footer {
   opacity: 0;
   animation: fadeFooter 1.2s ease 1.6s forwards;
@@ -553,4 +540,42 @@ body.konami-mode .accent-link {
 }
 body.konami-mode .konami-toast {
   background: rgba(255, 79, 163, 0.85);
+}
+
+.galaxy-void {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.galaxy-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+.galaxy-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.galaxy-back {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  font-size: 1.6rem;
+  background: rgba(5, 5, 5, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  z-index: 8;
+}
+.galaxy-back:hover {
+  transform: translateY(-4px);
+  background: rgba(10, 10, 10, 0.82);
+  border-color: rgba(255, 255, 255, 0.5);
 }

@@ -84,6 +84,14 @@
       }
     };
 
+    p.touchStarted = () => {
+      pointer.x = p.mouseX;
+      pointer.y = p.mouseY;
+      pointer.active = true;
+      p.mousePressed();
+      return false;
+    };
+
     p.draw = () => {
       p.background(2, 2, 6);
       // starfield

@@ -7,40 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
-<script src="p5.sound.min.js"></script>
 </head>
 <body class="projects-page">
 <div id="cursor-container"></div>
-<header class="site-header">
-  <div class="container">
-    <a class="brand" href="index.html">Jesse Zhang</a>
-    <nav class="nav">
-      <a href="projects.html" class="active">Projects</a>
-      <a href="shop.html">Shop</a>
-      <a href="links.html">Links</a>
-    </nav>
-  </div>
-</header>
-
-<main class="container page">
-  <section class="page-lede">
-    <h1>Project Constellation</h1>
-    <p class="muted">
-      Three sketches drifting in a vacuum. Watch their orbits warp under your cursor. Click a planet to enter its world.
-    </p>
-  </section>
-
-  <section class="galaxy-section">
-    <div class="galaxy-canvas" id="project-galaxy"></div>
-    <p class="galaxy-hints muted">drag / hover / click the satellites</p>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <small><a href="index.html">Back home</a></small>
-  </div>
-</footer>
+<button class="galaxy-back" onclick="location.href='index.html'">🚀</button>
+<div class="galaxy-void">
+  <div class="galaxy-canvas" id="project-galaxy"></div>
+</div>
 <script src="cursor.js"></script>
 <script src="main.js"></script>
 <script src="projectGalaxy.js"></script>
