@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
+<script src="p5.sound.min.js"></script>
 </head>
 <body class="projects-page">
 <div id="cursor-container"></div>
@@ -23,29 +24,40 @@
 
 <main class="container page">
   <section class="page-lede">
-    <h1>Lab Notes</h1>
+    <h1>Project Constellation</h1>
     <p class="muted">
-      Three tiny p5.js sketches I made in class. Click around, see what they do, and feel free to remix them.
+      I pictured every sketch as a little satellite. They drift, collide, and occasionally respond to passing gravity (your cursor). Click a wandering light to jump to its story below.
     </p>
   </section>
 
+  <section class="galaxy-section">
+    <div class="galaxy-canvas" id="project-galaxy"></div>
+    <p class="galaxy-hints muted">drag / hover / click the satellites</p>
+  </section>
+
   <section class="project-grid">
-    <article class="project-card">
-      <h3>Soft Orbit</h3>
-      <p class="muted">Two moons orbit an invisible center. Drag to nudge their path.</p>
-      <div class="sketch-frame" id="sketch-orbit"></div>
+    <article class="project-card" id="project-vox">
+      <h3>Satellite 01 · Vox Mechanica</h3>
+      <p>
+        A babbling geometry robot practices machine poetry. Click inside the frame to wake it up—its voice turns into chirps, and it streams glitch text as it improvises.
+      </p>
+      <div class="sketch-frame" id="sketch-robot"></div>
     </article>
 
-    <article class="project-card">
-      <h3>Noise Field</h3>
-      <p class="muted">Perlin noise pushes dots into slow currents. Move the mouse to stir the field.</p>
-      <div class="sketch-frame" id="sketch-noise"></div>
+    <article class="project-card" id="project-gummy">
+      <h3>Satellite 02 · Candy Bloom</h3>
+      <p>
+        A strange bear made of sugar vapor. Feed it little gummies; when it gets too full, it bursts into candy dust. Clear the pieces to let another tiny bear grow.
+      </p>
+      <div class="sketch-frame" id="sketch-bear"></div>
     </article>
 
-    <article class="project-card">
-      <h3>Polka Echo</h3>
-      <p class="muted">Tap or click to drop ripples of circles that fade away.</p>
-      <div class="sketch-frame" id="sketch-polka"></div>
+    <article class="project-card" id="project-carpet">
+      <h3>Satellite 03 · Chromatic Carpet</h3>
+      <p>
+        A hovering rug that ripples with color when you steer it. Move the cursor to tilt the loom and watch the gradients shift in mid-air.
+      </p>
+      <div class="sketch-frame" id="sketch-carpet"></div>
     </article>
   </section>
 </main>
@@ -57,119 +69,9 @@
 </footer>
 <script src="cursor.js"></script>
 <script src="main.js"></script>
-<script>
-  const sketches = {
-    orbit: (p) => {
-      let angle = 0;
-      let target = 0;
-      p.setup = () => {
-        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
-        p.createCanvas(size, size).parent('sketch-orbit');
-      };
-      p.draw = () => {
-        p.background(250);
-        const r1 = p.width * 0.18;
-        const r2 = p.width * 0.28;
-        angle = p.lerp(angle, target, 0.05);
-        const x1 = p.width / 2 + Math.cos(angle) * r1;
-        const y1 = p.height / 2 + Math.sin(angle) * r1;
-        const x2 = p.width / 2 + Math.cos(-angle * 1.4) * r2;
-        const y2 = p.height / 2 + Math.sin(-angle * 1.4) * r2;
-        p.noStroke();
-        p.fill(30, 30, 30, 30);
-        p.circle(p.width / 2, p.height / 2, p.width * 0.08);
-        p.fill(30, 30, 30, 200);
-        p.circle(x1, y1, p.width * 0.12);
-        p.fill(30, 30, 30, 120);
-        p.circle(x2, y2, p.width * 0.16);
-      };
-      p.mouseDragged = () => {
-        target += (p.movedX + p.movedY) * 0.01;
-      };
-      p.touchMoved = () => {
-        target += (p.movedX + p.movedY) * 0.01;
-        return false;
-      };
-      p.windowResized = () => {
-        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
-        p.resizeCanvas(size, size);
-      };
-    },
-    noise: (p) => {
-      const dots = [];
-      const dotCount = 180;
-      let zOff = 0;
-      p.setup = () => {
-        const w = Math.min(360, Math.floor(window.innerWidth * 0.65));
-        const h = w * 0.6;
-        p.createCanvas(w, h).parent('sketch-noise');
-        for (let i = 0; i < dotCount; i++) {
-          dots.push({ x: p.random(p.width), y: p.random(p.height) });
-        }
-      };
-      p.draw = () => {
-        p.background(250);
-        p.noStroke();
-        const mousePush = p.createVector(p.mouseX - p.width / 2, p.mouseY - p.height / 2).mult(0.0006);
-        dots.forEach((dot) => {
-          const angle = p.noise(dot.x * 0.003, dot.y * 0.003, zOff) * p.TWO_PI * 2;
-          dot.x += Math.cos(angle) * 0.7 + mousePush.x;
-          dot.y += Math.sin(angle) * 0.7 + mousePush.y;
-          if (dot.x < 0) dot.x += p.width;
-          if (dot.x > p.width) dot.x -= p.width;
-          if (dot.y < 0) dot.y += p.height;
-          if (dot.y > p.height) dot.y -= p.height;
-          p.fill(30, 30, 30, 70);
-          p.circle(dot.x, dot.y, 6);
-        });
-        zOff += 0.003;
-      };
-      p.windowResized = () => {
-        const w = Math.min(360, Math.floor(window.innerWidth * 0.65));
-        const h = w * 0.6;
-        p.resizeCanvas(w, h);
-      };
-    },
-    polka: (p) => {
-      const ripples = [];
-      p.setup = () => {
-        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
-        p.createCanvas(size, size).parent('sketch-polka');
-      };
-      p.draw = () => {
-        p.background(250);
-        for (let i = ripples.length - 1; i >= 0; i--) {
-          const r = ripples[i];
-          r.radius += 2;
-          r.alpha -= 4;
-          if (r.alpha <= 0) {
-            ripples.splice(i, 1);
-            continue;
-          }
-          p.noFill();
-          p.stroke(30, 30, 30, r.alpha);
-          p.strokeWeight(2);
-          p.circle(r.x, r.y, r.radius);
-        }
-      };
-      const spawn = (x, y) => {
-        ripples.push({ x, y, radius: 10, alpha: 180 });
-      };
-      p.mousePressed = () => spawn(p.mouseX, p.mouseY);
-      p.touchStarted = () => {
-        spawn(p.mouseX, p.mouseY);
-        return false;
-      };
-      p.windowResized = () => {
-        const size = Math.min(320, Math.floor(window.innerWidth * 0.6));
-        p.resizeCanvas(size, size);
-      };
-    },
-  };
-
-  new p5(sketches.orbit, 'sketch-orbit');
-  new p5(sketches.noise, 'sketch-noise');
-  new p5(sketches.polka, 'sketch-polka');
-</script>
+<script src="projectGalaxy.js"></script>
+<script src="sketchRobot.js"></script>
+<script src="sketchBear.js"></script>
+<script src="sketchCarpet.js"></script>
 </body>
 </html>
