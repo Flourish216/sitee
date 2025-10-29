@@ -187,12 +187,17 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .hero .btn.cta-flash {
   opacity: 0.2;
   transform: translateX(-50%) scale(0.88);
   pointer-events: none;
+}
+
+.btn {
+  white-space: nowrap;
 }
 
 @keyframes fadeUp {
@@ -268,26 +273,26 @@ body.konami-mode .site-footer {
   position: fixed;
   bottom: 1.6rem;
   left: 1.8rem;
-  font-size: 0.82rem;
-  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(20, 20, 20, 0.8);
+  color: rgba(20, 20, 20, 0.42);
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.92);
-  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 0.35rem 0.68rem;
   border-radius: 999px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   opacity: 0;
   animation: revealSecret 2.2s ease 1.2s forwards;
   z-index: 6;
 }
 .secret-see-projects:hover {
-  color: rgba(20, 20, 20, 1);
-  background: rgba(255, 255, 255, 0.98);
+  color: rgba(20, 20, 20, 0.75);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .secret-see-projects.attention {
-  animation: revealSecret 0.45s ease forwards, secretPulse 1.8s ease 0.45s infinite alternate;
+  animation: revealSecret 0.45s ease forwards, secretPulse 2.4s ease 0.45s infinite alternate;
 }
 
 @keyframes revealSecret {
@@ -303,12 +308,12 @@ body.konami-mode .site-footer {
 
 @keyframes secretPulse {
   from {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
-    letter-spacing: 0.14em;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    letter-spacing: 0.12em;
   }
   to {
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26);
-    letter-spacing: 0.18em;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    letter-spacing: 0.16em;
   }
 }
 

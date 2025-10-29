@@ -61,15 +61,14 @@
     const teleportButton = () => {
       const heroRect = hero.getBoundingClientRect();
       const buttonRect = ctaButton.getBoundingClientRect();
-      const padding = 60;
-      const minX = heroRect.left + padding;
-      const maxX = heroRect.right - padding - buttonRect.width;
-      const minY = heroRect.top + padding;
-      const maxY = heroRect.bottom - padding - buttonRect.height;
-      const randomX = Math.random() * (maxX - minX) + minX;
-      const randomY = Math.random() * (maxY - minY) + minY;
-      ctaButton.style.left = `${randomX - heroRect.left}px`;
-      ctaButton.style.top = `${randomY - heroRect.top}px`;
+      const padding = Math.min(80, Math.max(32, heroRect.width * 0.06));
+      const availableWidth = Math.max(0, heroRect.width - buttonRect.width - padding * 2);
+      const availableHeight = Math.max(0, heroRect.height - buttonRect.height - padding * 2);
+      const offsetX = availableWidth * Math.random() + padding;
+      const offsetY = availableHeight * Math.random() + padding;
+      ctaButton.style.left = `${offsetX}px`;
+      ctaButton.style.top = `${offsetY}px`;
+      ctaButton.style.transform = 'translate(0, 0)';
       ctaButton.classList.add('cta-flash');
       setTimeout(() => ctaButton.classList.remove('cta-flash'), flashDuration);
       flashCooldown = Date.now() + 260;
