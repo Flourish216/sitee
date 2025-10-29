@@ -55,7 +55,7 @@
   const ctaButton = hero ? hero.querySelector('.btn') : null;
   if (hero && ctaButton) {
     let escapes = 0;
-    const maxEscapes = 2;
+    const maxEscapes = 4;
     const resetTransform = () => {
       ctaButton.style.transform = 'translate(0, 0)';
     };

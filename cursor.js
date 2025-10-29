@@ -11,10 +11,10 @@ const cursorTrailSketch = (p) => {
   ];
   const petMessages = [
     'hi dreamer ✨',
-    '我们在这儿～',
-    'creative break time!',
-    '想画点什么吗？',
-    '静静地飘一会儿…',
+    'we drift with you',
+    'creative pause mode',
+    'maybe draw a constellation?',
+    'let thoughts float…',
   ];
 
   const idleDelay = 3400;
