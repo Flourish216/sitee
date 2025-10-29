@@ -17,7 +17,7 @@ const cursorTrailSketch = (p) => {
     'let thoughts float…',
   ];
 
-  const idleDelay = 3400;
+  const idleDelay = 2000;
   let maxSize = 36;
   let minSize = 14;
   let lastPointer = null;
@@ -25,6 +25,7 @@ const cursorTrailSketch = (p) => {
   let petMode = false;
   let petMessage = petMessages[0];
   let petMessageAlpha = 0;
+  let petAnchor = null;
 
   const recalcSizes = () => {
     const base = Math.max(p.windowWidth, p.windowHeight);
@@ -80,11 +81,16 @@ const cursorTrailSketch = (p) => {
     if (!trail.length) return;
 
     const now = performance.now();
-    if (!petMode && now - lastMoveMillis > idleDelay) {
+    const idleLongEnough = now - lastMoveMillis > idleDelay;
+    if (!petMode && idleLongEnough) {
       petMode = true;
       petMessage = pickPetMessage();
-    } else if (petMode && now - lastMoveMillis <= idleDelay) {
+      petAnchor = lastPointer
+        ? { ...lastPointer }
+        : { x: p.width / 2, y: p.height / 2 };
+    } else if (petMode && !idleLongEnough) {
       petMode = false;
+      petAnchor = null;
     }
 
     let targetX = p.mouseX;
@@ -110,9 +116,8 @@ const cursorTrailSketch = (p) => {
     }
 
     if (petMode) {
-      const centerX = p.width / 2;
-      const centerY = p.height / 2;
-      lastPointer = { x: centerX, y: centerY };
+      const centerX = petAnchor ? petAnchor.x : lastPointer.x;
+      const centerY = petAnchor ? petAnchor.y : lastPointer.y;
 
       for (let i = 0; i < trailLength; i++) {
         const angle = p.frameCount * 0.05 + i * 0.45;
@@ -169,12 +174,13 @@ const cursorTrailSketch = (p) => {
       petMode ? 0.06 : 0.12
     );
     if (petMessageAlpha > 0.02) {
+      const anchor = petAnchor || lastPointer || { x: p.width / 2, y: p.height / 2 };
       p.push();
       p.textAlign(p.CENTER, p.CENTER);
       p.textFont('Playfair Display');
       p.textSize(Math.min(30, p.width * 0.035));
       p.fill(40, 40, 40, 230 * petMessageAlpha);
-      p.text(petMessage, p.width / 2, p.height / 2 - maxSize * 1.6);
+      p.text(petMessage, anchor.x, anchor.y - maxSize * 1.6);
       p.pop();
     }
   };

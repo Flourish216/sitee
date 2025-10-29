@@ -14,7 +14,7 @@ const konamiPalette = [
 function setup() {
   createCanvas(windowWidth, windowHeight);
   initGrid();
-  noStroke(); // ✅ 无边线
+  noStroke(); // no stroke to keep tiles soft
 }
 
 function initGrid() {
@@ -28,7 +28,7 @@ function initGrid() {
 
 function draw() {
   const konami = Boolean(window.konamiActive);
-  background(255, konami ? 60 : 70); // ✅ 柔白背景，淡化尾迹
+  background(255, konami ? 60 : 70); // soft white backdrop, slightly brighter in Konami mode
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] === 1) {
@@ -38,7 +38,7 @@ function draw() {
           const alpha = 140 + 60 * sin(frameCount * 0.12 + (i + j) * 0.3);
           fill(color[0], color[1], color[2], constrain(alpha, 90, 220));
         } else {
-          fill(0, 70); // ✅ 更柔和的半透明块
+          fill(0, 70); // subtle semi-transparent tiles
         }
         rect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
