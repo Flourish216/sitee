@@ -5,6 +5,7 @@
   new p5((p) => {
     const offerings = [];
     const shards = [];
+    const fragments = [];
     const aura = [];
     let saturation = 0;
     let rupture = false;
@@ -24,23 +25,46 @@
     const resetBeast = () => {
       offerings.length = 0;
       shards.length = 0;
+      fragments.length = 0;
       saturation = 0;
       rupture = false;
       resetTimer = 0;
     };
 
-    const explodeBeast = (cx, cy) => {
+    const explodeBeast = (cx, cy, baseRadius) => {
       shards.length = 0;
-      for (let i = 0; i < 220; i++) {
-        shards.push({
-          x: cx + p.random(-20, 20),
-          y: cy + p.random(-20, 20),
-          vx: p.random(-3, 3),
-          vy: p.random(-4, 2),
-          hue: (p.random(360) + i * 2) % 360,
+      fragments.length = 0;
+
+      const fragmentCount = 7;
+      for (let i = 0; i < fragmentCount; i++) {
+        const angle = (p.TWO_PI / fragmentCount) * i + p.random(-0.2, 0.2);
+        const spread = baseRadius * 0.45;
+        fragments.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * spread * 0.08 + p.random(-1, 1),
+          vy: Math.sin(angle) * spread * 0.08 - p.random(1, 3),
+          rot: p.random(-p.PI, p.PI),
+          spin: p.random(-0.08, 0.08),
+          w: baseRadius * p.random(0.22, 0.35),
+          h: baseRadius * p.random(0.15, 0.28),
+          hue: (320 + i * 18) % 360,
           life: 1,
         });
       }
+
+      for (let i = 0; i < 280; i++) {
+        shards.push({
+          x: cx + p.random(-baseRadius * 0.15, baseRadius * 0.15),
+          y: cy + p.random(-baseRadius * 0.1, baseRadius * 0.15),
+          vx: p.random(-4, 4),
+          vy: p.random(-4.5, 3),
+          hue: (p.random(360) + i * 1.5) % 360,
+          life: 1,
+          size: p.random(8, 16),
+        });
+      }
+
       rupture = true;
     };
 
@@ -150,10 +174,47 @@
           offerings.splice(i, 1);
           saturation += 1;
           if (saturation >= 18 && !rupture) {
-            explodeBeast(cx, cy - p.width * 0.02);
+            const baseRadius = p.width * 0.16 + saturation * 6;
+            explodeBeast(cx, cy - p.width * 0.02, baseRadius);
           }
         }
       }
+    };
+
+    const updateFragments = () => {
+      for (let i = fragments.length - 1; i >= 0; i--) {
+        const f = fragments[i];
+        f.x += f.vx;
+        f.y += f.vy;
+        f.vx *= 0.97;
+        f.vy += 0.12;
+        f.rot += f.spin;
+        f.life *= 0.982;
+        if (f.life <= 0.08) fragments.splice(i, 1);
+      }
+    };
+
+    const drawFragments = () => {
+      p.push();
+      fragments.forEach((f) => {
+        p.push();
+        p.translate(f.x, f.y);
+        p.rotate(f.rot);
+        p.noStroke();
+        p.fill(f.hue, 70, 100, f.life * 0.75);
+        p.beginShape();
+        const w = f.w;
+        const h = f.h;
+        p.vertex(-w * 0.6, -h * 0.5);
+        p.vertex(w * 0.5, -h * 0.3);
+        p.vertex(w * 0.7, h * 0.4);
+        p.vertex(-w * 0.3, h * 0.6);
+        p.endShape(p.CLOSE);
+        p.fill(f.hue, 50, 95, f.life * 0.4);
+        p.ellipse(0, 0, w * 0.4, h * 0.3);
+        p.pop();
+      });
+      p.pop();
     };
 
     const updateShards = () => {
@@ -161,19 +222,19 @@
         const s = shards[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.vx *= 0.99;
-        s.vy += 0.02;
-        s.life *= 0.985;
-        if (s.life <= 0.02) {
+        s.vx *= 0.98;
+        s.vy += 0.04;
+        s.life *= 0.978;
+        if (s.life <= 0.015) {
           shards.splice(i, 1);
           continue;
         }
         p.noStroke();
-        p.fill(s.hue, 70, 100, s.life * 0.6);
-        p.circle(s.x, s.y, 4 + s.life * 12);
+        p.fill(s.hue, 75, 100, s.life * 0.55);
+        p.circle(s.x, s.y, s.size * s.life);
       }
 
-      if (rupture && shards.length === 0) {
+      if (rupture && shards.length === 0 && fragments.length === 0) {
         resetTimer += 1;
         if (resetTimer > 90) resetBeast();
       }
@@ -204,15 +265,23 @@
       p.blendMode(p.BLEND);
 
       if (!rupture) drawBeast();
+      else drawFragments();
       updateOfferings();
+      updateFragments();
       updateShards();
     };
 
     p.mousePressed = () => {
       if (rupture) {
         for (let i = shards.length - 1; i >= 0; i--) {
-          if (p.dist(p.mouseX, p.mouseY, shards[i].x, shards[i].y) < 12) {
+          if (p.dist(p.mouseX, p.mouseY, shards[i].x, shards[i].y) < shards[i].size * 0.45) {
             shards.splice(i, 1);
+          }
+        }
+        for (let i = fragments.length - 1; i >= 0; i--) {
+          const frag = fragments[i];
+          if (p.dist(p.mouseX, p.mouseY, frag.x, frag.y) < Math.max(frag.w, frag.h) * 0.45) {
+            fragments.splice(i, 1);
           }
         }
         return false;

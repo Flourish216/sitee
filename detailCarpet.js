@@ -165,6 +165,15 @@
       }
     };
 
+    const drawHUD = () => {
+      p.textAlign(p.CENTER, p.TOP);
+      p.textFont('Manrope');
+      p.textSize(18);
+      p.fill(200, 10, 90, 0.6);
+      const text = 'A / D or ← → to steer · hold W / ↑ to boost · click to burst sparks';
+      p.text(text, p.width / 2, 32);
+    };
+
     p.draw = () => {
       time += 0.02;
       drawBackground();
@@ -172,10 +181,7 @@
       drawTrail();
       drawCycle();
       drawSparks();
-      p.fill(200, 10, 90, 0.4);
-      p.textAlign(p.RIGHT, p.BOTTOM);
-      p.textSize(14);
-      p.text('Arrow keys / A D to steer · hold W / ↑ to boost', p.width - 32, p.height - 24);
+      drawHUD();
     };
 
     p.keyPressed = () => {

@@ -112,55 +112,92 @@
 
       // torso core
       p.noStroke();
-      p.fill(210, 40, 18, 0.65);
+      p.fill(210, 40, 18, 0.55 + pulse * 0.2);
       p.rectMode(p.CENTER);
-      p.rect(0, 0, s * 1.6, s * 2.1, 30);
+      p.rect(0, 0, s * 1.7, s * 2.2, 24);
+      p.fill(210, 20, 12, 0.4);
+      p.rect(0, 0, s * 1.05, s * 1.75, 16);
 
-      // ribs
-      p.stroke(210, 40, 90, 0.35 + pulse * 0.4);
-      p.strokeWeight(2.5);
+      // rib lattice
+      p.stroke(210, 40, 95, 0.4 + pulse * 0.3);
+      p.strokeWeight(2.2);
       for (let i = -3; i <= 3; i++) {
         const y = i * s * 0.22;
-        const wobble = Math.sin(p.frameCount * 0.08 + i * 0.8) * s * 0.1 * (1 + pulse);
-        p.line(-s * 0.7, y, s * 0.7, y + wobble);
+        const wobble = Math.sin(p.frameCount * 0.08 + i * 0.7) * s * 0.12 * (1 + pulse);
+        p.line(-s * 0.75, y, s * 0.75, y + wobble);
       }
+      p.stroke(210, 35, 95, 0.3);
+      p.ellipse(0, 0, s * 1.32, s * 0.6);
 
       // limbs
-      const swing = Math.sin(p.frameCount * 0.1) * s * 0.16 * (1 + pulse * 0.5);
-      p.stroke(200, 20, 100, 0.6);
-      p.strokeWeight(8);
-      p.line(-s * 1.05, -s * 0.1, -s * 1.8, -s * 0.9 + swing);
-      p.line(s * 1.05, -s * 0.1, s * 1.8, -s * 0.9 - swing);
-      p.line(-s * 0.9, s * 0.6, -s * 1.5, s * 1.3 - swing * 0.3);
-      p.line(s * 0.9, s * 0.6, s * 1.5, s * 1.3 + swing * 0.3);
+      const swing = Math.sin(p.frameCount * 0.09) * s * 0.18 * (1 + pulse * 0.6);
+      p.stroke(200, 25, 100, 0.65);
+      p.strokeWeight(9);
+      p.line(-s * 1.1, -s * 0.05, -s * 1.95, -s * 0.85 + swing);
+      p.line(s * 1.1, -s * 0.05, s * 1.95, -s * 0.85 - swing);
+      p.line(-s * 0.95, s * 0.65, -s * 1.6, s * 1.4 - swing * 0.35);
+      p.line(s * 0.95, s * 0.65, s * 1.6, s * 1.4 + swing * 0.35);
+      p.strokeWeight(4);
+      p.stroke(200, 20, 95, 0.35);
+      p.bezier(-s * 1.85, -s * 0.9 + swing, -s * 2.2, -s * 0.4, -s * 1.9, s * 0.2, -s * 1.5, s * 0.6);
+      p.bezier(s * 1.85, -s * 0.9 - swing, s * 2.2, -s * 0.4, s * 1.9, s * 0.2, s * 1.5, s * 0.6);
 
       // head
+      p.push();
+      p.translate(0, -s * 1.35);
+      p.rotate(Math.sin(p.frameCount * 0.01) * 0.05);
       p.noStroke();
-      p.fill(220, 28, 15, 0.5);
-      p.rect(0, -s * 1.3, s * 1.4, s, 20);
-      p.stroke(210, 25, 90);
-      p.strokeWeight(3);
+      p.fill(220, 25, 10, 0.45);
+      p.rect(0, 0, s * 1.5, s * 0.85, 18);
+      p.stroke(210, 30, 95, 0.8);
+      p.strokeWeight(3.2);
       p.noFill();
-      p.rect(0, -s * 1.3, s * 1.4, s, 20);
+      p.rect(0, 0, s * 1.5, s * 0.85, 18);
+      p.strokeWeight(2);
+      p.line(-s * 0.6, -s * 0.2, -s * 0.3, -s * 0.55);
+      p.line(s * 0.6, -s * 0.2, s * 0.3, -s * 0.55);
+      p.pop();
 
       // face hardware
       const eyeGlow = speaking ? 0.9 : 0.4;
       p.noStroke();
       p.fill(180, 60, 100, eyeGlow);
-      p.circle(-s * 0.4, -s * 1.4, s * 0.3 + pulse * s * 0.1);
-      p.circle(s * 0.4, -s * 1.4, s * 0.3 + pulse * s * 0.1);
+      p.ellipse(-s * 0.4, -s * 1.4, s * 0.36 + pulse * s * 0.12, s * 0.28);
+      p.ellipse(s * 0.4, -s * 1.4, s * 0.36 + pulse * s * 0.12, s * 0.28);
 
       p.fill(200, 20, 90, 0.7);
       const mouthOpen = s * (0.18 + pulse * 0.15);
       p.rect(0, -s, s * 0.6, mouthOpen, 8);
+      p.fill(200, 15, 95, 0.4);
+      p.rect(0, -s * 0.95, s * 0.8, mouthOpen * 0.6, 10);
+
+      // cables
+      p.stroke(200, 10, 70, 0.35 + pulse * 0.3);
+      p.strokeWeight(2.5);
+      for (let i = -2; i <= 2; i++) {
+        const anchorX = s * 0.4 * i;
+        p.bezier(
+          anchorX,
+          s * 0.9,
+          anchorX * 1.1,
+          s * 1.5 + Math.sin(p.frameCount * 0.04 + i) * s * 0.3,
+          anchorX * 1.4,
+          s * 1.9 + Math.cos(p.frameCount * 0.03 + i) * s * 0.3,
+          anchorX * 0.6,
+          s * 2.2
+        );
+      }
 
       // antenna crown
       p.stroke(200, 30, 100);
       p.strokeWeight(4);
       p.line(0, -s * 1.9, 0, -s * 2.6);
       p.noStroke();
-      p.fill(320, 50, 100, 0.8);
-      p.circle(0, -s * 2.7, s * (0.18 + pulse * 0.05));
+      p.fill(320, 50, 100, 0.85);
+      p.circle(0, -s * 2.7, s * (0.22 + pulse * 0.08));
+      p.stroke(210, 30, 100, 0.4);
+      p.noFill();
+      p.circle(0, -s * 2.7, s * (0.3 + pulse * 0.1));
 
       p.pop();
     };
