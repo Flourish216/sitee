@@ -523,7 +523,7 @@ body.konami-mode .konami-toast {
 .galaxy-void {
   position: fixed;
   inset: 0;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 1;
 }
 
