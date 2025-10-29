@@ -83,36 +83,69 @@ function init() {
 }
 
 function poster() {
-    // 海报边框
+    let videoWidth = windowWidth * 0.7;
+    let videoHeight = videoWidth * 0.5625;
+    let centerX = windowWidth/2 - videoWidth/2;
+    let centerY = windowHeight/2 - videoHeight/2;
+
+    push();
+    // 标题区域
+    let titleBoxWidth = videoWidth * 0.8;
+    let titleBoxX = windowWidth/2 - titleBoxWidth/2;
+    
+    // 上方装饰线
     noFill();
     stroke(255, 255, 255, 240);
     strokeWeight(2);
-    line(width / 2 - 230, height/2 - 240, width / 2 + 230, height/2 - 240);
+    line(titleBoxX, centerY - 80, titleBoxX + titleBoxWidth, centerY - 80);
 
-    // 海报文字
-    textStyle(NORMAL);
-    textSize(8);
-    noStroke();
-    fill(255, 255, 255);
-    text('Video Grinder Effect', width/2 + 155, height/2 - 270);
-    text('Hold mouse to distort', width/2 - 213, height/2 + 283);
-    ellipse(width/2 + 210, height/2 - 250, 9, 9);
-    ellipse(width/2 + 230, height/2 - 250, 9, 9);
-    ellipse(width/2 + 250, height/2 - 250, 9, 9);
-    textSize(100);
-    text('G', width/2 - 185, height/2 + 120);
-    textSize(80);
-    text('r in', width/2 - 178, height/2 + 188);
-    text('d', width/2 + 50, height/2 + 235);
-    fill(198, 157, 79);
-    text('e', width/2 + 120, height/2 + 255);
-    text('r', width/2 + 195, height/2 + 245);
+    // 主标题
+    textAlign(CENTER, CENTER);
+    let mainColor = color(255, 255, 255);
+    let accentColor = color(198, 157, 79);
+    
+    // VIDEO 文字
     textStyle(BOLD);
-    textSize(80);
-    noFill();
-    strokeWeight(0.5);
-    stroke(255, 255, 255, 240);
-    text('VIDEO', width/2 + 40, height/2 - 160);
+    textSize(42);
+    fill(mainColor);
+    noStroke();
+    text('VIDEO', windowWidth/2, centerY - 120);
+
+    // GRINDER 文字
+    let grinderX = windowWidth/2;
+    let grinderY = centerY - 40;
+    textSize(58);
+    text('GRIND', grinderX - 40, grinderY);
+    fill(accentColor);
+    text('ER', grinderX + 90, grinderY);
+
+    // 副标题和说明
+    textStyle(NORMAL);
+    textSize(14);
+    fill(mainColor);
+    text('DIGITAL DISTORTION', windowWidth/2, centerY - 160);
+    
+    // 右上角装饰点
+    let dotsX = titleBoxX + titleBoxWidth - 60;
+    let dotsY = centerY - 140;
+    for (let i = 0; i < 3; i++) {
+        ellipse(dotsX + i * 15, dotsY, 6, 6);
+    }
+
+    // 底部提示文本
+    textSize(16);
+    fill(255, 255, 255, 180);
+    text('HOLD MOUSE TO DISTORT • SCROLL TO RESET', windowWidth/2, centerY + videoHeight/2 + 40);
+
+    // 底部装饰线
+    strokeWeight(1);
+    stroke(255, 255, 255, 120);
+    let bottomLineWidth = videoWidth * 0.3;
+    let bottomLineX = windowWidth/2 - bottomLineWidth/2;
+    line(bottomLineX, centerY + videoHeight/2 + 70, 
+         bottomLineX + bottomLineWidth, centerY + videoHeight/2 + 70);
+
+    pop();
 }
 
 // 鼠标滚轮，重置
