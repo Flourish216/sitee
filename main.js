@@ -55,7 +55,7 @@
   const ctaButton = hero ? hero.querySelector('.btn') : null;
   if (hero && ctaButton) {
     let escapes = 0;
-    const maxEscapes = 4;
+    const maxEscapes = Infinity;
     const resetTransform = () => {
       ctaButton.style.transform = 'translate(0, 0)';
     };
@@ -66,10 +66,6 @@
       ctaButton.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       escapes += 1;
       setTimeout(resetTransform, 420);
-      if (escapes >= maxEscapes) {
-        hero.removeEventListener('pointermove', handleMove);
-        setTimeout(resetTransform, 600);
-      }
     };
 
     const handleMove = (event) => {

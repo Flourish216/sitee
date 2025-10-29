@@ -178,7 +178,7 @@ const cursorTrailSketch = (p) => {
       p.push();
       p.textAlign(p.CENTER, p.CENTER);
       p.textFont('Playfair Display');
-      p.textSize(Math.min(30, p.width * 0.035));
+      p.textSize(Math.min(22, p.width * 0.025));
       p.fill(40, 40, 40, 230 * petMessageAlpha);
       p.text(petMessage, anchor.x, anchor.y - maxSize * 1.6);
       p.pop();

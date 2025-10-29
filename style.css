@@ -122,6 +122,15 @@ html, body {
 }
 .nav a:hover::after { width: 100%; }
 
+.nav-link-fake {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+.nav-link-fake::after {
+  display: none;
+}
+
 /* ===== Hero Section ===== */
 .hero {
   text-align: center;
@@ -244,6 +253,39 @@ body.konami-mode .site-header,
 body.konami-mode .site-footer {
   background: rgba(255, 255, 255, 0.75);
   border-color: rgba(255, 79, 163, 0.25);
+}
+
+.secret-see-projects {
+  position: fixed;
+  bottom: 1.6rem;
+  left: 1.8rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  animation: revealSecret 4s ease 2.2s forwards;
+  z-index: 4;
+}
+.secret-see-projects:hover {
+  color: rgba(0, 0, 0, 0.85);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes revealSecret {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .konami-toast {
