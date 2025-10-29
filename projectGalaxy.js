@@ -7,7 +7,7 @@
   const planets = [
     { type: 'robot', url: 'projects/robot.html', radius: 0.28, speed: 0.006, wobble: Math.random() * 1000, hue: 200, size: 28 },
     { type: 'bear', url: 'projects/bear.html', radius: 0.39, speed: -0.0048, wobble: Math.random() * 1000, hue: 330, size: 34 },
-    { type: 'cycle', url: 'projects/carpet.html', radius: 0.5, speed: 0.0038, wobble: Math.random() * 1000, hue: 150, size: 26 },
+    { type: 'person', url: 'projects/carpet.html', radius: 0.5, speed: 0.0038, wobble: Math.random() * 1000, hue: 150, size: 26 },
   ].map((planet, idx) => ({
     ...planet,
     phase: Math.random() * Math.PI * 2 + idx * 0.8,
@@ -313,22 +313,40 @@
           p.arc(0, s * 0.22, s * 0.8, s * 0.72, 0, p.PI);
           p.pop();
         },
-        cycle: () => {
+        person: () => {
           p.push();
           p.translate(planet.pos.x, planet.pos.y);
           p.rotate(Math.sin(p.frameCount * 0.02 + planet.fluxSeed) * 0.15);
-          p.stroke(planet.hue, 90, 100, 0.85);
-          p.strokeWeight(3.2);
+          
+          // 头部
+          p.fill(planet.hue, 70, 100, 0.9);
+          p.noStroke();
+          p.ellipse(0, 0, s * 1.6, s * 1.8);
+          
+          // 眼睛
+          p.fill(0, 0, 10);
+          const eyeY = -s * 0.1;
+          p.ellipse(-s * 0.3, eyeY, s * 0.25, s * 0.3);
+          p.ellipse(s * 0.3, eyeY, s * 0.25, s * 0.3);
+          
+          // 嘴巴
           p.noFill();
-          const ringOffset = s * 0.9;
-          p.ellipse(-ringOffset, s * 0.35, s * 1.05, s * 0.88);
-          p.ellipse(ringOffset, s * 0.35, s * 1.05, s * 0.88);
-          p.line(-s * 0.65, -s * 0.5, s * 0.65, -s * 0.12);
-          p.line(-s * 0.65, -s * 0.5, -ringOffset, s * 0.35);
-          p.line(s * 0.65, -s * 0.12, ringOffset, s * 0.35);
-          p.stroke(planet.hue, 90, 100, 0.5);
+          p.stroke(0, 0, 10);
           p.strokeWeight(2);
-          p.bezier(-s * 0.4, -s * 0.8, 0, -s, s * 0.4, -s * 0.6, s * 0.75, -s * 0.85);
+          const mouthY = s * 0.3;
+          p.bezier(-s * 0.3, mouthY, -s * 0.1, mouthY + s * 0.2, s * 0.1, mouthY + s * 0.2, s * 0.3, mouthY);
+          
+          // 头发
+          p.stroke(planet.hue, 90, 100, 0.85);
+          p.strokeWeight(3);
+          const hairY = -s * 0.7;
+          for (let i = -4; i <= 4; i++) {
+            const x = i * s * 0.15;
+            const waveOffset = Math.sin(p.frameCount * 0.05 + i * 0.5) * s * 0.1;
+            p.bezier(x, hairY, x - s * 0.1, hairY - s * 0.3 + waveOffset, 
+                    x + s * 0.1, hairY - s * 0.6 + waveOffset, x, hairY - s * 0.9);
+          }
+          
           p.pop();
         },
       };

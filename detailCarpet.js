@@ -45,10 +45,12 @@ function draw() {
         count++;
     } else {
         // 当没有按住鼠标时，显示正常的摄像头画面
-        let centerX = windowWidth/2 - 175;
-        let centerY = windowHeight/2 - 175;
-        image(capture, centerX, centerY, 350, 350);
-        picGraph.image(capture, centerX, centerY, 350, 350);
+        let videoWidth = windowWidth * 0.7; // 视频宽度为窗口宽度的70%
+        let videoHeight = videoWidth * 0.5625; // 保持16:9比例
+        let centerX = windowWidth/2 - videoWidth/2;
+        let centerY = windowHeight/2 - videoHeight/2;
+        image(capture, centerX, centerY, videoWidth, videoHeight);
+        picGraph.image(capture, centerX, centerY, videoWidth, videoHeight);
     }
 
     // 海报
@@ -103,14 +105,28 @@ function mouseWheel() {
 
 // 设置粉碎效果的参数
 function setGrinder() {
-    let centerX = windowWidth/2 - 175;
-    let centerY = windowHeight/2 - 175;
-    x = int(random(centerX, centerX + 350));
-    y = int(random(centerY, centerY + 350));
-    w = int(random(50, 200));
-    h = int(random(50, 200));
-    spx = random(-10, 10);
-    spy = random(-10, 10);
+    let videoWidth = windowWidth * 0.7;
+    let videoHeight = videoWidth * 0.5625;
+    let centerX = windowWidth/2 - videoWidth/2;
+    let centerY = windowHeight/2 - videoHeight/2;
+    
+    // 生成条状效果
+    if (random() > 0.5) {
+        // 横条
+        x = centerX;
+        y = int(random(centerY, centerY + videoHeight));
+        w = videoWidth;
+        h = int(random(5, 20)); // 细长的条状
+    } else {
+        // 竖条
+        x = int(random(centerX, centerX + videoWidth));
+        y = centerY;
+        w = int(random(5, 20)); // 细长的条状
+        h = videoHeight;
+    }
+    
+    spx = random(-15, 15);
+    spy = random(-15, 15);
 }
 
 // 设置加速度
