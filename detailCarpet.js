@@ -13,7 +13,7 @@
     };
     const trail = [];
     const sparks = [];
-    const keys = { left: false, right: false, up: false, down: false };
+    const keys = { left: false, right: false, up: false };
 
     const resetCycle = () => {
       cycle.pos = p.createVector(p.width * 0.25, p.height * 0.55);
@@ -175,7 +175,6 @@
     };
 
     p.draw = () => {
-      time += 0.02;
       drawBackground();
       updateCycle();
       drawTrail();
@@ -188,7 +187,6 @@
       if (p.key === 'ArrowLeft' || p.key === 'a' || p.key === 'A') keys.left = true;
       if (p.key === 'ArrowRight' || p.key === 'd' || p.key === 'D') keys.right = true;
       if (p.key === 'ArrowUp' || p.key === 'w' || p.key === 'W') keys.up = true;
-      if (p.key === 'ArrowDown' || p.key === 's' || p.key === 'S') keys.down = true;
       return false;
     };
 
@@ -196,7 +194,6 @@
       if (p.key === 'ArrowLeft' || p.key === 'a' || p.key === 'A') keys.left = false;
       if (p.key === 'ArrowRight' || p.key === 'd' || p.key === 'D') keys.right = false;
       if (p.key === 'ArrowUp' || p.key === 'w' || p.key === 'W') keys.up = false;
-      if (p.key === 'ArrowDown' || p.key === 's' || p.key === 'S') keys.down = false;
       return false;
     };
 
@@ -209,5 +206,5 @@
       spawnSpark(cycle.pos, cycle.hue);
       return false;
     };
-  }, mount);
+  }, host);
 })();
