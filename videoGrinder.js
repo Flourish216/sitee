@@ -20,7 +20,7 @@ var picGraph; // 图片所在的子画布
 var newImg; // 错位后的新图片
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(displayWidth, displayHeight);
     // 初始化摄像头
     capture = createCapture(VIDEO);
     capture.hide(); // 隐藏默认的视频元素
@@ -45,10 +45,8 @@ function draw() {
         count++;
     } else {
         // 当没有按住鼠标时，显示正常的摄像头画面
-        let centerX = windowWidth/2 - 175;
-        let centerY = windowHeight/2 - 175;
-        image(capture, centerX, centerY, 350, 350);
-        picGraph.image(capture, centerX, centerY, 350, 350);
+        image(capture, width / 2 - 175, 150, 350, 350);
+        picGraph.image(capture, width / 2 - 175, 150, 350, 350);
     }
 
     // 海报
@@ -59,7 +57,7 @@ function init() {
     pixelDensity(3); // 不然图片错位后会糊，注意：这个要在background之前设置
     background(0);
 
-    picGraph = createGraphics(windowWidth, windowHeight);  // 创建子画布
+    picGraph = createGraphics(displayWidth, displayHeight);  // 创建子画布
     setGrinder();
 }
 
@@ -68,32 +66,32 @@ function poster() {
     noFill();
     stroke(255, 255, 255, 240);
     strokeWeight(2);
-    line(width / 2 - 230, height/2 - 240, width / 2 + 230, height/2 - 240);
+    line(width / 2 - 230, 60, width / 2 + 230, 60);
 
     // 海报文字
     textStyle(NORMAL);
     textSize(8);
     noStroke();
     fill(255, 255, 255);
-    text('Video Grinder Effect', width/2 + 155, height/2 - 270);
-    text('Hold mouse to distort', width/2 - 213, height/2 + 283);
-    ellipse(width/2 + 210, height/2 - 250, 9, 9);
-    ellipse(width/2 + 230, height/2 - 250, 9, 9);
-    ellipse(width/2 + 250, height/2 - 250, 9, 9);
+    text('Video Grinder Effect', 885, 30);
+    text('Hold mouse to distort', 517, 683);
+    ellipse(940, 50, 9, 9);
+    ellipse(960, 50, 9, 9);
+    ellipse(980, 50, 9, 9);
     textSize(100);
-    text('G', width/2 - 185, height/2 + 120);
+    text('G', 545, 520);
     textSize(80);
-    text('r in', width/2 - 178, height/2 + 188);
-    text('d', width/2 + 50, height/2 + 235);
+    text('r in', 552, 588);
+    text('d', 780, 635);
     fill(198, 157, 79);
-    text('e', width/2 + 120, height/2 + 255);
-    text('r', width/2 + 195, height/2 + 245);
+    text('e', 850, 655);
+    text('r', 925, 645);
     textStyle(BOLD);
     textSize(80);
     noFill();
     strokeWeight(0.5);
     stroke(255, 255, 255, 240);
-    text('VIDEO', width/2 + 40, height/2 - 160);
+    text('VIDEO', 770, 140);
 }
 
 // 鼠标滚轮，重置
@@ -103,10 +101,8 @@ function mouseWheel() {
 
 // 设置粉碎效果的参数
 function setGrinder() {
-    let centerX = windowWidth/2 - 175;
-    let centerY = windowHeight/2 - 175;
-    x = int(random(centerX, centerX + 350));
-    y = int(random(centerY, centerY + 350));
+    x = int(random(width / 2 - 175, width / 2 + 175));
+    y = int(random(150, 500));
     w = int(random(50, 200));
     h = int(random(50, 200));
     spx = random(-10, 10);
