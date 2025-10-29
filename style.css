@@ -182,17 +182,14 @@ html, body {
   justify-content: center;
 }
 
-.hero .btn {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  white-space: nowrap;
+.cta-wrapper {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform;
 }
-
-.hero .btn.cta-flash {
+.cta-wrapper.cta-ghost {
   opacity: 0.25;
-  pointer-events: none;
 }
 
 .btn {

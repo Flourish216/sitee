@@ -52,30 +52,35 @@
   });
 
   const hero = document.querySelector('.hero');
-  const ctaButton = hero ? hero.querySelector('.btn') : null;
-  if (hero && ctaButton) {
+  const ctaWrapper = hero ? hero.querySelector('.cta-wrapper') : null;
+  const ctaButton = ctaWrapper ? ctaWrapper.querySelector('.btn') : null;
+  if (hero && ctaWrapper && ctaButton) {
     let flashCooldown = 0;
     const safeRadius = 60;
     const flashDuration = 220;
     let resetTimer = null;
 
-    const initial = {
-      left: parseFloat(getComputedStyle(ctaButton).left) || ctaButton.offsetLeft,
-      top: parseFloat(getComputedStyle(ctaButton).top) || ctaButton.offsetTop,
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const applyTransform = (x, y) => {
+      ctaWrapper.style.transform = `translate(${x}px, ${y}px)`;
     };
 
-    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const resetTransform = () => {
+      applyTransform(0, 0);
+      ctaWrapper.classList.remove('cta-ghost');
+    };
 
     const scheduleReset = () => {
       clearTimeout(resetTimer);
       resetTimer = setTimeout(() => {
-        resetPosition();
+        resetTransform();
       }, 1800);
     };
 
     const handleMove = (event) => {
       if (!event.isPrimary) return;
-      const rect = ctaButton.getBoundingClientRect();
+      const rect = ctaWrapper.getBoundingClientRect();
       const pointerX = event.clientX;
       const pointerY = event.clientY;
       const distX = pointerX - (rect.left + rect.width / 2);
@@ -84,30 +89,24 @@
 
       if (distance < safeRadius && Date.now() > flashCooldown) {
         flashCooldown = Date.now() + 360;
-        const offsetX = clamp((Math.random() - 0.5) * 220, -180, 180);
-        const offsetY = clamp((Math.random() - 0.5) * 160, -120, 140);
-        ctaButton.style.left = `${initial.left + offsetX}px`;
-        ctaButton.style.top = `${initial.top + offsetY}px`;
-        ctaButton.classList.add('cta-flash');
-        setTimeout(() => ctaButton.classList.remove('cta-flash'), flashDuration);
+        const maxOffsetX = Math.min(hero.clientWidth * 0.25, 160);
+        const maxOffsetY = Math.min(hero.clientHeight * 0.18, 110);
+        const offsetX = clamp((Math.random() - 0.5) * 2 * maxOffsetX, -maxOffsetX, maxOffsetX);
+        const offsetY = clamp((Math.random() - 0.5) * 2 * maxOffsetY, -maxOffsetY, maxOffsetY);
+        applyTransform(offsetX, offsetY);
+        ctaWrapper.classList.add('cta-ghost');
+        setTimeout(() => ctaWrapper.classList.remove('cta-ghost'), flashDuration);
         scheduleReset();
       }
     };
 
-    const resetPosition = () => {
-      ctaButton.style.left = `${initial.left}px`;
-      ctaButton.style.top = `${initial.top}px`;
-      ctaButton.classList.remove('cta-flash');
-    };
-
     hero.style.position = 'relative';
-    ctaButton.style.position = 'absolute';
-    resetPosition();
+    resetTransform();
 
     hero.addEventListener('pointermove', handleMove);
     hero.addEventListener('pointerleave', () => {
       flashCooldown = Date.now() + 320;
-      resetPosition();
+      resetTransform();
       clearTimeout(resetTimer);
     });
 
