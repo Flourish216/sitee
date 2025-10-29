@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jesse Zhang | Creative Lab</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- p5.js -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
+</head>
+
+<body class="home-page">
+  <div id="cursor-container"></div>
+
+  <!-- ✅ Background Game of Life -->
+  <script src="sketch.js"></script>
+
+  <!-- ✅ Soft Mist Overlay (slightly stronger than before) -->
+  <div class="page-mist"></div>
+
+  <!-- ✅ Header -->
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Jesse Zhang</a>
+      <nav class="nav">
+        <a href="#" class="nav-link-fake" aria-disabled="true">Projects*</a>
+        <a href="shop.html">Shop</a>
+        <a href="links.html">Links</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ✅ Main Hero Section -->
+  <main class="home">
+    <div class="hero container">
+      <h1 class="fade-in-title">Welcome to my <a class="accent accent-link" href="projects.html">Creative Lab</a></h1>
+      <p class="fade-in-quote">I craft quiet worlds — where curiosity meets reflection, and creation becomes a form of calm.</p>
+      <div class="cta-row fade-in-btn">
+        <span class="cta-wrapper">
+          <a class="btn" href="projects.html">See Projects</a>
+        </span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; Jesse Zhang</small>
+    </div>
+  </footer>
+
+  <script src="cursor.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
