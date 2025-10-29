@@ -1,214 +1,424 @@
-(() => {(() => {
+(() => {(() => {(() => {
 
-  const host = document.getElementById('bear-canvas');  const host = document.getElementById('bear-canvas');
+  const host = document.getElementById('bear-canvas');
 
-  if (!host) return;  if (!host) return;
+  if (!host) return;  const host = document.getElementById('bear-canvas');  const host = document.getElementById('bear-canvas');
 
 
 
-  new p5((p) => {  new p5((p) => {
+  new p5((p) => {  if (!host) return;  if (!host) return;
 
-    let cats = []; // 存储所有的猫    let cats = []; // 存储所有的猫
+    let cats = []; // 存储所有的猫
 
-    const colors = [ // 彩虹颜色    const colors = [ // 彩虹颜色
+    const colors = [ // 彩虹颜色
+
+        '#ff0000', // 红
+
+        '#ff9900', // 橙  new p5((p) => {  new p5((p) => {
+
+        '#ffff00', // 黄
+
+        '#33ff00', // 绿    let cats = []; // 存储所有的猫    let cats = []; // 存储所有的猫
+
+        '#0099ff', // 蓝
+
+        '#6633ff'  // 紫    const colors = [ // 彩虹颜色    const colors = [ // 彩虹颜色
+
+    ];
 
         '#ff0000', // 红        '#ff0000', // 红
 
-        '#ff9900', // 橙        '#ff9900', // 橙
+    class NyanCat {
 
-        '#ffff00', // 黄        '#ffff00', // 黄
+        constructor(x, y) {        '#ff9900', // 橙        '#ff9900', // 橙
 
-        '#33ff00', // 绿        '#33ff00', // 绿
+            this.pos = p.createVector(x, y);
 
-        '#0099ff', // 蓝        '#0099ff', // 蓝
+            // 随机选择一个方向和速度        '#ffff00', // 黄        '#ffff00', // 黄
 
-        '#6633ff'  // 紫        '#6633ff'  // 紫
+            let angle = p.random(p.TWO_PI);
 
-    ];    ];
+            let speed = p.random(3, 6);        '#33ff00', // 绿        '#33ff00', // 绿
 
+            this.vel = p.createVector(p.cos(angle) * speed, p.sin(angle) * speed);
 
+            this.trail = []; // 彩虹轨迹        '#0099ff', // 蓝        '#0099ff', // 蓝
 
-    class NyanCat {    class NyanCat {
+            this.trailLength = 25; // 彩虹长度
+
+            this.size = p.random(30, 50); // 猫的大小        '#6633ff'  // 紫        '#6633ff'  // 紫
+
+            this.bobTime = 0; // 用于上下浮动动画
+
+            this.alive = true;    ];    ];
+
+            this.targetAngle = angle;
+
+            this.currentAngle = angle;
+
+            this.nextDirectionChange = p.random(60, 120); // 下次改变方向的时间
+
+            this.frameCount = 0;    class NyanCat {    class NyanCat {
+
+        }
 
         constructor(x, y) {        constructor(x, y) {
 
-            this.pos = p.createVector(x, y);            this.pos = p.createVector(x, y);
+        update() {
 
-            this.vel = p5.Vector.random2D().mult(p.random(3, 6));            this.vel = p5.Vector.random2D().mult(p.random(3, 6));
+            this.frameCount++;            this.pos = p.createVector(x, y);            this.pos = p.createVector(x, y);
 
-            this.trail = []; // 彩虹轨迹            this.trail = []; // 彩虹轨迹
+            
 
-            this.trailLength = 20; // 彩虹长度            this.trailLength = 20; // 彩虹长度
+            // 每隔一段时间改变方向            this.vel = p5.Vector.random2D().mult(p.random(3, 6));            this.vel = p5.Vector.random2D().mult(p.random(3, 6));
 
-            this.size = p.random(30, 50); // 猫的大小            this.size = p.random(30, 50); // 猫的大小
+            if (this.frameCount >= this.nextDirectionChange) {
 
-            this.bobTime = 0; // 用于上下浮动动画            this.bobTime = 0; // 用于上下浮动动画
+                this.targetAngle = p.random(p.TWO_PI);            this.trail = []; // 彩虹轨迹            this.trail = []; // 彩虹轨迹
 
-            this.alive = true;            this.alive = true;
+                this.nextDirectionChange = this.frameCount + p.random(60, 120);
 
-        }        }
+            }            this.trailLength = 20; // 彩虹长度            this.trailLength = 20; // 彩虹长度
 
-      down: false,
 
-        update() {      dragging: false,
 
-            // 更新位置      dragCandidate: false,
+            // 平滑转向            this.size = p.random(30, 50); // 猫的大小            this.size = p.random(30, 50); // 猫的大小
+
+            let angleDiff = p.angleMode(p.RADIANS);
+
+            let currentAngle = p.atan2(this.vel.y, this.vel.x);            this.bobTime = 0; // 用于上下浮动动画            this.bobTime = 0; // 用于上下浮动动画
+
+            let targetAngleDiff = this.targetAngle - currentAngle;
+
+                        this.alive = true;            this.alive = true;
+
+            // 确保角度差在 -PI 到 PI 之间
+
+            while (targetAngleDiff > p.PI) targetAngleDiff -= p.TWO_PI;        }        }
+
+            while (targetAngleDiff < -p.PI) targetAngleDiff += p.TWO_PI;
+
+                  down: false,
+
+            // 平滑转向
+
+            currentAngle += targetAngleDiff * 0.05;        update() {      dragging: false,
+
+            let speed = this.vel.mag();
+
+            this.vel.x = p.cos(currentAngle) * speed;            // 更新位置      dragCandidate: false,
+
+            this.vel.y = p.sin(currentAngle) * speed;
 
             this.pos.add(this.vel);      pendingSpawn: false,
 
-                  startX: 0,
+            // 更新位置
 
-            // 记录轨迹      startY: 0,
+            this.pos.add(this.vel);                  startX: 0,
 
-            this.trail.unshift({x: this.pos.x, y: this.pos.y});    };
+            
 
-            if (this.trail.length > this.trailLength) {    let saturation = 0;
+            // 记录轨迹            // 记录轨迹      startY: 0,
 
-                this.trail.pop();    let rupture = false;
+            this.trail.unshift({x: this.pos.x, y: this.pos.y});
 
-            }    let resetTimer = 0;
+            if (this.trail.length > this.trailLength) {            this.trail.unshift({x: this.pos.x, y: this.pos.y});    };
 
-    let gulpPulse = 0;
+                this.trail.pop();
 
-            // 边界检查    let bass, hiss, gulpOsc, burstOsc, gulpEnv, burstEnv;
+            }            if (this.trail.length > this.trailLength) {    let saturation = 0;
 
-            if (this.pos.x < -100 || this.pos.x > p.width + 100 ||    let bassLevel = 0;
 
-                this.pos.y < -100 || this.pos.y > p.height + 100) {    let hissLevel = 0;
 
-                this.alive = false;    let audioReady = false;
+            // 边界检查 - 从另一边重新进入                this.trail.pop();    let rupture = false;
 
-            }
+            this.pos.x = (this.pos.x + p.width) % p.width;
 
-    const spawnOffering = (x, y, heavy = false) => {
+            this.pos.y = (this.pos.y + p.height) % p.height;            }    let resetTimer = 0;
 
-            // 更新浮动动画      const spawnX = p.constrain(x, p.width * 0.08, p.width * 0.92);
 
-            this.bobTime += 0.2;      const spawnY = Math.min(y, p.height * 0.35);
 
-        }      const massRange = heavy ? [14, 24] : [6, 11];
+            // 更新浮动动画    let gulpPulse = 0;
 
-      offerings.push({
+            this.bobTime += 0.2;
 
-        draw() {        x: spawnX,
+        }            // 边界检查    let bass, hiss, gulpOsc, burstOsc, gulpEnv, burstEnv;
 
-            p.push();        y: spawnY,
 
-                    vx: p.random(-0.8, 0.8),
 
-            // 绘制彩虹轨迹        vy: -p.random(1, 2),
+        draw() {            if (this.pos.x < -100 || this.pos.x > p.width + 100 ||    let bassLevel = 0;
 
-            p.noStroke();        hue: p.random([320, 20, 120, 180, 260]),
+            p.push();
 
-            for (let i = this.trail.length - 1; i >= 0; i--) {        mass: p.random(massRange[0], massRange[1]),
+                            this.pos.y < -100 || this.pos.y > p.height + 100) {    let hissLevel = 0;
 
-                const t = this.trail[i];      });
+            // 绘制彩虹轨迹
 
-                const alpha = p.map(i, 0, this.trail.length - 1, 255, 100);    };
+            p.noStroke();                this.alive = false;    let audioReady = false;
+
+            for (let i = this.trail.length - 1; i >= 0; i--) {
+
+                const t = this.trail[i];            }
+
+                const alpha = p.map(i, 0, this.trail.length - 1, 255, 100);
+
+                const trailWidth = this.size * 0.8;    const spawnOffering = (x, y, heavy = false) => {
+
+                const spacing = trailWidth / colors.length;
+
+                            // 更新浮动动画      const spawnX = p.constrain(x, p.width * 0.08, p.width * 0.92);
 
                 for (let j = 0; j < colors.length; j++) {
 
-                    p.fill(p.color(colors[j] + p.hex(p.int(alpha), 2)));    const ensureAudio = () => {
+                    p.fill(p.color(colors[j] + p.hex(p.int(alpha), 2)));            this.bobTime += 0.2;      const spawnY = Math.min(y, p.height * 0.35);
 
-                    const yOffset = j * (this.size/8) - (this.size/3);      if (audioReady) return;
+                    const yOffset = j * spacing - (trailWidth/2);
 
-                    p.rect(t.x - this.size, t.y + yOffset, this.size/1.2, this.size/8);      if (typeof p5 === 'undefined' || !p5.Oscillator) return;
+                    p.rect(t.x - this.size, t.y + yOffset, this.size * 0.8, spacing);        }      const massRange = heavy ? [14, 24] : [6, 11];
 
-                }      if (p.userStartAudio) p.userStartAudio();
+                }
 
-            }      bass = new p5.Oscillator('sawtooth');
+            }      offerings.push({
 
-      bass.start();
 
-            // 绘制猫咪      bass.amp(0, 0.1);
 
-            p.translate(this.pos.x, this.pos.y + p.sin(this.bobTime) * 5);      hiss = new p5.Noise('pink');
+            // 绘制猫咪        draw() {        x: spawnX,
 
-                  hiss.start();
+            p.translate(this.pos.x, this.pos.y + p.sin(this.bobTime) * 5);
 
-            // 身体（粉色）      hiss.amp(0, 0.1);
+            p.rotate(p.atan2(this.vel.y, this.vel.x)); // 让猫咪面向运动方向            p.push();        y: spawnY,
 
-            p.fill('#ffb3da');      gulpOsc = new p5.Oscillator('triangle');
+            
 
-            p.noStroke();      gulpOsc.start();
+            // 身体（粉色）                    vx: p.random(-0.8, 0.8),
 
-            p.rect(-this.size/2, -this.size/2, this.size, this.size, this.size/5);      gulpOsc.amp(0);
+            p.fill('#ffb3da');
 
-                  burstOsc = new p5.Oscillator('square');
+            p.noStroke();            // 绘制彩虹轨迹        vy: -p.random(1, 2),
 
-            // 头部      burstOsc.start();
+            const bodyWidth = this.size;
 
-            p.rect(-this.size/3, -this.size/1.5, this.size/1.5, this.size/1.5, this.size/6);      burstOsc.amp(0);
+            const bodyHeight = this.size * 0.6;            p.noStroke();        hue: p.random([320, 20, 120, 180, 260]),
 
-                  gulpEnv = new p5.Envelope();
+            p.rect(-bodyWidth/2, -bodyHeight/2, bodyWidth, bodyHeight, bodyHeight/4);
 
-            // 耳朵      gulpEnv.setADSR(0.005, 0.08, 0, 0.06);
+                        for (let i = this.trail.length - 1; i >= 0; i--) {        mass: p.random(massRange[0], massRange[1]),
 
-            p.triangle(-this.size/3, -this.size/1.5, -this.size/6, -this.size/1.5, -this.size/4, -this.size);      gulpEnv.setRange(0.22, 0);
+            // 头部
 
-            p.triangle(this.size/6, -this.size/1.5, 0, -this.size/1.5, 0, -this.size);      burstEnv = new p5.Envelope();
+            const headSize = this.size * 0.8;                const t = this.trail[i];      });
 
-                  burstEnv.setADSR(0.01, 0.18, 0, 0.4);
+            p.rect(-headSize/2, -headSize/2, headSize, headSize, headSize/5);
 
-            // 面部表情      burstEnv.setRange(0.3, 0);
+                            const alpha = p.map(i, 0, this.trail.length - 1, 255, 100);    };
 
-            // 眼睛      audioReady = true;
+            // 耳朵
 
-            p.fill(0);    };
+            const earSize = headSize * 0.4;                for (let j = 0; j < colors.length; j++) {
+
+            p.triangle(-headSize/2, -headSize/2, -headSize/4, -headSize/2, -headSize/3, -headSize/2 - earSize);
+
+            p.triangle(headSize/4, -headSize/2, headSize/2, -headSize/2, headSize/3, -headSize/2 - earSize);                    p.fill(p.color(colors[j] + p.hex(p.int(alpha), 2)));    const ensureAudio = () => {
+
+            
+
+            // 面部表情                    const yOffset = j * (this.size/8) - (this.size/3);      if (audioReady) return;
+
+            p.fill(0);
+
+            // 眼睛                    p.rect(t.x - this.size, t.y + yOffset, this.size/1.2, this.size/8);      if (typeof p5 === 'undefined' || !p5.Oscillator) return;
 
             const blinkRate = p.sin(this.bobTime * 2) > 0.9;
 
-            if (blinkRate) {    const triggerGulp = () => {
+            if (blinkRate) {                }      if (p.userStartAudio) p.userStartAudio();
 
-                p.strokeWeight(2);      ensureAudio();
+                p.strokeWeight(2);
 
-                p.stroke(0);      if (!gulpEnv || !gulpOsc) return;
+                p.stroke(0);            }      bass = new p5.Oscillator('sawtooth');
 
-                p.line(-this.size/4, -this.size/1.8, -this.size/8, -this.size/1.8);      gulpOsc.freq(220 + Math.random() * 160);
+                p.line(-headSize/4, -headSize/4, -headSize/8, -headSize/4);
 
-                p.line(0, -this.size/1.8, this.size/8, -this.size/1.8);      gulpEnv.play(gulpOsc);
+                p.line(headSize/8, -headSize/4, headSize/4, -headSize/4);      bass.start();
 
-            } else {      bassLevel = Math.min(0.4, bassLevel + 0.08);
+            } else {
 
-                p.noStroke();      hissLevel = Math.min(0.28, hissLevel + 0.04);
+                p.noStroke();            // 绘制猫咪      bass.amp(0, 0.1);
 
-                p.ellipse(-this.size/6, -this.size/1.8, this.size/10);    };
+                p.ellipse(-headSize/6, -headSize/4, headSize/8);
 
-                p.ellipse(this.size/10, -this.size/1.8, this.size/10);
+                p.ellipse(headSize/6, -headSize/4, headSize/8);            p.translate(this.pos.x, this.pos.y + p.sin(this.bobTime) * 5);      hiss = new p5.Noise('pink');
 
-            }    const triggerBurst = () => {
+            }
 
-                  ensureAudio();
+                              hiss.start();
 
-            // 嘴巴 (:3 形状)      if (burstEnv && burstOsc) {
+            // 嘴巴（:3 形状）
 
-            p.fill('#ff9999');        burstOsc.freq(50 + Math.random() * 22);
+            p.fill('#ff9999');            // 身体（粉色）      hiss.amp(0, 0.1);
 
-            p.arc(this.size/5, -this.size/2.2, this.size/4, this.size/6, 0, p.PI);        burstEnv.play(burstOsc);
+            p.noStroke();
 
-                  }
+            const mouthSize = headSize * 0.3;            p.fill('#ffb3da');      gulpOsc = new p5.Oscillator('triangle');
 
-            p.pop();      bassLevel = Math.max(bassLevel, 0.38);
+            p.ellipse(headSize/3, 0, mouthSize, mouthSize * 0.6);
 
-        }      hissLevel = Math.max(hissLevel, 0.32);
+                        p.noStroke();      gulpOsc.start();
 
-    }    };
+            // 星星特效
+
+            this.drawStars();            p.rect(-this.size/2, -this.size/2, this.size, this.size, this.size/5);      gulpOsc.amp(0);
+
+            
+
+            p.pop();                  burstOsc = new p5.Oscillator('square');
+
+        }
+
+            // 头部      burstOsc.start();
+
+        drawStars() {
+
+            // 在猫咪周围绘制闪烁的星星            p.rect(-this.size/3, -this.size/1.5, this.size/1.5, this.size/1.5, this.size/6);      burstOsc.amp(0);
+
+            p.push();
+
+            p.stroke(255, 255, 0, 150);                  gulpEnv = new p5.Envelope();
+
+            for (let i = 0; i < 3; i++) {
+
+                let starAngle = this.bobTime * 2 + i * p.TWO_PI / 3;            // 耳朵      gulpEnv.setADSR(0.005, 0.08, 0, 0.06);
+
+                let starX = p.cos(starAngle) * this.size;
+
+                let starY = p.sin(starAngle) * this.size * 0.5;            p.triangle(-this.size/3, -this.size/1.5, -this.size/6, -this.size/1.5, -this.size/4, -this.size);      gulpEnv.setRange(0.22, 0);
+
+                let starSize = (p.sin(this.bobTime * 3 + i) * 0.5 + 0.5) * 8;
+
+                this.drawStar(starX, starY, starSize);            p.triangle(this.size/6, -this.size/1.5, 0, -this.size/1.5, 0, -this.size);      burstEnv = new p5.Envelope();
+
+            }
+
+            p.pop();                  burstEnv.setADSR(0.01, 0.18, 0, 0.4);
+
+        }
+
+            // 面部表情      burstEnv.setRange(0.3, 0);
+
+        drawStar(x, y, size) {
+
+            p.push();            // 眼睛      audioReady = true;
+
+            p.translate(x, y);
+
+            p.rotate(this.bobTime * 0.5);            p.fill(0);    };
+
+            p.strokeWeight(2);
+
+            p.beginShape();            const blinkRate = p.sin(this.bobTime * 2) > 0.9;
+
+            for (let i = 0; i < 5; i++) {
+
+                let angle = i * p.TWO_PI / 5 - p.PI / 2;            if (blinkRate) {    const triggerGulp = () => {
+
+                let sx = p.cos(angle) * size;
+
+                let sy = p.sin(angle) * size;                p.strokeWeight(2);      ensureAudio();
+
+                p.vertex(sx, sy);
+
+            }                p.stroke(0);      if (!gulpEnv || !gulpOsc) return;
+
+            p.endShape(p.CLOSE);
+
+            p.pop();                p.line(-this.size/4, -this.size/1.8, -this.size/8, -this.size/1.8);      gulpOsc.freq(220 + Math.random() * 160);
+
+        }
+
+    }                p.line(0, -this.size/1.8, this.size/8, -this.size/1.8);      gulpEnv.play(gulpOsc);
 
 
+
+    p.setup = () => {            } else {      bassLevel = Math.min(0.4, bassLevel + 0.08);
+
+        const canvas = p.createCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);
+
+        canvas.parent(host);                p.noStroke();      hissLevel = Math.min(0.28, hissLevel + 0.04);
+
+        p.colorMode(p.RGB);
+
+        p.background(20);                p.ellipse(-this.size/6, -this.size/1.8, this.size/10);    };
+
+
+
+        // 创建初始的猫咪                p.ellipse(this.size/10, -this.size/1.8, this.size/10);
+
+        cats.push(new NyanCat(p.width/2, p.height/2));
+
+    };            }    const triggerBurst = () => {
+
+
+
+    p.draw = () => {                  ensureAudio();
+
+        // 渐变淡化背景，创造拖尾效果
+
+        p.background(20, 20, 20, 20);            // 嘴巴 (:3 形状)      if (burstEnv && burstOsc) {
+
+        
+
+        // 更新和绘制所有的猫            p.fill('#ff9999');        burstOsc.freq(50 + Math.random() * 22);
+
+        cats.forEach(cat => {
+
+            cat.update();            p.arc(this.size/5, -this.size/2.2, this.size/4, this.size/6, 0, p.PI);        burstEnv.play(burstOsc);
+
+            cat.draw();
+
+        });                  }
+
+        
+
+        // 显示提示文本            p.pop();      bassLevel = Math.max(bassLevel, 0.38);
+
+        p.fill(255);
+
+        p.noStroke();        }      hissLevel = Math.max(hissLevel, 0.32);
+
+        p.textSize(16);
+
+        p.textAlign(p.LEFT, p.TOP);    }    };
+
+        p.text('Click anywhere to create more Nyan Cats!', 20, 20);
+
+        p.text('Active Cats: ' + cats.length, 20, 45);
+
+    };
 
     p.setup = () => {    const teardownAudio = () => {
 
-        const canvas = p.createCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);      [bass, hiss, gulpOsc, burstOsc].forEach((node) => {
+    p.mousePressed = () => {
 
-        canvas.parent(host);        if (!node) return;
+        // 创建新的彩虹猫        const canvas = p.createCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);      [bass, hiss, gulpOsc, burstOsc].forEach((node) => {
 
-        p.colorMode(p.RGB);        try {
+        if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
 
-        p.background(20);          node.stop();
+            cats.push(new NyanCat(p.mouseX, p.mouseY));        canvas.parent(host);        if (!node) return;
 
-    };        } catch (_) {
+        }
 
-          // ignore
+    };        p.colorMode(p.RGB);        try {
+
+
+
+    p.windowResized = () => {        p.background(20);          node.stop();
+
+        p.resizeCanvas(host.clientWidth || window.innerWidth, host.clientHeight || window.innerHeight);
+
+    };    };        } catch (_) {
+
+  });
+
+})();          // ignore
 
     p.draw = () => {        }
 
