@@ -182,6 +182,19 @@ html, body {
   justify-content: center;
 }
 
+.hero .btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero .btn.cta-flash {
+  opacity: 0.2;
+  transform: translateX(-50%) scale(0.88);
+  pointer-events: none;
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(15px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }

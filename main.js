@@ -51,57 +51,57 @@
     }
   });
 
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
   const hero = document.querySelector('.hero');
   const ctaButton = hero ? hero.querySelector('.btn') : null;
   if (hero && ctaButton) {
-    let targetOffset = { x: 0, y: 0 };
-    let currentOffset = { x: 0, y: 0 };
-    const maxOffset = 260;
-    const safeRadius = 160;
+    let flashCooldown = 0;
+    const safeRadius = 170;
+    const flashDuration = 220;
 
-    const animate = () => {
-      currentOffset.x += (targetOffset.x - currentOffset.x) * 0.12;
-      currentOffset.y += (targetOffset.y - currentOffset.y) * 0.12;
-      if (Math.abs(currentOffset.x) < 0.05) currentOffset.x = 0;
-      if (Math.abs(currentOffset.y) < 0.05) currentOffset.y = 0;
-      ctaButton.style.transform = `translate(${currentOffset.x}px, ${currentOffset.y}px)`;
-      requestAnimationFrame(animate);
-    };
-    animate();
-
-    const updateTarget = (pointerX, pointerY) => {
-      const rect = ctaButton.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = pointerX - centerX;
-      const dy = pointerY - centerY;
-      const distance = Math.hypot(dx, dy) || 0.001;
-
-      if (distance < safeRadius) {
-        const normX = dx / distance;
-        const normY = dy / distance;
-        const push = (safeRadius - distance) * 1.2 + 120;
-        targetOffset = {
-          x: clamp(targetOffset.x - normX * push, -maxOffset, maxOffset),
-          y: clamp(targetOffset.y - normY * push, -maxOffset, maxOffset),
-        };
-      } else {
-        targetOffset.x *= 0.9;
-        targetOffset.y *= 0.9;
-        if (Math.abs(targetOffset.x) < 0.2) targetOffset.x = 0;
-        if (Math.abs(targetOffset.y) < 0.2) targetOffset.y = 0;
-      }
+    const teleportButton = () => {
+      const heroRect = hero.getBoundingClientRect();
+      const buttonRect = ctaButton.getBoundingClientRect();
+      const padding = 60;
+      const minX = heroRect.left + padding;
+      const maxX = heroRect.right - padding - buttonRect.width;
+      const minY = heroRect.top + padding;
+      const maxY = heroRect.bottom - padding - buttonRect.height;
+      const randomX = Math.random() * (maxX - minX) + minX;
+      const randomY = Math.random() * (maxY - minY) + minY;
+      ctaButton.style.left = `${randomX - heroRect.left}px`;
+      ctaButton.style.top = `${randomY - heroRect.top}px`;
+      ctaButton.classList.add('cta-flash');
+      setTimeout(() => ctaButton.classList.remove('cta-flash'), flashDuration);
+      flashCooldown = Date.now() + 260;
     };
 
     const handleMove = (event) => {
-      updateTarget(event.clientX, event.clientY);
+      const rect = ctaButton.getBoundingClientRect();
+      const pointerX = event.clientX;
+      const pointerY = event.clientY;
+      const distX = pointerX - (rect.left + rect.width / 2);
+      const distY = pointerY - (rect.top + rect.height / 2);
+      const distance = Math.hypot(distX, distY);
+
+      if (distance < safeRadius && Date.now() > flashCooldown) {
+        teleportButton();
+      }
     };
+
+    const resetPosition = () => {
+      ctaButton.style.left = '50%';
+      ctaButton.style.top = '0';
+      ctaButton.style.transform = 'translate(-50%, 0)';
+    };
+
+    hero.style.position = 'relative';
+    ctaButton.style.position = 'absolute';
+    resetPosition();
 
     hero.addEventListener('pointermove', handleMove);
     hero.addEventListener('pointerleave', () => {
-      targetOffset = { x: 0, y: 0 };
+      flashCooldown = Date.now() + 320;
+      resetPosition();
     });
 
     ['click', 'pointerdown'].forEach((type) =>
