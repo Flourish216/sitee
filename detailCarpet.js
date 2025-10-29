@@ -28,28 +28,45 @@ function setup() {
 }
 
 function draw() {
-    // 当鼠标按住时，进行图片错位切割
+    let videoWidth = windowWidth * 0.7; // 视频宽度为窗口宽度的70%
+    let videoHeight = videoWidth * 0.5625; // 保持16:9比例
+    let centerX = windowWidth/2 - videoWidth/2;
+    let centerY = windowHeight/2 - videoHeight/2;
+
+    background(0); // 每帧清除背景
+
     if (mouseIsPressed == true) {
         if (count >= maxCount) { // 每经过maxCount次就重置一遍参数
             setGrinder();
             count = 0;
-            maxCount = int(random(3, 8));
+            maxCount = int(random(2, 4)); // 减少重置间隔，使效果更连续
         }
         accel();
 
+        // 更新主画布
+        picGraph.background(0);
+        picGraph.image(capture, centerX, centerY, videoWidth, videoHeight);
+        
+        // 创建切割效果
         newImg = createImage(width, height);
-        newImg.copy(picGraph.get(), x, y, w, h, x, y, w, h); // 获取当前子画布上所有的像素值，并根据x、y、w...等参数生成newImg
-        picGraph.image(newImg, spx, spy); // 每帧移动的速度即为每次错位的量，也就是新图的位置
+        newImg.copy(picGraph.get(), x, y, w, h, x, y, w, h);
+        
+        // 在原位置涂黑（模拟切割）
+        picGraph.fill(0);
+        picGraph.noStroke();
+        picGraph.rect(x, y, w, h);
+        
+        // 显示切割后的画面
         image(picGraph, 0, 0);
+        // 显示移动的切片
+        image(newImg, x + spx, y + spy);
 
         count++;
     } else {
         // 当没有按住鼠标时，显示正常的摄像头画面
-        let videoWidth = windowWidth * 0.7; // 视频宽度为窗口宽度的70%
-        let videoHeight = videoWidth * 0.5625; // 保持16:9比例
-        let centerX = windowWidth/2 - videoWidth/2;
-        let centerY = windowHeight/2 - videoHeight/2;
         image(capture, centerX, centerY, videoWidth, videoHeight);
+        // 重置画布
+        picGraph.background(0);
         picGraph.image(capture, centerX, centerY, videoWidth, videoHeight);
     }
 
@@ -114,23 +131,35 @@ function setGrinder() {
     if (random() > 0.5) {
         // 横条
         x = centerX;
-        y = int(random(centerY, centerY + videoHeight));
+        y = int(random(centerY, centerY + videoHeight - 20));
         w = videoWidth;
-        h = int(random(5, 20)); // 细长的条状
+        h = int(random(15, 35)); // 增加条的宽度
     } else {
         // 竖条
-        x = int(random(centerX, centerX + videoWidth));
+        x = int(random(centerX, centerX + videoWidth - 20));
         y = centerY;
-        w = int(random(5, 20)); // 细长的条状
+        w = int(random(15, 35)); // 增加条的宽度
         h = videoHeight;
     }
     
-    spx = random(-15, 15);
-    spy = random(-15, 15);
+    // 随机决定移动方向
+    if (random() > 0.5) {
+        spx = random(20, 35) * (random() > 0.5 ? 1 : -1);
+        spy = random(-8, 8);
+    } else {
+        spx = random(-8, 8);
+        spy = random(20, 35) * (random() > 0.5 ? 1 : -1);
+    }
 }
 
 // 设置加速度
 function accel() {
-    spx += random(-2, 2);
-    spy += random(-2, 2);
+    // 保持主要运动方向，只添加小幅度随机偏移
+    if (abs(spx) > abs(spy)) {
+        spx += random(-1, 1);
+        spy = constrain(spy + random(-0.5, 0.5), -10, 10);
+    } else {
+        spy += random(-1, 1);
+        spx = constrain(spx + random(-0.5, 0.5), -10, 10);
+    }
 }
