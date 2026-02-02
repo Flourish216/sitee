@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Creative Lab — Jesse Zhang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
+</head>
+<body class="projects-page">
+  <div id="cursor-container"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Jesse Zhang</a>
+      <nav class="nav">
+        <a href="#" class="nav-link-fake" aria-disabled="true">Projects*</a>
+        <a href="https://flourish216.github.io/Mousepad-website/">Shop</a>
+        <a href="links.html">Links</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="projects-main">
+    <section class="galaxy-section">
+      <div class="void-gradient"></div>
+      <div class="galaxy-void">
+        <div class="galaxy-canvas" id="project-galaxy"></div>
+      </div>
+      <h1>Creative Lab Constellation</h1>
+      <p>Orbit to preview interactive sketches. Click a planet to enter its world.</p>
+      <p class="galaxy-hints">Galaxy is one stop in the lab. Scroll for everything else.</p>
+    </section>
+
+    <section class="container page">
+      <div class="page-lede">
+        <h1>Works &amp; WIPs</h1>
+        <p class="muted">A living shelf for current and future pieces. The galaxy above is the interactive map; cards below link directly.</p>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="card-meta"><span class="pill">p5.js</span><span class="pill ghost">Audio</span></div>
+          <h3>Vox Mechanica</h3>
+          <p>Reactive robot head that syncs motion and filters to live microphone input.</p>
+          <div class="card-actions">
+            <a class="btn small" href="projects/robot.html">Open</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-meta"><span class="pill">p5.js</span><span class="pill ghost">Particles</span></div>
+          <h3>Candy Bloom</h3>
+          <p>Soft orbital bear fields with chromatic blooming and subtle wobble.</p>
+          <div class="card-actions">
+            <a class="btn small" href="projects/bear.html">Open</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-meta"><span class="pill">p5.js</span><span class="pill ghost">Motion</span></div>
+          <h3>Magic Carpet</h3>
+          <p>Hypnotic warp grid that responds to pointer drift and internal noise flow.</p>
+          <div class="card-actions">
+            <a class="btn small" href="projects/carpet.html">Open</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-meta"><span class="pill">Interactive</span><span class="pill ghost">Galaxy</span></div>
+          <h3>Project Constellation</h3>
+          <p>The p5.js orbit map you see above. Jump in directly if you skipped the scroll.</p>
+          <div class="card-actions">
+            <a class="btn small" href="projects.html">Enter Galaxy</a>
+          </div>
+        </article>
+
+        <article class="project-card photography-card">
+          <div class="card-meta"><span class="pill">Photography</span><span class="pill ghost">B&amp;W</span></div>
+          <h3>Assignment #1 — Black &amp; White Studies</h3>
+          <p>Exercises: Two Dozen, Twelve Abstracts, Steps, and a Carrie Mae Weems-inspired narrative.</p>
+          <div class="card-actions">
+            <span class="due">Due Feb 2, 2026 · 8:00 AM</span>
+            <a class="btn small" href="projects/photography.html">Open workspace</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; Jesse Zhang · Creative Lab</small>
+    </div>
+  </footer>
+
+  <script src="cursor.js"></script>
+  <script src="main.js"></script>
+  <script src="projectGalaxy.js"></script>
+</body>
+</html>
