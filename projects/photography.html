@@ -137,10 +137,12 @@
         const extensions = ['jpg', 'jpeg', 'png', 'webp'];
         let found = 0;
 
+        const cacheKey = Date.now();
+
         for (let i = 1; i <= expected + 12; i++) {
           let loaded = false;
           for (const ext of extensions) {
-            const src = `${folder}/${i}.${ext}`;
+            const src = `${folder}/${i}.${ext}?v=${cacheKey}`;
             if (await tryImage(src)) {
               const img = document.createElement('img');
               img.src = src;
