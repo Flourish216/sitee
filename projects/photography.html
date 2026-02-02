@@ -72,8 +72,27 @@
   <script>
     // Minimal loader: inject numbered JPGs, clickable to open raw file.
     (() => {
-      const version = 'v8';
+      const version = 'v9';
       const sections = document.querySelectorAll('.photo-section');
+      const lightbox = (() => {
+        const host = document.getElementById('lightbox');
+        const img = host.querySelector('img');
+        const close = () => host.classList.remove('visible');
+        host.addEventListener('click', (e) => {
+          if (e.target === host || e.target.classList.contains('lightbox-close')) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') close();
+        });
+        return {
+          open(src, alt) {
+            img.src = src;
+            img.alt = alt || '';
+            host.classList.add('visible');
+          },
+        };
+      })();
+
       sections.forEach((section) => {
         const folder = section.dataset.folder;
         const count = Number(section.dataset.count) || 0;
@@ -82,12 +101,15 @@
           const src = `${folder}/${i}.jpg?${version}`;
           const link = document.createElement('a');
           link.href = src;
-          link.target = '_blank';
           const img = document.createElement('img');
           img.src = src;
           img.loading = 'lazy';
           img.alt = `Photo ${i}`;
           img.onerror = () => link.remove();
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            lightbox.open(src, img.alt);
+          });
           link.appendChild(img);
           grid.appendChild(link);
         }
@@ -95,4 +117,9 @@
     })();
   </script>
 </body>
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-close" aria-label="Close">×</button>
+  <img src="" alt="">
+</div>
 </html>
