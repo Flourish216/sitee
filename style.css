@@ -203,11 +203,6 @@ body.projects-page {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.8rem;
 }
-.photo-grid a {
-  display: block;
-  border-radius: 12px;
-  overflow: hidden;
-}
 .photo-grid img,
 .photo-slot {
   width: 100%;
@@ -226,6 +221,64 @@ body.projects-page {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+.lightbox.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+  filter: grayscale(100%);
+}
+.lightbox .lightbox-caption {
+  margin-top: 0.8rem;
+  color: #f5f5f5;
+  text-align: center;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+.lightbox .close-btn {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.lightbox .nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: #fff;
+  width: 48px;
+  height: 64px;
+  border-radius: 12px;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.lightbox .nav-prev { left: 2rem; }
+.lightbox .nav-next { right: 2rem; }
 
 #cursor-container {
   position: fixed;
