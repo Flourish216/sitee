@@ -70,7 +70,7 @@
 
   <script src="../cursor.js"></script>
   <script>
-    // Minimal loader: inject numbered JPGs directly (no lightbox)
+    // Minimal loader: inject numbered JPGs; click opens full image in new tab
     (() => {
       const version = Date.now(); // cache-bust per load
       document.querySelectorAll('.photo-section').forEach((section) => {
@@ -79,12 +79,17 @@
         const grid = section.querySelector('.photo-grid');
         for (let i = 1; i <= count; i++) {
           const src = `${folder}/${i}.jpg?${version}`;
+          const link = document.createElement('a');
+          link.href = src;
+          link.target = '_blank';
+          link.rel = 'noopener';
           const img = document.createElement('img');
           img.src = src;
           img.loading = 'lazy';
           img.alt = `Photo ${i}`;
-          img.onerror = () => img.remove();
-          grid.appendChild(img);
+          img.onerror = () => link.remove();
+          link.appendChild(img);
+          grid.appendChild(link);
         }
       });
     })();

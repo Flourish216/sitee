@@ -203,6 +203,11 @@ body.projects-page {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.8rem;
 }
+.photo-grid a {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+}
 .photo-grid img,
 .photo-slot {
   width: 100%;
