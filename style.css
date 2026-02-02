@@ -802,3 +802,14 @@ body.konami-mode .konami-toast {
   background: transparent;
   padding: 0;
 }
+
+.cosmos-exit-hint {
+  position: fixed;
+  top: 5.4rem;
+  left: 2rem;
+  color: rgba(245, 245, 245, 0.8);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  z-index: 8;
+}
