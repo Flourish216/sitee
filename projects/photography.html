@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assignment #1 — Black & White Studies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="project-detail photo-detail">
+  <div id="cursor-container"></div>
+
+  <button class="cosmos-return detail-back" onclick="location.href='../projects.html'" aria-label="Return to constellation">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M32 6c-9.2 0-16 12.1-16 25.5 0 3.8.5 7.5 1.4 11.1L10.4 49l12.6-3.8c3.1 5.4 6.9 9.5 11 12 4.1-2.5 7.9-6.6 11-12L53.6 49l-7-10.4C47.5 39 48 35.3 48 31.5 48 18.1 41.2 6 32 6z"/>
+      <circle cx="32" cy="25" r="6.5" fill="currentColor" opacity="0.38"/>
+      <path fill="currentColor" opacity="0.55" d="M32 46l-8.5 4.5L32 62l8.5-11.5z"/>
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4" d="M20 38c3.4 2.2 7.7 3.4 12 3.4s8.6-1.2 12-3.4"/>
+    </svg>
+  </button>
+
+  <main class="photo-wrapper">
+    <header class="photo-hero">
+      <div>
+        <p class="pill ghost">Photography · B&amp;W</p>
+        <h1>Assignment #1 — Black &amp; White Studies</h1>
+        <p class="muted">Exercises: Two Dozen · Twelve Abstracts · Steps · Narrative inspired by Carrie Mae Weems.</p>
+        <p class="due">Due: Feb 2, 2026 · 8:00 AM</p>
+      </div>
+      <div class="photo-notes">
+        <strong>Upload guide</strong>
+        <ul>
+          <li>Drop JPEG/PNG files into four folders once ready: <code>assets/photography/ex1</code>, <code>ex6</code>, <code>ex12</code>, <code>narrative</code>.</li>
+          <li>Keep landscape orientation when shooting on phone; convert to black &amp; white in your editor.</li>
+          <li>After uploading, refresh this page — it will auto-pull any files in those folders.</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="photo-section" data-folder="../assets/photography/ex1">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 1: Two Dozen</h2>
+          <p class="muted">Stand in one spot, 24 unique frames, feet planted. Show variation via angle, focal length, exposure, subject distance — all in black &amp; white.</p>
+        </div>
+        <span class="pill ghost">24 photos</span>
+      </div>
+      <div class="photo-grid" data-expected="24"></div>
+    </section>
+
+    <section class="photo-section" data-folder="../assets/photography/ex6">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 6: Twelve Abstracts</h2>
+          <p class="muted">A dozen abstractions of one common object. Emphasize line, texture, shadow, and form; avoid literal depiction.</p>
+        </div>
+        <span class="pill ghost">12 photos</span>
+      </div>
+      <div class="photo-grid" data-expected="12"></div>
+    </section>
+
+    <section class="photo-section" data-folder="../assets/photography/ex12">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 12: Steps</h2>
+          <p class="muted">Walk a route you’ve wanted to photograph. Stop every chosen interval (e.g., every 10 steps or block) and capture a distinct scene.</p>
+        </div>
+        <span class="pill ghost">Series</span>
+      </div>
+      <div class="photo-grid" data-expected="12"></div>
+    </section>
+
+    <section class="photo-section" data-folder="../assets/photography/narrative">
+      <div class="section-head">
+        <div>
+          <h2>Narrative Photograph</h2>
+          <p class="muted">Frame a story using light, shadow, and 3-point lighting separation. Channel Carrie Mae Weems; consider contrast &amp; affinity.</p>
+        </div>
+        <span class="pill ghost">1+ photos</span>
+      </div>
+      <div class="photo-grid" data-expected="3"></div>
+    </section>
+  </main>
+
+  <script src="../cursor.js"></script>
+  <script>
+    // Simple static loader: tries to fetch sequentially named files in each folder.
+    const tryImage = (src) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = src;
+      });
+
+    const loadGrids = async () => {
+      const grids = document.querySelectorAll('.photo-grid');
+      for (const grid of grids) {
+        const folder = grid.parentElement.dataset.folder;
+        const expected = Number(grid.dataset.expected) || 12;
+        const extensions = ['jpg', 'jpeg', 'png', 'webp'];
+        let found = 0;
+
+        for (let i = 1; i <= expected + 12; i++) {
+          let loaded = false;
+          for (const ext of extensions) {
+            const src = `${folder}/${i}.${ext}`;
+            if (await tryImage(src)) {
+              const img = document.createElement('img');
+              img.src = src;
+              img.alt = `Photo ${i}`;
+              grid.appendChild(img);
+              found++;
+              loaded = true;
+              break;
+            }
+          }
+          if (!loaded && i > expected && found >= expected) {
+            break;
+          }
+        }
+
+        if (found === 0) {
+          for (let i = 0; i < Math.min(expected, 6); i++) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'photo-slot';
+            placeholder.textContent = 'Awaiting upload';
+            grid.appendChild(placeholder);
+          }
+        }
+      }
+    };
+
+    loadGrids();
+  </script>
+</body>
+</html>
