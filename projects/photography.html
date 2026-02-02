@@ -71,6 +71,53 @@
   <script src="../cursor.js"></script>
   <script>
     // Simple static loader: tries to fetch sequentially named files in each folder.
+    const lightbox = {
+      host: null,
+      img: null,
+      caption: null,
+      sources: [],
+      index: 0,
+      open(idx) {
+        this.index = idx;
+        const item = this.sources[idx];
+        if (!item) return;
+        this.img.src = item.src;
+        this.caption.textContent = item.alt || '';
+        this.host.classList.add('visible');
+      },
+      close() {
+        this.host.classList.remove('visible');
+      },
+      next(dir = 1) {
+        if (!this.sources.length) return;
+        this.index = (this.index + dir + this.sources.length) % this.sources.length;
+        this.open(this.index);
+      },
+      init() {
+        this.host = document.getElementById('lightbox');
+        this.img = this.host.querySelector('img');
+        this.caption = this.host.querySelector('.lightbox-caption');
+        this.host.addEventListener('click', (e) => {
+          if (e.target === this.host || e.target.classList.contains('close-btn')) this.close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (!this.host.classList.contains('visible')) return;
+          if (e.key === 'Escape') this.close();
+          if (e.key === 'ArrowRight') this.next(1);
+          if (e.key === 'ArrowLeft') this.next(-1);
+        });
+        this.host.querySelector('.nav-prev').addEventListener('click', (e) => {
+          e.stopPropagation(); this.next(-1);
+        });
+        this.host.querySelector('.nav-next').addEventListener('click', (e) => {
+          e.stopPropagation(); this.next(1);
+        });
+        this.host.querySelector('.close-btn').addEventListener('click', (e) => {
+          e.stopPropagation(); this.close();
+        });
+      }
+    };
+
     const tryImage = (src) =>
       new Promise((resolve) => {
         const img = new Image();
@@ -81,6 +128,9 @@
 
     const loadGrids = async () => {
       const grids = document.querySelectorAll('.photo-grid');
+      lightbox.sources = [];
+      let globalIndex = 0;
+
       for (const grid of grids) {
         const folder = grid.parentElement.dataset.folder;
         const expected = Number(grid.dataset.expected) || 12;
@@ -95,6 +145,10 @@
               const img = document.createElement('img');
               img.src = src;
               img.alt = `Photo ${i}`;
+              const currentIndex = globalIndex;
+              img.addEventListener('click', () => lightbox.open(currentIndex));
+              lightbox.sources.push({ src, alt: img.alt });
+              globalIndex += 1;
               grid.appendChild(img);
               found++;
               loaded = true;
@@ -117,7 +171,16 @@
       }
     };
 
+    lightbox.init();
     loadGrids();
   </script>
+
+  <div id="lightbox" class="lightbox">
+    <button class="close-btn" aria-label="Close">×</button>
+    <button class="nav nav-prev" aria-label="Previous">‹</button>
+    <img src="" alt="">
+    <button class="nav nav-next" aria-label="Next">›</button>
+    <div class="lightbox-caption"></div>
+  </div>
 </body>
 </html>
