@@ -4,94 +4,96 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Assignment #1 — Black & White Studies</title>
-  <style>
-    :root { color-scheme: light; }
-    body { margin: 0; font-family: Arial, sans-serif; background: #f7f7f7; color: #111; }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
-    .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-    .top h1 { margin: 0; font-size: 1.8rem; }
-    .back { text-decoration: none; color: #111; border: 1px solid #bbb; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; }
-    section { margin: 2rem 0; }
-    h2 { margin: 0 0 0.8rem; font-size: 1.3rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; }
-    figure { margin: 0; background: #fff; border: 1px solid #e2e2e2; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 18px rgba(0,0,0,0.06); }
-    img { display: block; width: 100%; height: 180px; object-fit: cover; filter: grayscale(100%); }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
 </head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <h1>Assignment #1 — Black & White Studies</h1>
-      <a class="back" href="../projects.html">Back</a>
-    </div>
-    <section>
-      <h2>Exercise 1: Two Dozen</h2>
-      <div class="grid">
-        <figure><img src="../assets/photography/ex1/1.jpg" alt="Exercise 1: Two Dozen 1"></figure>
-        <figure><img src="../assets/photography/ex1/2.jpg" alt="Exercise 1: Two Dozen 2"></figure>
-        <figure><img src="../assets/photography/ex1/3.jpg" alt="Exercise 1: Two Dozen 3"></figure>
-        <figure><img src="../assets/photography/ex1/4.jpg" alt="Exercise 1: Two Dozen 4"></figure>
-        <figure><img src="../assets/photography/ex1/5.jpg" alt="Exercise 1: Two Dozen 5"></figure>
-        <figure><img src="../assets/photography/ex1/6.jpg" alt="Exercise 1: Two Dozen 6"></figure>
-        <figure><img src="../assets/photography/ex1/7.jpg" alt="Exercise 1: Two Dozen 7"></figure>
-        <figure><img src="../assets/photography/ex1/8.jpg" alt="Exercise 1: Two Dozen 8"></figure>
-        <figure><img src="../assets/photography/ex1/9.jpg" alt="Exercise 1: Two Dozen 9"></figure>
-        <figure><img src="../assets/photography/ex1/10.jpg" alt="Exercise 1: Two Dozen 10"></figure>
-        <figure><img src="../assets/photography/ex1/11.jpg" alt="Exercise 1: Two Dozen 11"></figure>
-        <figure><img src="../assets/photography/ex1/12.jpg" alt="Exercise 1: Two Dozen 12"></figure>
-        <figure><img src="../assets/photography/ex1/13.jpg" alt="Exercise 1: Two Dozen 13"></figure>
-        <figure><img src="../assets/photography/ex1/14.jpg" alt="Exercise 1: Two Dozen 14"></figure>
-        <figure><img src="../assets/photography/ex1/15.jpg" alt="Exercise 1: Two Dozen 15"></figure>
-        <figure><img src="../assets/photography/ex1/16.jpg" alt="Exercise 1: Two Dozen 16"></figure>
-        <figure><img src="../assets/photography/ex1/17.jpg" alt="Exercise 1: Two Dozen 17"></figure>
-        <figure><img src="../assets/photography/ex1/18.jpg" alt="Exercise 1: Two Dozen 18"></figure>
-        <figure><img src="../assets/photography/ex1/19.jpg" alt="Exercise 1: Two Dozen 19"></figure>
-        <figure><img src="../assets/photography/ex1/20.jpg" alt="Exercise 1: Two Dozen 20"></figure>
-        <figure><img src="../assets/photography/ex1/21.jpg" alt="Exercise 1: Two Dozen 21"></figure>
-        <figure><img src="../assets/photography/ex1/22.jpg" alt="Exercise 1: Two Dozen 22"></figure>
-        <figure><img src="../assets/photography/ex1/23.jpg" alt="Exercise 1: Two Dozen 23"></figure>
-        <figure><img src="../assets/photography/ex1/24.jpg" alt="Exercise 1: Two Dozen 24"></figure>
+<body class="project-detail photo-detail">
+  <div id="cursor-container"></div>
+
+  <button class="cosmos-return detail-back" onclick="location.href='../projects.html'" aria-label="Return to projects log">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M32 6c-9.2 0-16 12.1-16 25.5 0 3.8.5 7.5 1.4 11.1L10.4 49l12.6-3.8c3.1 5.4 6.9 9.5 11 12 4.1-2.5 7.9-6.6 11-12L53.6 49l-7-10.4C47.5 39 48 35.3 48 31.5 48 18.1 41.2 6 32 6z"/>
+      <circle cx="32" cy="25" r="6.5" fill="currentColor" opacity="0.38"/>
+      <path fill="currentColor" opacity="0.55" d="M32 46l-8.5 4.5L32 62l8.5-11.5z"/>
+      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4" d="M20 38c3.4 2.2 7.7 3.4 12 3.4s8.6-1.2 12-3.4"/>
+    </svg>
+  </button>
+
+  <main class="photo-wrapper">
+    <header class="photo-hero">
+      <div>
+        <p class="pill ghost">Photography · B&amp;W</p>
+        <h1>Assignment #1 — Black &amp; White Studies</h1>
       </div>
-    </section>
-    <section>
-      <h2>Exercise 6: Twelve Abstracts</h2>
-      <div class="grid">
-        <figure><img src="../assets/photography/ex6/1.jpg" alt="Exercise 6: Twelve Abstracts 1"></figure>
-        <figure><img src="../assets/photography/ex6/2.jpg" alt="Exercise 6: Twelve Abstracts 2"></figure>
-        <figure><img src="../assets/photography/ex6/3.jpg" alt="Exercise 6: Twelve Abstracts 3"></figure>
-        <figure><img src="../assets/photography/ex6/4.jpg" alt="Exercise 6: Twelve Abstracts 4"></figure>
-        <figure><img src="../assets/photography/ex6/5.jpg" alt="Exercise 6: Twelve Abstracts 5"></figure>
-        <figure><img src="../assets/photography/ex6/6.jpg" alt="Exercise 6: Twelve Abstracts 6"></figure>
-        <figure><img src="../assets/photography/ex6/7.jpg" alt="Exercise 6: Twelve Abstracts 7"></figure>
-        <figure><img src="../assets/photography/ex6/8.jpg" alt="Exercise 6: Twelve Abstracts 8"></figure>
-        <figure><img src="../assets/photography/ex6/9.jpg" alt="Exercise 6: Twelve Abstracts 9"></figure>
-        <figure><img src="../assets/photography/ex6/10.jpg" alt="Exercise 6: Twelve Abstracts 10"></figure>
-        <figure><img src="../assets/photography/ex6/11.jpg" alt="Exercise 6: Twelve Abstracts 11"></figure>
-        <figure><img src="../assets/photography/ex6/12.jpg" alt="Exercise 6: Twelve Abstracts 12"></figure>
+    </header>
+
+    <section class="photo-section" data-folder="../assets/photography/ex1" data-count="24">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 1: Two Dozen</h2>
+        </div>
+        <span class="pill ghost">24 photos</span>
       </div>
+      <div class="photo-grid"></div>
     </section>
-    <section>
-      <h2>Exercise 12: Steps</h2>
-      <div class="grid">
-        <figure><img src="../assets/photography/ex12/1.jpg" alt="Exercise 12: Steps 1"></figure>
-        <figure><img src="../assets/photography/ex12/2.jpg" alt="Exercise 12: Steps 2"></figure>
-        <figure><img src="../assets/photography/ex12/3.jpg" alt="Exercise 12: Steps 3"></figure>
-        <figure><img src="../assets/photography/ex12/4.jpg" alt="Exercise 12: Steps 4"></figure>
-        <figure><img src="../assets/photography/ex12/5.jpg" alt="Exercise 12: Steps 5"></figure>
-        <figure><img src="../assets/photography/ex12/6.jpg" alt="Exercise 12: Steps 6"></figure>
-        <figure><img src="../assets/photography/ex12/7.jpg" alt="Exercise 12: Steps 7"></figure>
-        <figure><img src="../assets/photography/ex12/8.jpg" alt="Exercise 12: Steps 8"></figure>
-        <figure><img src="../assets/photography/ex12/9.jpg" alt="Exercise 12: Steps 9"></figure>
-        <figure><img src="../assets/photography/ex12/10.jpg" alt="Exercise 12: Steps 10"></figure>
-        <figure><img src="../assets/photography/ex12/11.jpg" alt="Exercise 12: Steps 11"></figure>
-        <figure><img src="../assets/photography/ex12/12.jpg" alt="Exercise 12: Steps 12"></figure>
+
+    <section class="photo-section" data-folder="../assets/photography/ex6" data-count="12">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 6: Twelve Abstracts</h2>
+        </div>
+        <span class="pill ghost">12 photos</span>
       </div>
+      <div class="photo-grid"></div>
     </section>
-    <section>
-      <h2>Narrative Photograph</h2>
-      <div class="grid">
+
+    <section class="photo-section" data-folder="../assets/photography/ex12" data-count="12">
+      <div class="section-head">
+        <div>
+          <h2>Exercise 12: Steps</h2>
+        </div>
+        <span class="pill ghost">Series</span>
       </div>
+      <div class="photo-grid"></div>
     </section>
-  </div>
+
+    <section class="photo-section" data-folder="../assets/photography/narrative" data-count="6">
+      <div class="section-head">
+        <div>
+          <h2>Narrative Photograph</h2>
+        </div>
+        <span class="pill ghost">1+ photos</span>
+      </div>
+      <div class="photo-grid"></div>
+    </section>
+  </main>
+
+  <script src="../cursor.js"></script>
+  <script>
+    // Minimal loader: inject numbered JPGs; click opens full image in new tab
+    (() => {
+      const version = Date.now(); // cache-bust per load
+      document.querySelectorAll('.photo-section').forEach((section) => {
+        const folder = section.dataset.folder;
+        const count = Number(section.dataset.count) || 0;
+        const grid = section.querySelector('.photo-grid');
+        for (let i = 1; i <= count; i++) {
+          const src = `${folder}/${i}.jpg?${version}`;
+          const link = document.createElement('a');
+          link.href = src;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          const img = document.createElement('img');
+          img.src = src;
+          img.loading = 'lazy';
+          img.alt = `Photo ${i}`;
+          img.onerror = () => link.remove();
+          link.appendChild(img);
+          grid.appendChild(link);
+        }
+      });
+    })();
+  </script>
 </body>
+
 </html>
