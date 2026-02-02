@@ -32,14 +32,18 @@ html, body {
 }
 .blog-body {
   padding: 4rem 0 5rem;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
+  align-items: start;
 }
 .blog-hero h1 {
   margin: 0.3rem 0;
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 2.8rem);
+}
+.blog-hero {
+  grid-column: 1 / -1;
 }
 
 .blog-card {
