@@ -73,6 +73,22 @@ html, body {
   border-color: #ddd;
 }
 
+.back-home {
+  position: fixed;
+  top: 1.4rem;
+  left: 1.4rem;
+  z-index: 12;
+  padding: 0.5rem 0.9rem;
+  background: #111;
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+.back-home:hover { background: #000; }
+
 .muted {
   color: var(--muted);
 }
@@ -172,22 +188,6 @@ body.projects-page {
   font-family: var(--font-display);
   margin: 0.4rem 0;
   font-size: clamp(2rem, 4.5vw, 2.8rem);
-}
-
-.photo-notes {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 1.2rem 1.3rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-}
-.photo-notes ul {
-  margin: 0.4rem 0 0;
-  padding-left: 1.2rem;
-  color: rgba(235, 235, 235, 0.82);
-}
-.photo-notes li {
-  margin-bottom: 0.4rem;
 }
 
 .photo-section {
