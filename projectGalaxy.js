@@ -8,7 +8,6 @@
     { type: 'robot', url: 'projects/robot.html', radius: 0.28, speed: 0.006, wobble: Math.random() * 1000, hue: 200, size: 28 },
     { type: 'bear', url: 'projects/bear.html', radius: 0.39, speed: -0.0048, wobble: Math.random() * 1000, hue: 330, size: 34 },
     { type: 'person', url: 'projects/carpet.html', radius: 0.5, speed: 0.0038, wobble: Math.random() * 1000, hue: 150, size: 26 },
-    { type: 'photo', url: 'projects/photography.html', radius: 0.61, speed: -0.003, wobble: Math.random() * 1000, hue: 45, size: 30 },
   ].map((planet, idx) => ({
     ...planet,
     phase: Math.random() * Math.PI * 2 + idx * 0.8,
@@ -348,42 +347,6 @@
                     x + s * 0.1, hairY - s * 0.6 + waveOffset, x, hairY - s * 0.9);
           }
           
-          p.pop();
-        },
-        photo: () => {
-          p.push();
-          p.translate(planet.pos.x, planet.pos.y);
-          p.rotate(Math.sin(p.frameCount * 0.015 + planet.fluxSeed) * 0.08);
-          p.rectMode(p.CENTER);
-
-          // body
-          p.fill(planet.hue, 70, 100, 0.92);
-          p.rect(0, 0, s * 2.1, s * 1.3, 8);
-
-          // top prism
-          p.fill(planet.hue, 40, 90, 0.9);
-          p.rect(0, -s * 0.65, s * 1.4, s * 0.45, 6);
-
-          // lens
-          p.fill(0, 0, 8, 0.9);
-          p.circle(0, 0, s * 1.05);
-          p.fill(planet.hue, 85, 100, 0.9);
-          p.circle(0, 0, s * 0.7);
-          p.fill(planet.hue, 15, 95, 0.9);
-          p.circle(0, 0, s * 0.35);
-
-          // shutter sparkle
-          p.noFill();
-          p.stroke(planet.hue, 90, 100, 0.85);
-          p.strokeWeight(2);
-          p.arc(0, 0, s * 1.3, s * 1.3, p.frameCount * 0.03, p.frameCount * 0.03 + p.PI * 1.4);
-
-          // strap dots
-          p.noStroke();
-          p.fill(planet.hue, 60, 100, 0.9);
-          p.circle(-s * 1.05, -s * 0.15, s * 0.2);
-          p.circle(s * 1.05, -s * 0.15, s * 0.2);
-
           p.pop();
         },
       };
