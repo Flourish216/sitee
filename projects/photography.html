@@ -6,7 +6,6 @@
   <title>Assignment #1 — Black & White Studies</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
 </head>
 <body class="project-detail photo-detail">
   <div id="cursor-container"></div>
@@ -28,149 +27,72 @@
       </div>
     </header>
 
-    <section class="photo-section" data-folder="../assets/photography/ex1">
+    <section class="photo-section" data-folder="../assets/photography/ex1" data-count="24">
       <div class="section-head">
         <div>
           <h2>Exercise 1: Two Dozen</h2>
         </div>
         <span class="pill ghost">24 photos</span>
       </div>
-      <div class="photo-grid" data-expected="24"></div>
+      <div class="photo-grid"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/ex6">
+    <section class="photo-section" data-folder="../assets/photography/ex6" data-count="12">
       <div class="section-head">
         <div>
           <h2>Exercise 6: Twelve Abstracts</h2>
         </div>
         <span class="pill ghost">12 photos</span>
       </div>
-      <div class="photo-grid" data-expected="12"></div>
+      <div class="photo-grid"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/ex12">
+    <section class="photo-section" data-folder="../assets/photography/ex12" data-count="12">
       <div class="section-head">
         <div>
           <h2>Exercise 12: Steps</h2>
         </div>
         <span class="pill ghost">Series</span>
       </div>
-      <div class="photo-grid" data-expected="12"></div>
+      <div class="photo-grid"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/narrative">
+    <section class="photo-section" data-folder="../assets/photography/narrative" data-count="6">
       <div class="section-head">
         <div>
           <h2>Narrative Photograph</h2>
         </div>
         <span class="pill ghost">1+ photos</span>
       </div>
-      <div class="photo-grid" data-expected="3"></div>
+      <div class="photo-grid"></div>
     </section>
   </main>
 
   <script src="../cursor.js"></script>
   <script>
-    // Simple loader + lightbox
-    const lightbox = {
-      host: null,
-      img: null,
-      caption: null,
-      sources: [],
-      index: 0,
-      open(idx) {
-        this.index = idx;
-        const item = this.sources[idx];
-        if (!item) return;
-        this.img.src = item.src;
-        this.caption.textContent = item.alt || '';
-        this.host.classList.add('visible');
-      },
-      close() {
-        this.host.classList.remove('visible');
-      },
-      next(dir = 1) {
-        if (!this.sources.length) return;
-        this.index = (this.index + dir + this.sources.length) % this.sources.length;
-        this.open(this.index);
-      },
-      init() {
-        this.host = document.getElementById('lightbox');
-        this.img = this.host.querySelector('img');
-        this.caption = this.host.querySelector('.lightbox-caption');
-        this.host.addEventListener('click', (e) => {
-          if (e.target === this.host || e.target.classList.contains('close-btn')) this.close();
-        });
-        document.addEventListener('keydown', (e) => {
-          if (!this.host.classList.contains('visible')) return;
-          if (e.key === 'Escape') this.close();
-          if (e.key === 'ArrowRight') this.next(1);
-          if (e.key === 'ArrowLeft') this.next(-1);
-        });
-        this.host.querySelector('.nav-prev').addEventListener('click', (e) => {
-          e.stopPropagation(); this.next(-1);
-        });
-        this.host.querySelector('.nav-next').addEventListener('click', (e) => {
-          e.stopPropagation(); this.next(1);
-        });
-        this.host.querySelector('.close-btn').addEventListener('click', (e) => {
-          e.stopPropagation(); this.close();
-        });
-      }
-    };
-
-    const loadGrids = async () => {
-      const grids = document.querySelectorAll('.photo-grid');
-      lightbox.sources = [];
-      let globalIndex = 0;
-      const cacheKey = Date.now();
-      const expectedByFolder = {
-        '../assets/photography/ex1': 24,
-        '../assets/photography/ex6': 12,
-        '../assets/photography/ex12': 12,
-        '../assets/photography/narrative': 3,
-      };
-
-      for (const grid of grids) {
-        const folder = grid.parentElement.dataset.folder;
-        const expected = expectedByFolder[folder] || Number(grid.dataset.expected) || 12;
-        let found = 0;
-
-        for (let i = 1; i <= expected; i++) {
-          const src = `${folder}/${i}.jpg?v=${cacheKey}`;
+    // Minimal loader: inject numbered JPGs, clickable to open raw file.
+    (() => {
+      const version = 'v8';
+      const sections = document.querySelectorAll('.photo-section');
+      sections.forEach((section) => {
+        const folder = section.dataset.folder;
+        const count = Number(section.dataset.count) || 0;
+        const grid = section.querySelector('.photo-grid');
+        for (let i = 1; i <= count; i++) {
+          const src = `${folder}/${i}.jpg?${version}`;
+          const link = document.createElement('a');
+          link.href = src;
+          link.target = '_blank';
           const img = document.createElement('img');
           img.src = src;
+          img.loading = 'lazy';
           img.alt = `Photo ${i}`;
-          const currentIndex = globalIndex + i - 1;
-          img.addEventListener('click', () => lightbox.open(currentIndex));
-          img.onerror = () => img.remove();
-          grid.appendChild(img);
-          lightbox.sources.push({ src, alt: img.alt });
-          found++;
+          img.onerror = () => link.remove();
+          link.appendChild(img);
+          grid.appendChild(link);
         }
-        globalIndex += found;
-
-        if (found === 0) {
-          for (let i = 0; i < Math.min(expected, 6); i++) {
-            const placeholder = document.createElement('div');
-            placeholder.className = 'photo-slot';
-            placeholder.textContent = 'Awaiting upload';
-            grid.appendChild(placeholder);
-          }
-        }
-      }
-    };
-
-    lightbox.init();
-    loadGrids();
+      });
+    })();
   </script>
-
-  <div id="lightbox" class="lightbox">
-    <button class="close-btn" aria-label="Close">×</button>
-    <button class="nav nav-prev" aria-label="Previous">‹</button>
-    <img src="" alt="">
-    <button class="nav nav-next" aria-label="Next">›</button>
-    <div class="lightbox-caption"></div>
-  </div>
 </body>
 </html>
