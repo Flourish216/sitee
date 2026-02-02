@@ -203,11 +203,6 @@ body.projects-page {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.8rem;
 }
-.photo-grid a {
-  display: block;
-  border-radius: 12px;
-  overflow: hidden;
-}
 .photo-grid img,
 .photo-slot {
   width: 100%;
@@ -225,43 +220,6 @@ body.projects-page {
   color: rgba(240, 240, 240, 0.68);
   font-weight: 600;
   letter-spacing: 0.02em;
-}
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 50;
-}
-.lightbox.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.lightbox img {
-  max-width: 92vw;
-  max-height: 88vh;
-  border-radius: 14px;
-  box-shadow: 0 28px 60px rgba(0,0,0,0.5);
-  filter: grayscale(100%);
-}
-.lightbox-close {
-  position: fixed;
-  top: 1.6rem;
-  right: 1.6rem;
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.32);
-  color: #fff;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 1.4rem;
-  cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.25);
 }
 
 #cursor-container {
