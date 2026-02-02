@@ -4,190 +4,137 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Assignment #1 — Black & White Studies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.0/lib/p5.min.js"></script>
+  <style>
+    body {
+      background: #f7f7f7;
+      color: #111;
+      font-family: "Manrope", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .plain-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+    .plain-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .plain-top h1 { margin: 0; font-family: "Playfair Display", serif; }
+    .plain-back {
+      text-decoration: none;
+      color: #111;
+      border: 1px solid #ccc;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .plain-section { margin-bottom: 2.5rem; }
+    .plain-section h2 { margin: 0 0 0.8rem; font-family: "Playfair Display", serif; }
+    .plain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem;
+    }
+    .plain-grid figure {
+      margin: 0;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+    }
+    .plain-grid img {
+      display: block;
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+  </style>
 </head>
-<body class="project-detail photo-detail">
-  <div id="cursor-container"></div>
+<body>
+  <div class="plain-wrap">
+    <div class="plain-top">
+      <h1>Assignment #1 — Black &amp; White Studies</h1>
+      <a class="plain-back" href="../projects.html">Back</a>
+    </div>
 
-  <button class="cosmos-return detail-back" onclick="location.href='../projects.html'" aria-label="Return to projects log">
-    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <path fill="currentColor" d="M32 6c-9.2 0-16 12.1-16 25.5 0 3.8.5 7.5 1.4 11.1L10.4 49l12.6-3.8c3.1 5.4 6.9 9.5 11 12 4.1-2.5 7.9-6.6 11-12L53.6 49l-7-10.4C47.5 39 48 35.3 48 31.5 48 18.1 41.2 6 32 6z"/>
-      <circle cx="32" cy="25" r="6.5" fill="currentColor" opacity="0.38"/>
-      <path fill="currentColor" opacity="0.55" d="M32 46l-8.5 4.5L32 62l8.5-11.5z"/>
-      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4" d="M20 38c3.4 2.2 7.7 3.4 12 3.4s8.6-1.2 12-3.4"/>
-    </svg>
-  </button>
-
-  <main class="photo-wrapper">
-    <header class="photo-hero">
-      <div>
-        <p class="pill ghost">Photography · B&amp;W</p>
-        <h1>Assignment #1 — Black &amp; White Studies</h1>
+    <section class="plain-section">
+      <h2>Exercise 1: Two Dozen</h2>
+      <div class="plain-grid">
+        <figure><img src="../assets/photography/ex1/1.jpg" alt="Exercise 1: Two Dozen #1"></figure>
+        <figure><img src="../assets/photography/ex1/2.jpg" alt="Exercise 1: Two Dozen #2"></figure>
+        <figure><img src="../assets/photography/ex1/3.jpg" alt="Exercise 1: Two Dozen #3"></figure>
+        <figure><img src="../assets/photography/ex1/4.jpg" alt="Exercise 1: Two Dozen #4"></figure>
+        <figure><img src="../assets/photography/ex1/5.jpg" alt="Exercise 1: Two Dozen #5"></figure>
+        <figure><img src="../assets/photography/ex1/6.jpg" alt="Exercise 1: Two Dozen #6"></figure>
+        <figure><img src="../assets/photography/ex1/7.jpg" alt="Exercise 1: Two Dozen #7"></figure>
+        <figure><img src="../assets/photography/ex1/8.jpg" alt="Exercise 1: Two Dozen #8"></figure>
+        <figure><img src="../assets/photography/ex1/9.jpg" alt="Exercise 1: Two Dozen #9"></figure>
+        <figure><img src="../assets/photography/ex1/10.jpg" alt="Exercise 1: Two Dozen #10"></figure>
+        <figure><img src="../assets/photography/ex1/11.jpg" alt="Exercise 1: Two Dozen #11"></figure>
+        <figure><img src="../assets/photography/ex1/12.jpg" alt="Exercise 1: Two Dozen #12"></figure>
+        <figure><img src="../assets/photography/ex1/13.jpg" alt="Exercise 1: Two Dozen #13"></figure>
+        <figure><img src="../assets/photography/ex1/14.jpg" alt="Exercise 1: Two Dozen #14"></figure>
+        <figure><img src="../assets/photography/ex1/15.jpg" alt="Exercise 1: Two Dozen #15"></figure>
+        <figure><img src="../assets/photography/ex1/16.jpg" alt="Exercise 1: Two Dozen #16"></figure>
+        <figure><img src="../assets/photography/ex1/17.jpg" alt="Exercise 1: Two Dozen #17"></figure>
+        <figure><img src="../assets/photography/ex1/18.jpg" alt="Exercise 1: Two Dozen #18"></figure>
+        <figure><img src="../assets/photography/ex1/19.jpg" alt="Exercise 1: Two Dozen #19"></figure>
+        <figure><img src="../assets/photography/ex1/20.jpg" alt="Exercise 1: Two Dozen #20"></figure>
+        <figure><img src="../assets/photography/ex1/21.jpg" alt="Exercise 1: Two Dozen #21"></figure>
+        <figure><img src="../assets/photography/ex1/22.jpg" alt="Exercise 1: Two Dozen #22"></figure>
+        <figure><img src="../assets/photography/ex1/23.jpg" alt="Exercise 1: Two Dozen #23"></figure>
+        <figure><img src="../assets/photography/ex1/24.jpg" alt="Exercise 1: Two Dozen #24"></figure>
       </div>
-    </header>
-
-    <section class="photo-section" data-folder="../assets/photography/ex1">
-      <div class="section-head">
-        <div>
-          <h2>Exercise 1: Two Dozen</h2>
-        </div>
-        <span class="pill ghost">24 photos</span>
-      </div>
-      <div class="photo-grid" data-expected="24"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/ex6">
-      <div class="section-head">
-        <div>
-          <h2>Exercise 6: Twelve Abstracts</h2>
-        </div>
-        <span class="pill ghost">12 photos</span>
+    <section class="plain-section">
+      <h2>Exercise 6: Twelve Abstracts</h2>
+      <div class="plain-grid">
+        <figure><img src="../assets/photography/ex6/1.jpg" alt="Exercise 6: Twelve Abstracts #1"></figure>
+        <figure><img src="../assets/photography/ex6/2.jpg" alt="Exercise 6: Twelve Abstracts #2"></figure>
+        <figure><img src="../assets/photography/ex6/3.jpg" alt="Exercise 6: Twelve Abstracts #3"></figure>
+        <figure><img src="../assets/photography/ex6/4.jpg" alt="Exercise 6: Twelve Abstracts #4"></figure>
+        <figure><img src="../assets/photography/ex6/5.jpg" alt="Exercise 6: Twelve Abstracts #5"></figure>
+        <figure><img src="../assets/photography/ex6/6.jpg" alt="Exercise 6: Twelve Abstracts #6"></figure>
+        <figure><img src="../assets/photography/ex6/7.jpg" alt="Exercise 6: Twelve Abstracts #7"></figure>
+        <figure><img src="../assets/photography/ex6/8.jpg" alt="Exercise 6: Twelve Abstracts #8"></figure>
+        <figure><img src="../assets/photography/ex6/9.jpg" alt="Exercise 6: Twelve Abstracts #9"></figure>
+        <figure><img src="../assets/photography/ex6/10.jpg" alt="Exercise 6: Twelve Abstracts #10"></figure>
+        <figure><img src="../assets/photography/ex6/11.jpg" alt="Exercise 6: Twelve Abstracts #11"></figure>
+        <figure><img src="../assets/photography/ex6/12.jpg" alt="Exercise 6: Twelve Abstracts #12"></figure>
       </div>
-      <div class="photo-grid" data-expected="12"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/ex12">
-      <div class="section-head">
-        <div>
-          <h2>Exercise 12: Steps</h2>
-        </div>
-        <span class="pill ghost">Series</span>
+    <section class="plain-section">
+      <h2>Exercise 12: Steps</h2>
+      <div class="plain-grid">
+        <figure><img src="../assets/photography/ex12/1.jpg" alt="Exercise 12: Steps #1"></figure>
+        <figure><img src="../assets/photography/ex12/2.jpg" alt="Exercise 12: Steps #2"></figure>
+        <figure><img src="../assets/photography/ex12/3.jpg" alt="Exercise 12: Steps #3"></figure>
+        <figure><img src="../assets/photography/ex12/4.jpg" alt="Exercise 12: Steps #4"></figure>
+        <figure><img src="../assets/photography/ex12/5.jpg" alt="Exercise 12: Steps #5"></figure>
+        <figure><img src="../assets/photography/ex12/6.jpg" alt="Exercise 12: Steps #6"></figure>
+        <figure><img src="../assets/photography/ex12/7.jpg" alt="Exercise 12: Steps #7"></figure>
+        <figure><img src="../assets/photography/ex12/8.jpg" alt="Exercise 12: Steps #8"></figure>
+        <figure><img src="../assets/photography/ex12/9.jpg" alt="Exercise 12: Steps #9"></figure>
+        <figure><img src="../assets/photography/ex12/10.jpg" alt="Exercise 12: Steps #10"></figure>
+        <figure><img src="../assets/photography/ex12/11.jpg" alt="Exercise 12: Steps #11"></figure>
+        <figure><img src="../assets/photography/ex12/12.jpg" alt="Exercise 12: Steps #12"></figure>
       </div>
-      <div class="photo-grid" data-expected="12"></div>
     </section>
 
-    <section class="photo-section" data-folder="../assets/photography/narrative">
-      <div class="section-head">
-        <div>
-          <h2>Narrative Photograph</h2>
-        </div>
-        <span class="pill ghost">1+ photos</span>
-      </div>
-      <div class="photo-grid" data-expected="3"></div>
+    <section class="plain-section">
+      <h2>Narrative Photograph</h2>
+      <p class="muted">Add images as 1.jpg, 2.jpg... in assets/photography/narrative/ when ready.</p>
+      <div class="plain-grid"></div>
     </section>
-  </main>
-
-  <script src="../cursor.js"></script>
-  <script>
-<<<<<<< ours
-    // Minimal loader: inject numbered JPGs; click opens full image in new tab
-    (() => {
-      const version = Date.now(); // cache-bust per load
-      document.querySelectorAll('.photo-section').forEach((section) => {
-        const folder = section.dataset.folder;
-        const count = Number(section.dataset.count) || 0;
-        const grid = section.querySelector('.photo-grid');
-        for (let i = 1; i <= count; i++) {
-          const src = `${folder}/${i}.jpg?${version}`;
-          const link = document.createElement('a');
-          link.href = src;
-          link.target = '_blank';
-          link.rel = 'noopener';
-=======
-    // Simple loader + lightbox
-    const lightbox = {
-      host: null,
-      img: null,
-      caption: null,
-      sources: [],
-      index: 0,
-      open(idx) {
-        this.index = idx;
-        const item = this.sources[idx];
-        if (!item) return;
-        this.img.src = item.src;
-        this.caption.textContent = item.alt || '';
-        this.host.classList.add('visible');
-      },
-      close() {
-        this.host.classList.remove('visible');
-      },
-      next(dir = 1) {
-        if (!this.sources.length) return;
-        this.index = (this.index + dir + this.sources.length) % this.sources.length;
-        this.open(this.index);
-      },
-      init() {
-        this.host = document.getElementById('lightbox');
-        this.img = this.host.querySelector('img');
-        this.caption = this.host.querySelector('.lightbox-caption');
-        this.host.addEventListener('click', (e) => {
-          if (e.target === this.host || e.target.classList.contains('close-btn')) this.close();
-        });
-        document.addEventListener('keydown', (e) => {
-          if (!this.host.classList.contains('visible')) return;
-          if (e.key === 'Escape') this.close();
-          if (e.key === 'ArrowRight') this.next(1);
-          if (e.key === 'ArrowLeft') this.next(-1);
-        });
-        this.host.querySelector('.nav-prev').addEventListener('click', (e) => {
-          e.stopPropagation(); this.next(-1);
-        });
-        this.host.querySelector('.nav-next').addEventListener('click', (e) => {
-          e.stopPropagation(); this.next(1);
-        });
-        this.host.querySelector('.close-btn').addEventListener('click', (e) => {
-          e.stopPropagation(); this.close();
-        });
-      }
-    };
-
-    const loadGrids = async () => {
-      const grids = document.querySelectorAll('.photo-grid');
-      lightbox.sources = [];
-      let globalIndex = 0;
-      const cacheKey = Date.now();
-      const expectedByFolder = {
-        '../assets/photography/ex1': 24,
-        '../assets/photography/ex6': 12,
-        '../assets/photography/ex12': 12,
-        '../assets/photography/narrative': 3,
-      };
-
-      for (const grid of grids) {
-        const folder = grid.parentElement.dataset.folder;
-        const expected = expectedByFolder[folder] || Number(grid.dataset.expected) || 12;
-        let found = 0;
-
-        for (let i = 1; i <= expected; i++) {
-          const src = `${folder}/${i}.jpg?v=${cacheKey}`;
->>>>>>> theirs
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = `Photo ${i}`;
-          const currentIndex = globalIndex + i - 1;
-          img.addEventListener('click', () => lightbox.open(currentIndex));
-          img.onerror = () => img.remove();
-          grid.appendChild(img);
-          lightbox.sources.push({ src, alt: img.alt });
-          found++;
-        }
-        globalIndex += found;
-
-        if (found === 0) {
-          for (let i = 0; i < Math.min(expected, 6); i++) {
-            const placeholder = document.createElement('div');
-            placeholder.className = 'photo-slot';
-            placeholder.textContent = 'Awaiting upload';
-            grid.appendChild(placeholder);
-          }
-        }
-      }
-    };
-
-    lightbox.init();
-    loadGrids();
-  </script>
-
-  <div id="lightbox" class="lightbox">
-    <button class="close-btn" aria-label="Close">×</button>
-    <button class="nav nav-prev" aria-label="Previous">‹</button>
-    <img src="" alt="">
-    <button class="nav nav-next" aria-label="Next">›</button>
-    <div class="lightbox-caption"></div>
   </div>
 </body>
-
 </html>
