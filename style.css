@@ -416,10 +416,12 @@ body.projects-page {
   border-bottom: 1px dashed rgba(0, 0, 0, 0.25);
   color: inherit;
   display: inline-block;
+  text-shadow: 0 10px 30px rgba(255, 79, 163, 0.7);
 }
 .accent-link:hover {
   color: var(--accent);
   border-bottom-color: rgba(0, 0, 0, 0.45);
+  text-shadow: 0 12px 36px rgba(255, 79, 163, 0.85);
 }
 .accent-link:focus-visible {
   outline: 2px solid rgba(0, 0, 0, 0.4);
