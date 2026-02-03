@@ -11,76 +11,75 @@
     h1 { margin: 0; font-size: 20px; font-weight: 600; }
     h2 { margin: 32px 0 12px; font-size: 16px; font-weight: 600; }
     a.back { text-decoration: none; color: #111; border: 1px solid #bbb; padding: 6px 12px; border-radius: 999px; font-weight: 600; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; grid-auto-flow: dense; }
     figure { margin: 0; background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden; }
+    figure.landscape { grid-column: span 2; }
     img { display: block; width: 100%; height: auto; }
+    @media (max-width: 720px) { figure.landscape { grid-column: span 1; } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="top">
-      <h1>Assignment #1 — Black &amp; White Studies</h1>
+      <h1>Assignment #1 — Black & White Studies</h1>
       <a class="back" href="../projects.html">Back</a>
     </div>
-
     <h2>Exercise 1: Two Dozen</h2>
     <div class="grid">
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/1.jpg" alt="Ex1 1"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/2.jpg" alt="Ex1 2"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/3.jpg" alt="Ex1 3"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/4.jpg" alt="Ex1 4"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/5.jpg" alt="Ex1 5"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/6.jpg" alt="Ex1 6"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/7.jpg" alt="Ex1 7"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/8.jpg" alt="Ex1 8"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/9.jpg" alt="Ex1 9"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/10.jpg" alt="Ex1 10"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/11.jpg" alt="Ex1 11"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/12.jpg" alt="Ex1 12"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/13.jpg" alt="Ex1 13"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/14.jpg" alt="Ex1 14"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/15.jpg" alt="Ex1 15"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/16.jpg" alt="Ex1 16"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/17.jpg" alt="Ex1 17"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/18.jpg" alt="Ex1 18"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/19.jpg" alt="Ex1 19"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/20.jpg" alt="Ex1 20"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/21.jpg" alt="Ex1 21"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/22.jpg" alt="Ex1 22"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/23.jpg" alt="Ex1 23"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex1/24.jpg" alt="Ex1 24"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/1.jpg" alt="Exercise 1: Two Dozen 1"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/2.jpg" alt="Exercise 1: Two Dozen 2"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/3.jpg" alt="Exercise 1: Two Dozen 3"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/4.jpg" alt="Exercise 1: Two Dozen 4"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/5.jpg" alt="Exercise 1: Two Dozen 5"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/6.jpg" alt="Exercise 1: Two Dozen 6"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/7.jpg" alt="Exercise 1: Two Dozen 7"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/8.jpg" alt="Exercise 1: Two Dozen 8"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/9.jpg" alt="Exercise 1: Two Dozen 9"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/10.jpg" alt="Exercise 1: Two Dozen 10"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/11.jpg" alt="Exercise 1: Two Dozen 11"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/12.jpg" alt="Exercise 1: Two Dozen 12"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/13.jpg" alt="Exercise 1: Two Dozen 13"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/14.jpg" alt="Exercise 1: Two Dozen 14"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/15.jpg" alt="Exercise 1: Two Dozen 15"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/16.jpg" alt="Exercise 1: Two Dozen 16"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/17.jpg" alt="Exercise 1: Two Dozen 17"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/18.jpg" alt="Exercise 1: Two Dozen 18"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/19.jpg" alt="Exercise 1: Two Dozen 19"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/20.jpg" alt="Exercise 1: Two Dozen 20"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/21.jpg" alt="Exercise 1: Two Dozen 21"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/22.jpg" alt="Exercise 1: Two Dozen 22"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/23.jpg" alt="Exercise 1: Two Dozen 23"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex1/24.jpg" alt="Exercise 1: Two Dozen 24"></figure>
     </div>
-
     <h2>Exercise 6: Twelve Abstracts</h2>
     <div class="grid">
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/1.jpg" alt="Ex6 1"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/2.jpg" alt="Ex6 2"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/3.jpg" alt="Ex6 3"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/4.jpg" alt="Ex6 4"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/5.jpg" alt="Ex6 5"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/6.jpg" alt="Ex6 6"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/7.jpg" alt="Ex6 7"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/8.jpg" alt="Ex6 8"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/9.jpg" alt="Ex6 9"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/10.jpg" alt="Ex6 10"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/11.jpg" alt="Ex6 11"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex6/12.jpg" alt="Ex6 12"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/1.jpg" alt="Exercise 6: Twelve Abstracts 1"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/2.jpg" alt="Exercise 6: Twelve Abstracts 2"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/3.jpg" alt="Exercise 6: Twelve Abstracts 3"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/4.jpg" alt="Exercise 6: Twelve Abstracts 4"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/5.jpg" alt="Exercise 6: Twelve Abstracts 5"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/6.jpg" alt="Exercise 6: Twelve Abstracts 6"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/7.jpg" alt="Exercise 6: Twelve Abstracts 7"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/8.jpg" alt="Exercise 6: Twelve Abstracts 8"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/9.jpg" alt="Exercise 6: Twelve Abstracts 9"></figure>
+      <figure class="landscape"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/10.jpg" alt="Exercise 6: Twelve Abstracts 10"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/11.jpg" alt="Exercise 6: Twelve Abstracts 11"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex6/12.jpg" alt="Exercise 6: Twelve Abstracts 12"></figure>
     </div>
-
     <h2>Exercise 12: Steps</h2>
     <div class="grid">
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/1.jpg" alt="Ex12 1"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/2.jpg" alt="Ex12 2"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/3.jpg" alt="Ex12 3"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/4.jpg" alt="Ex12 4"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/5.jpg" alt="Ex12 5"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/6.jpg" alt="Ex12 6"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/7.jpg" alt="Ex12 7"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/8.jpg" alt="Ex12 8"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/9.jpg" alt="Ex12 9"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/10.jpg" alt="Ex12 10"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/11.jpg" alt="Ex12 11"></figure>
-      <figure><img src="https://flourish216.github.io/sitee/assets/photography/ex12/12.jpg" alt="Ex12 12"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/1.jpg" alt="Exercise 12: Steps 1"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/2.jpg" alt="Exercise 12: Steps 2"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/3.jpg" alt="Exercise 12: Steps 3"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/4.jpg" alt="Exercise 12: Steps 4"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/5.jpg" alt="Exercise 12: Steps 5"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/6.jpg" alt="Exercise 12: Steps 6"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/7.jpg" alt="Exercise 12: Steps 7"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/8.jpg" alt="Exercise 12: Steps 8"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/9.jpg" alt="Exercise 12: Steps 9"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/10.jpg" alt="Exercise 12: Steps 10"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/11.jpg" alt="Exercise 12: Steps 11"></figure>
+      <figure class="portrait"><img src="https://flourish216.github.io/sitee/assets/photography/ex12/12.jpg" alt="Exercise 12: Steps 12"></figure>
     </div>
   </div>
 </body>
