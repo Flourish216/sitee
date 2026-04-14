@@ -9,13 +9,25 @@ const cursorTrailSketch = (p) => {
     [90, 160, 255],
     [168, 118, 255],
   ];
-  const petMessages = [
-    'hi dreamer ✨',
-    'we drift with you',
-    'creative pause mode',
-    'maybe draw a constellation?',
-    'let thoughts float…',
-  ];
+
+  // Detect browser language and pick message set
+  const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  const isZh = lang.startsWith('zh');
+  const petMessages = isZh
+    ? [
+        '嗨，梦想家 ✨',
+        '我们和你一起漂游',
+        '创作暂停模式',
+        '画个星座试试？',
+        '让思绪飘一会儿…',
+      ]
+    : [
+        'hi dreamer ✨',
+        'we drift with you',
+        'creative pause mode',
+        'maybe draw a constellation?',
+        'let thoughts float…',
+      ];
 
   const idleDelay = 2000;
   let maxSize = 36;
